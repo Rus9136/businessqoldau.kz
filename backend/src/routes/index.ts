@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import authRoutes from './auth';
+import profileRoutes from './profile';
 
 const router = Router();
 
@@ -19,9 +20,9 @@ router.get('/', (req, res) => {
 
 // Route modules
 router.use('/auth', authRoutes);
+router.use('/profile', profileRoutes);
 
 // TODO: Add remaining route modules
-// router.use('/profile', profileRoutes);
 // router.use('/applications', applicationRoutes);
 // router.use('/contacts', contactRoutes);
 

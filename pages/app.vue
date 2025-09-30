@@ -222,9 +222,8 @@ definePageMeta({
   middleware: 'auth'
 })
 
-const user = useSupabaseUser()
-const client = useSupabaseClient()
-const router = useRouter()
+const { user, logout } = useAuth()
+const { profile, loading: profileLoading, getProfile, createProfile, updateProfile } = useProfile()
 
 const form = reactive({
   fullName: '',
@@ -248,10 +247,23 @@ const canSubmit = computed(() => {
          form.summary && form.planFilePath && form.videoFilePath && form.agreeTerms
 })
 
-// Load application data
+// Load profile data
 onMounted(async () => {
-  // TODO: Load application from Supabase
-  // This is a placeholder
+  try {
+    await getProfile()
+
+    // Pre-fill form with profile data if it exists
+    if (profile.value) {
+      form.fullName = profile.value.fullName
+      form.phone = profile.value.phone
+      form.city = profile.value.city
+    }
+  } catch (e: any) {
+    // Profile doesn't exist yet, that's ok
+    console.log('No profile yet')
+  }
+
+  // TODO: Load application data
 })
 
 const handlePlanUpload = (event: Event) => {
@@ -262,7 +274,7 @@ const handlePlanUpload = (event: Event) => {
       error.value = 'Размер файла превышает 20 МБ'
       return
     }
-    // TODO: Upload to Supabase Storage
+    // TODO: Upload file to backend
     form.planFilePath = 'placeholder-path'
   }
 }
@@ -275,7 +287,7 @@ const handleVideoUpload = (event: Event) => {
       error.value = 'Размер файла превышает 300 МБ'
       return
     }
-    // TODO: Upload to Supabase Storage
+    // TODO: Upload file to backend
     form.videoFilePath = 'placeholder-path'
   }
 }
@@ -286,7 +298,22 @@ const saveDraft = async () => {
   success.value = ''
 
   try {
-    // TODO: Save draft to Supabase
+    // Save/update profile first
+    if (!profile.value) {
+      await createProfile({
+        fullName: form.fullName,
+        phone: form.phone,
+        city: form.city,
+      })
+    } else {
+      await updateProfile({
+        fullName: form.fullName,
+        phone: form.phone,
+        city: form.city,
+      })
+    }
+
+    // TODO: Save application draft to backend
     success.value = 'Черновик сохранен'
   } catch (e: any) {
     error.value = e.message
@@ -303,9 +330,23 @@ const handleSubmit = async () => {
   success.value = ''
 
   try {
-    // TODO: Submit application to Supabase
+    // Save/update profile first
+    if (!profile.value) {
+      await createProfile({
+        fullName: form.fullName,
+        phone: form.phone,
+        city: form.city,
+      })
+    } else {
+      await updateProfile({
+        fullName: form.fullName,
+        phone: form.phone,
+        city: form.city,
+      })
+    }
+
+    // TODO: Submit application to backend
     success.value = 'Заявка успешно отправлена!'
-    // Reload application data
   } catch (e: any) {
     error.value = e.message
   } finally {
@@ -314,8 +355,7 @@ const handleSubmit = async () => {
 }
 
 const handleLogout = async () => {
-  await client.auth.signOut()
-  router.push('/')
+  await logout()
 }
 
 useSeoMeta({
