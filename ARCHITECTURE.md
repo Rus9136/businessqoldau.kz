@@ -233,7 +233,11 @@ businessqoldau/
 - ✅ Защита: проверка владения, запрет редактирования submitted заявок
 - ✅ Валидация: требуется профиль + файл для submit
 - ✅ Все endpoints протестированы через curl
-- ⚠️ Интеграция с фронтендом (TODO)
+- ✅ Frontend composable useApplication() реализован
+- ✅ Интеграция в pages/app.vue с автозагрузкой данных
+- ✅ Загрузка файлов с progress tracking (XMLHttpRequest + FormData)
+- ✅ UI для статусов draft/submitted
+- ✅ Полный цикл: создание → загрузка файла → отправка заявки
 
 ### Этап 5: Контактная форма ✅ COMPLETE
 - ✅ Contact service (createContact, getAllContacts, getContactById)

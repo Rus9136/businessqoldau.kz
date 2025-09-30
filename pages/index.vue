@@ -5,10 +5,10 @@
       <div class="container-custom">
         <div class="max-w-3xl">
           <h1 class="text-5xl font-bold mb-6">
-            {{ $t('home.title') }}
+            Бизнес Camp 2025
           </h1>
           <p class="text-xl mb-8">
-            {{ $t('home.subtitle') }}
+            Конкурс для предпринимателей Казахстана
           </p>
 
           <!-- Timer Placeholder -->
@@ -31,7 +31,7 @@
           </div>
 
           <NuxtLink to="/app" class="btn-primary bg-white text-blue-600 hover:bg-gray-100">
-            {{ $t('home.applyButton') }}
+            Подать заявку
           </NuxtLink>
         </div>
       </div>
@@ -99,7 +99,7 @@
           Подайте заявку сейчас и получите шанс выиграть грант на развитие вашего бизнеса
         </p>
         <NuxtLink to="/app" class="btn-primary bg-white text-blue-600 hover:bg-gray-100">
-          {{ $t('home.applyButton') }}
+          Подать заявку
         </NuxtLink>
       </div>
     </section>

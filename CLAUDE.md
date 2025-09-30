@@ -298,6 +298,10 @@ backend/
 - Валидация: требуется профиль + файл для submit
 - UUID имена файлов для безопасности
 - Все endpoints протестированы через curl
+- Frontend composable useApplication() с полной интеграцией API
+- Интеграция в pages/app.vue с автозагрузкой данных
+- Загрузка файлов с progress bar и валидацией
+- Поддержка draft/submitted статусов с соответствующим UI
 
 **Stage 5: Contact Form** ✅ COMPLETE
 - Contact service (createContact, getAllContacts, getContactById)
@@ -324,14 +328,16 @@ backend/
 **Completed:**
 - ✅ useAuth() composable connected to backend API
 - ✅ useProfile() composable for profile management
-- ✅ pages/app.vue integrated with profile API
+- ✅ useApplication() composable for application management
+- ✅ pages/app.vue fully integrated with profile + application APIs
+- ✅ File upload with progress tracking for business plans (PDF/DOC/DOCX)
 - ✅ useContact() composable for contact form
 - ✅ pages/contacts.vue integrated with backend API
 
 **TODO:**
-- Need to integrate applications API in pages/app.vue
-- Implement file upload with progress tracking for business plans
-- Handle authentication state and tokens globally
+- Implement countdown timer on landing page
+- Add form validation feedback
+- Handle edge cases and error states
 
 ### Countdown Timer (TODO)
 Landing page (`pages/index.vue`) has static timer placeholder:
