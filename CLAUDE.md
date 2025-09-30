@@ -1,12 +1,13 @@
+
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides comprehensive guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project Overview
+## 📋 Project Overview
 
-Бизнес Camp 2025 - A bilingual (Russian/Kazakh) business competition platform for entrepreneurs in Kazakhstan. Full-stack application with Nuxt 3 frontend and Node.js + Express backend.
+**Бизнес Camp 2025** - A bilingual (Russian/Kazakh) business competition platform for entrepreneurs in Kazakhstan. Full-stack application with Nuxt 3 frontend and Node.js + Express backend.
 
-**Tech Stack:**
+### Tech Stack
 
 **Frontend:**
 - Nuxt 3 (SSR)
@@ -23,9 +24,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Nodemailer (email notifications)
 - Zod (validation)
 
-## Development Commands
+## 🚀 Quick Start
 
-**Frontend (root directory):**
+### Backend
+```bash
+cd backend
+npm install
+npm run dev  # http://localhost:3001
+```
+
+**Verification:**
+- `curl http://localhost:3001/health` - health check
+- `curl http://localhost:3001/api` - API info
+
+**Database:** PostgreSQL `businesscamp` is already configured and running
+
+### Frontend
+```bash
+npm install
+npm run dev  # http://localhost:3000
+```
+
+## 🛠️ Development Commands
+
+### Frontend (root directory)
 ```bash
 # Start development server (localhost:3000)
 npm run dev
@@ -40,7 +62,7 @@ npm run preview
 npm run generate
 ```
 
-**Backend (backend/ directory):**
+### Backend (backend/ directory)
 ```bash
 cd backend
 
@@ -63,7 +85,7 @@ curl http://localhost:3001/health    # Health check
 curl http://localhost:3001/api       # API info
 ```
 
-## Architecture
+## 🏗️ Application Architecture
 
 ### Authentication & Authorization
 
@@ -71,7 +93,7 @@ curl http://localhost:3001/api       # API info
 - JWT-based authentication with access and refresh tokens
 - Password hashing with bcrypt
 - `backend/src/middleware/auth.ts` - JWT verification middleware
-- Authentication endpoints (to be implemented in Stage 2):
+- Authentication endpoints (✅ IMPLEMENTED in Stage 2):
   - `POST /api/auth/register` - User registration
   - `POST /api/auth/login` - User login
   - `POST /api/auth/refresh` - Refresh access token
@@ -80,7 +102,7 @@ curl http://localhost:3001/api       # API info
 
 **Frontend (Nuxt 3):**
 - `middleware/auth.ts` protects the `/app` route (personal cabinet)
-- Auth state managed via composables (to be connected to backend API)
+- Auth state managed via composables (✅ connected to backend API)
 - Public routes: `/`, `/how-to-apply`, `/terms`, `/contacts`, `/privacy`
 - Protected routes: `/app` (application submission form)
 
@@ -96,7 +118,7 @@ curl http://localhost:3001/api       # API info
 - `/how-to-apply` - Step-by-step application instructions
 - `/terms` - Competition rules (rendered from `content/terms.md` via @nuxt/content)
 - `/privacy` - Privacy policy (rendered from `content/privacy.md` via @nuxt/content)
-- `/contacts` - Contact form (saves to `contacts` table in Supabase)
+- `/contacts` - Contact form (saves to `contacts` table in database)
 - `/login` - Combined login/registration page (no layout wrapper)
 - `/app` - Protected personal cabinet for application submission (requires auth)
 
@@ -114,7 +136,7 @@ curl http://localhost:3001/api       # API info
 5. Save as draft (status: 'draft') or submit (status: 'submitted')
 6. After submission, form becomes read-only
 
-### Database Schema (PostgreSQL + Prisma)
+## 🗄️ Database Schema (PostgreSQL + Prisma)
 
 Schema defined in `backend/prisma/schema.prisma`:
 
@@ -150,7 +172,7 @@ Local filesystem storage in `backend/uploads/`:
 - `business-plans/` - PDF business plans (max 20MB)
 - `videos/` - MP4 video presentations (max 300MB)
 
-### Styling Approach
+## 🎨 Styling Approach
 - Tailwind CSS configured via `@nuxtjs/tailwindcss` module
 - Custom utilities in `assets/css/main.css`:
   - `.btn-primary` - Primary action button
@@ -159,16 +181,16 @@ Local filesystem storage in `backend/uploads/`:
 - Color scheme: Blue primary (`blue-600`), white background, gray text
 - Mobile-first responsive design
 
-## Environment Setup
+## ⚙️ Environment Setup
 
-**Frontend `.env`:**
-```
+### Frontend `.env`
+```env
 BASE_URL=http://localhost:3000
 NUXT_PUBLIC_API_URL=http://localhost:3001/api
 ```
 
-**Backend `backend/.env`:**
-```
+### Backend `backend/.env`
+```env
 # Database
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/businesscamp?schema=public
 
@@ -196,9 +218,9 @@ MAX_FILE_SIZE_PDF=20971520
 MAX_FILE_SIZE_VIDEO=314572800
 ```
 
-See `backend/.env.example` for full template.
+> See `backend/.env.example` for full template.
 
-## Backend Structure
+## 📁 Backend Structure
 
 ```
 backend/
@@ -223,7 +245,7 @@ backend/
 └── .env                     # Environment variables
 ```
 
-## Implementation Status
+## 📊 Implementation Status
 
 ### ✅ Completed
 **Stage 1: Environment & Database Setup** ✅ COMPLETE
@@ -239,8 +261,18 @@ backend/
 - Git repository initialized and pushed to GitHub
 - Docker Compose configuration for PostgreSQL (optional)
 
+**Stage 2: Authentication** ✅ COMPLETE
+- Auth service реализован (register, login, refresh, logout, verify-email, reset-password)
+- Auth controller с валидацией (Zod)
+- JWT utilities (генерация/верификация access/refresh токенов)
+- Email utilities (отправка верификации и сброса пароля)
+- Auth middleware (проверка JWT токенов)
+- Auth routes подключены к main router
+- Все endpoints протестированы через curl
+- Frontend интеграция: composable useAuth(), pages/login.vue, middleware/auth.ts
+- ⚠️ Email отправка требует настройки SMTP credentials в .env
+
 ### ⏳ TODO
-**Stage 2:** Authentication (register, login, JWT, email verification)
 **Stage 3:** User profiles
 **Stage 4:** Applications (CRUD + file uploads)
 **Stage 5:** Contact form
@@ -248,7 +280,7 @@ backend/
 **Stage 7:** Testing & security
 **Stage 8:** Deployment
 
-## Important Implementation Notes
+## 📝 Important Implementation Notes
 
 ### Frontend Integration (TODO)
 Frontend (`pages/app.vue`, `pages/contacts.vue`) has placeholder logic:
@@ -267,12 +299,12 @@ Landing page (`pages/index.vue`) has static timer placeholder:
 - @nuxt/content uses better-sqlite3 (already installed)
 - Edit `content/terms.md` and `content/privacy.md` to update legal text
 
-## Known Issues
+## ⚠️ Known Issues
 
 - @nuxt/content warns about missing content config (optional, using default collection)
 - TypeScript may show i18n config errors in `nuxt.config.ts` (runtime works correctly)
 
-## Deployment Notes
+## 🚀 Deployment Notes
 
 **Frontend (Vercel):**
 1. Connect GitHub repo to Vercel
@@ -287,4 +319,10 @@ Landing page (`pages/index.vue`) has static timer placeholder:
 5. Configure reverse proxy (nginx) if using VPS
 6. Set up SSL certificates (Let's Encrypt)
 
-See `backend/README.md` for detailed deployment instructions.
+> See `DEPLOYMENT.md` for detailed deployment instructions.
+
+---
+
+**📅 Updated**: 2025-09-30  
+**👤 Project**: Business Qoldau 2025  
+**🌐 Domain**: businessqoldau.kz

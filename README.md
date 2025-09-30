@@ -1,225 +1,179 @@
-# Бизнес Camp 2025
+# 🏆 Business Qoldau 2025
 
-Сайт конкурса для предпринимателей Казахстана.
+**Бизнес Camp 2025** - платформа конкурса для предпринимателей Казахстана с поддержкой русского и казахского языков.
 
-## Стек технологий
+[![Статус](https://img.shields.io/badge/статус-в%20разработке-yellow)](https://github.com/your-repo/businessqoldau)
+[![Frontend](https://img.shields.io/badge/frontend-Nuxt%203-00DC82)](https://nuxt.com/)
+[![Backend](https://img.shields.io/badge/backend-Node.js%20%2B%20Express-339933)](https://nodejs.org/)
+[![База данных](https://img.shields.io/badge/БД-PostgreSQL%20%2B%20Prisma-336791)](https://www.postgresql.org/)
 
-- **Frontend/SSR**: Nuxt 3
-- **Styling**: Tailwind CSS
-- **Backend**: Supabase (Auth, Postgres, Storage)
-- **Content**: @nuxt/content
-- **i18n**: @nuxtjs/i18n (русский/казахский)
-- **Deploy**: Vercel
+## 🚀 Быстрый старт
 
-## Настройка проекта
+### Предварительные требования
+- Node.js 18+ 
+- PostgreSQL 13+
+- npm или yarn
 
-### 1. Установка зависимостей
+### Установка и запуск
 
 ```bash
-# npm
+# Клонирование репозитория
+git clone https://github.com/your-repo/businessqoldau.git
+cd businessqoldau
+
+# Установка зависимостей
 npm install
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-### 2. Настройка переменных окружения
-
-Создайте файл `.env` на основе `.env.example`:
-
-```bash
+# Настройка переменных окружения
 cp .env.example .env
+# Отредактируйте .env файл
+
+# Запуск backend
+cd backend
+npm install
+npm run dev  # http://localhost:3001
+
+# Запуск frontend (в новом терминале)
+cd ..
+npm run dev  # http://localhost:3000
 ```
 
-Заполните необходимые переменные:
+### Проверка работы
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:3001/api
+- Health check: http://localhost:3001/health
 
-```env
-SUPABASE_URL=your-supabase-url
-SUPABASE_KEY=your-supabase-anon-key
-BASE_URL=http://localhost:3000
-```
+## 📚 Документация
 
-### 3. Настройка Supabase
+- **[🏗️ Архитектура](ARCHITECTURE.md)** - архитектура системы, модель данных, API
+- **[💻 Разработка](DEVELOPMENT.md)** - руководство разработчика, команды, конфигурация
+- **[🚀 Деплой](DEPLOYMENT.md)** - развертывание на production сервере
+- **[🤖 Claude](CLAUDE.md)** - руководство для AI агента
 
-Создайте проект в [Supabase](https://supabase.com) и выполните следующие SQL команды:
+## 🛠️ Технологический стек
 
-```sql
--- Create profiles table
-CREATE TABLE profiles (
-  id UUID REFERENCES auth.users PRIMARY KEY,
-  full_name TEXT,
-  phone TEXT,
-  city TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+### Frontend
+- **Framework**: Nuxt 3 (SSR)
+- **Styling**: Tailwind CSS
+- **i18n**: @nuxtjs/i18n (русский/казахский)
+- **Content**: @nuxt/content (Markdown)
+- **Deploy**: Vercel
 
--- Create applications table
-CREATE TABLE applications (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES auth.users NOT NULL,
-  category TEXT NOT NULL CHECK (category IN ('starter', 'active', 'it')),
-  summary TEXT NOT NULL,
-  plan_file_path TEXT,
-  video_file_path TEXT,
-  status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'submitted')),
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+### Backend
+- **Runtime**: Node.js + Express
+- **База данных**: PostgreSQL + Prisma ORM
+- **Аутентификация**: JWT + bcrypt
+- **Файлы**: Multer (локальное хранилище)
+- **Email**: Nodemailer
+- **Валидация**: Zod
 
--- Create contacts table
-CREATE TABLE contacts (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  name TEXT NOT NULL,
-  email TEXT NOT NULL,
-  message TEXT NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+## 📄 Страницы
 
--- Enable Row Level Security
-ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE applications ENABLE ROW LEVEL SECURITY;
-ALTER TABLE contacts ENABLE ROW LEVEL SECURITY;
+### Публичные
+- **`/`** - Главная страница с таймером и призовым фондом
+- **`/how-to-apply`** - Инструкция по подаче заявки
+- **`/terms`** - Правила участия (Markdown)
+- **`/contacts`** - Контактная форма
+- **`/privacy`** - Политика конфиденциальности (Markdown)
 
--- Policies for profiles
-CREATE POLICY "Users can view own profile" ON profiles
-  FOR SELECT USING (auth.uid() = id);
+### Защищенные
+- **`/login`** - Вход/регистрация
+- **`/app`** - Личный кабинет для подачи заявки
 
-CREATE POLICY "Users can update own profile" ON profiles
-  FOR UPDATE USING (auth.uid() = id);
+## 🗄️ База данных
 
-CREATE POLICY "Users can insert own profile" ON profiles
-  FOR INSERT WITH CHECK (auth.uid() = id);
+Проект использует PostgreSQL с Prisma ORM. Схема базы данных определена в `backend/prisma/schema.prisma`.
 
--- Policies for applications
-CREATE POLICY "Users can view own applications" ON applications
-  FOR SELECT USING (auth.uid() = user_id);
+### Основные таблицы
+- **users** - Пользователи системы
+- **profiles** - Профили пользователей
+- **applications** - Заявки на конкурс
+- **contacts** - Контактные формы
 
-CREATE POLICY "Users can create own applications" ON applications
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
+Подробнее см. [ARCHITECTURE.md](ARCHITECTURE.md#модель-данных)
 
-CREATE POLICY "Users can update own draft applications" ON applications
-  FOR UPDATE USING (auth.uid() = user_id AND status = 'draft');
+## 🚀 Деплой
 
--- Policies for contacts
-CREATE POLICY "Anyone can insert contacts" ON contacts
-  FOR INSERT WITH CHECK (true);
-```
-
-### 4. Настройка Storage в Supabase
-
-Создайте два bucket в Supabase Storage:
-- `business-plans` (для бизнес-планов)
-- `videos` (для видео-презентаций)
-
-Настройте политики доступа для каждого bucket.
-
-## Запуск проекта
-
-### Development Server
-
-Запустите dev-сервер на `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-### Production Build
-
-Соберите приложение для production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-## Структура проекта
-
-```
-├── app/              # Nuxt app директория
-├── assets/           # CSS и статические ресурсы
-├── components/       # Vue компоненты
-├── composables/      # Composables
-├── content/          # Markdown контент (terms, privacy)
-├── layouts/          # Layouts
-├── locales/          # i18n переводы
-├── middleware/       # Route middleware
-├── pages/            # Страницы приложения
-├── public/           # Публичные статические файлы
-└── nuxt.config.ts    # Nuxt конфигурация
-```
-
-## Страницы
-
-- `/` - Главная страница
-- `/how-to-apply` - Инструкция по подаче заявки
-- `/terms` - Правила участия
-- `/contacts` - Контакты
-- `/privacy` - Политика конфиденциальности
-- `/login` - Вход/регистрация
-- `/app` - Личный кабинет (protected)
-
-## Деплой
-
-Проект настроен для деплоя на [Vercel](https://vercel.com).
-
+### Frontend (Vercel)
 1. Подключите репозиторий к Vercel
-2. Добавьте переменные окружения в настройках Vercel
+2. Добавьте переменные окружения
 3. Деплой произойдет автоматически
 
-## TODO
+### Backend (VPS)
+1. Настройте PostgreSQL
+2. Настройте переменные окружения
+3. Запустите миграции: `npm run prisma:migrate`
+4. Запустите сервер: `npm start`
 
-- [ ] Реализовать загрузку файлов в Supabase Storage
-- [ ] Реализовать отправку email уведомлений
-- [ ] Добавить таймер обратного отсчета
-- [ ] Настроить Google Analytics
-- [ ] Добавить sitemap.xml и robots.txt
-- [ ] Оптимизировать изображения
-- [ ] Добавить тесты
+Подробнее см. [DEPLOYMENT.md](DEPLOYMENT.md)
 
-## Документация
+## 📊 Статус проекта
 
-- [Nuxt 3](https://nuxt.com/docs)
-- [Tailwind CSS](https://tailwindcss.com/docs)
-- [Supabase](https://supabase.com/docs)
-- [Vercel](https://vercel.com/docs)
+### ✅ Завершено
+- Frontend: все страницы, i18n, аутентификация
+- Backend: аутентификация, JWT, email уведомления
+- База данных: схема, миграции
+
+### ⚠️ В разработке
+- API для заявок и контактов
+- Загрузка файлов
+- Админ-панель
+
+### ❌ Планируется
+- Тестирование
+- Деплой на production
+- Мониторинг
+
+## 🤝 Участие в разработке
+
+1. Форкните репозиторий
+2. Создайте ветку для фичи: `git checkout -b feature/amazing-feature`
+3. Зафиксируйте изменения: `git commit -m 'Add amazing feature'`
+4. Отправьте в ветку: `git push origin feature/amazing-feature`
+5. Откройте Pull Request
+
+## 📝 Лицензия
+
+Этот проект лицензирован под MIT License - см. файл [LICENSE](LICENSE) для деталей.
+
+## 📁 Структура проекта
+
+```
+businessqoldau/
+├── app/                    # Nuxt app директория
+├── assets/                 # CSS и статические ресурсы
+├── components/             # Vue компоненты
+├── composables/            # Composables
+├── content/                # Markdown контент (terms, privacy)
+├── layouts/                # Layouts
+├── locales/                # i18n переводы
+├── middleware/             # Route middleware
+├── pages/                  # Страницы приложения
+├── public/                 # Публичные статические файлы
+├── backend/                # Backend API
+│   ├── src/
+│   │   ├── config/         # Конфигурация
+│   │   ├── middleware/     # Middleware
+│   │   ├── routes/         # API роуты
+│   │   ├── controllers/    # Контроллеры
+│   │   ├── services/       # Бизнес-логика
+│   │   └── utils/          # Утилиты
+│   ├── prisma/
+│   │   └── schema.prisma   # Database schema
+│   └── uploads/            # Загруженные файлы
+├── nuxt.config.ts          # Nuxt конфигурация
+└── ecosystem.config.js     # PM2 configuration
+```
+
+## 🔗 Полезные ссылки
+
+- **[Nuxt 3](https://nuxt.com/docs)** - документация фреймворка
+- **[Tailwind CSS](https://tailwindcss.com/docs)** - документация CSS фреймворка
+- **[Prisma](https://www.prisma.io/docs)** - документация ORM
+- **[Vercel](https://vercel.com/docs)** - документация платформы деплоя
+
+---
+
+**📅 Обновлено**: 2025-09-30  
+**👤 Проект**: Business Qoldau 2025  
+**🌐 Домен**: businessqoldau.kz
