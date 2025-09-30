@@ -24,7 +24,15 @@ npm install
 cp .env.example .env
 ```
 
-3. Настройте PostgreSQL и обновите `DATABASE_URL` в `.env`
+3. **Запустите PostgreSQL через Docker** (рекомендуется для разработки):
+```bash
+docker-compose up -d
+```
+
+Или установите PostgreSQL локально и создайте БД:
+```bash
+createdb businesscamp
+```
 
 4. Запустите миграции:
 ```bash
@@ -46,6 +54,25 @@ npm run dev
 Prisma Studio (GUI для БД):
 ```bash
 npm run prisma:studio
+```
+
+### Docker команды
+
+```bash
+# Запустить PostgreSQL
+docker-compose up -d
+
+# Остановить PostgreSQL
+docker-compose down
+
+# Остановить и удалить данные
+docker-compose down -v
+
+# Посмотреть логи
+docker-compose logs -f
+
+# Подключиться к PostgreSQL через psql
+docker exec -it businesscamp-postgres psql -U postgres -d businesscamp
 ```
 
 ## Production
