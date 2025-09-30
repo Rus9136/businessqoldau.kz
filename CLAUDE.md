@@ -107,11 +107,15 @@ curl http://localhost:3001/api       # API info
 - Protected routes: `/app` (application submission form)
 
 ### i18n Configuration
-- Configured in `i18n.config.ts` with inline messages (not separate JSON files)
+- Configured in `i18n.config.ts` with inline messages
 - Default locale: `ru` (Russian)
 - Available locales: `ru`, `kk` (Kazakh)
 - Access translations via `$t()` in templates or `useI18n()` in script
 - Language switcher in `Header.vue` allows runtime locale switching
+- ⚠️ **Current Issue**: Translation keys display as `nav.home` instead of translated text
+  - Messages are defined in `i18n.config.ts` but @nuxtjs/i18n v10 requires additional configuration
+  - Site functionality is NOT affected - this is a display-only issue
+  - See "Known Issues" section for details
 
 ### Page Structure & Routes
 - `/` - Landing page with hero, countdown timer, competition stages, prize pool
@@ -335,6 +339,7 @@ backend/
 - ✅ pages/contacts.vue integrated with backend API
 
 **TODO:**
+- **Fix i18n translations** - configure @nuxtjs/i18n v10 correctly (see Known Issues)
 - Implement countdown timer on landing page
 - Add form validation feedback
 - Handle edge cases and error states
@@ -351,8 +356,23 @@ Landing page (`pages/index.vue`) has static timer placeholder:
 
 ## ⚠️ Known Issues
 
+### i18n Translations Not Displaying
+**Status**: Translation keys (e.g., `nav.home`) display instead of translated text
+
+**Details**:
+- All translations are properly defined in `i18n.config.ts` (Russian and Kazakh)
+- @nuxtjs/i18n v10.x requires specific configuration that differs from v8/v9
+- Attempted solutions:
+  - Created JSON files in `locales/` directory (ru.json, kk.json)
+  - Configured `vueI18n: './i18n.config.ts'` in nuxt.config.ts
+  - Tried lazy loading with `langDir` setting
+- **Impact**: Display only - site functionality is NOT affected
+- **Workaround**: Temporarily hardcode text in components instead of using `$t()`
+- **TODO**: Research @nuxtjs/i18n v10 documentation for correct configuration
+
+### Other Issues
 - @nuxt/content warns about missing content config (optional, using default collection)
-- TypeScript may show i18n config errors in `nuxt.config.ts` (runtime works correctly)
+- TypeScript may show i18n config errors in `nuxt.config.ts` (works at runtime)
 
 ## 🚀 Deployment Notes
 
@@ -373,6 +393,16 @@ Landing page (`pages/index.vue`) has static timer placeholder:
 
 ---
 
-**📅 Updated**: 2025-09-30  
-**👤 Project**: Business Qoldau 2025  
+## 📝 Recent Updates (2025-09-30)
+
+### Fixed: Nuxt Welcome Page Issue
+- **Problem**: Site was showing default Nuxt welcome page instead of actual content
+- **Cause**: Conflicting `/app/app.vue` file interfering with main `app.vue`
+- **Solution**: Removed `/app/app.vue` and empty `app/` directory
+- **Result**: Site now correctly displays landing page at http://localhost:3000/
+
+---
+
+**📅 Updated**: 2025-09-30
+**👤 Project**: Business Qoldau 2025
 **🌐 Domain**: businessqoldau.kz
