@@ -1,8 +1,9 @@
 import { Router } from 'express';
+import authRoutes from './auth';
 
 const router = Router();
 
-// Placeholder routes - will be implemented in later stages
+// API info endpoint
 router.get('/', (req, res) => {
   res.json({
     message: 'Business Camp 2025 API',
@@ -16,8 +17,10 @@ router.get('/', (req, res) => {
   });
 });
 
-// TODO: Add route modules
-// router.use('/auth', authRoutes);
+// Route modules
+router.use('/auth', authRoutes);
+
+// TODO: Add remaining route modules
 // router.use('/profile', profileRoutes);
 // router.use('/applications', applicationRoutes);
 // router.use('/contacts', contactRoutes);

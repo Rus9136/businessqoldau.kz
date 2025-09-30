@@ -101,8 +101,8 @@ definePageMeta({
   layout: false
 })
 
-const client = useSupabaseClient()
 const router = useRouter()
+const { login, register } = useAuth()
 
 const mode = ref<'login' | 'register'>('login')
 const form = reactive({
@@ -121,29 +121,18 @@ const handleSubmit = async () => {
 
   try {
     if (mode.value === 'register') {
-      const { error: signUpError } = await client.auth.signUp({
-        email: form.email,
-        password: form.password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/app`
-        }
-      })
+      const response = await register(form.email, form.password)
+      success.value = response.message
 
-      if (signUpError) throw signUpError
-
-      success.value = 'Регистрация успешна! Проверьте email для подтверждения.'
+      // Clear form after successful registration
+      form.email = ''
+      form.password = ''
     } else {
-      const { error: signInError } = await client.auth.signInWithPassword({
-        email: form.email,
-        password: form.password
-      })
-
-      if (signInError) throw signInError
-
+      await login(form.email, form.password)
       router.push('/app')
     }
   } catch (e: any) {
-    error.value = e.message || 'Произошла ошибка'
+    error.value = e.data?.message || e.message || 'Произошла ошибка'
   } finally {
     loading.value = false
   }

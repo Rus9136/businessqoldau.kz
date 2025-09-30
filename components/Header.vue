@@ -109,7 +109,7 @@
 
 <script setup lang="ts">
 const { locale, locales, setLocale: setI18nLocale } = useI18n()
-const user = useSupabaseUser()
+const { user } = useAuth()
 const mobileMenuOpen = ref(false)
 
 const currentLocale = computed(() => locale.value)
