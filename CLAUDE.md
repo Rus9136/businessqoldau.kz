@@ -132,7 +132,7 @@ curl http://localhost:3001/api       # API info
 1. User registers/logs in via `/login`
 2. Redirected to `/app` (personal cabinet)
 3. Fill form: full name, phone, city, category (starter/active/it), business description
-4. Upload business plan (PDF, max 20MB) and video (MP4, max 300MB)
+4. Upload business plan (PDF/DOC/DOCX, max 20MB)
 5. Save as draft (status: 'draft') or submit (status: 'submitted')
 6. After submission, form becomes read-only
 
@@ -169,8 +169,9 @@ Schema defined in `backend/prisma/schema.prisma`:
 
 ### File Storage
 Local filesystem storage in `backend/uploads/`:
-- `business-plans/` - PDF business plans (max 20MB)
-- `videos/` - MP4 video presentations (max 300MB)
+- `business-plans/` - Business plans in PDF/DOC/DOCX format (max 20MB)
+- Unique UUID filenames for security
+- MIME type validation on upload
 
 ## 🎨 Styling Approach
 - Tailwind CSS configured via `@nuxtjs/tailwindcss` module
@@ -215,7 +216,7 @@ FRONTEND_URL=http://localhost:3000
 # File Upload
 UPLOAD_DIR=./uploads
 MAX_FILE_SIZE_PDF=20971520
-MAX_FILE_SIZE_VIDEO=314572800
+MAX_FILE_SIZE_DOC=20971520
 ```
 
 > See `backend/.env.example` for full template.
@@ -240,8 +241,7 @@ backend/
 ├── prisma/
 │   └── schema.prisma        # Database schema
 ├── uploads/
-│   ├── business-plans/      # PDF files
-│   └── videos/              # MP4 files
+│   └── business-plans/      # PDF/DOC/DOCX files
 └── .env                     # Environment variables
 ```
 
@@ -272,9 +272,34 @@ backend/
 - Frontend интеграция: composable useAuth(), pages/login.vue, middleware/auth.ts
 - ⚠️ Email отправка требует настройки SMTP credentials в .env
 
+**Stage 3: User Profiles** ✅ COMPLETE
+- Profile service (getProfile, createProfile, updateProfile)
+- Profile controller с валидацией Zod
+- Profile routes с auth middleware
+- API endpoints: GET/POST/PUT /api/profile
+- Frontend composable useProfile()
+- Интеграция в pages/app.vue
+- Автозагрузка и автосохранение профиля
+
+**Stage 4: Applications (CRUD + File Uploads)** ✅ COMPLETE
+- Application service: getApplications, getApplicationById, createApplication, updateApplication, submitApplication, deleteApplication
+- File upload service с Multer (PDF/DOC/DOCX, 20MB limit)
+- Application controller с валидацией Zod
+- Application routes подключены к main router
+- 7 API endpoints:
+  - `GET /api/applications` - список заявок пользователя
+  - `POST /api/applications` - создать заявку (draft)
+  - `GET /api/applications/:id` - получить заявку по ID
+  - `PUT /api/applications/:id` - обновить заявку (только draft)
+  - `DELETE /api/applications/:id` - удалить заявку (только draft)
+  - `POST /api/applications/:id/submit` - отправить заявку (draft → submitted)
+  - `POST /api/applications/:id/upload` - загрузить бизнес-план
+- Защита: проверка владения, запрет редактирования submitted заявок
+- Валидация: требуется профиль + файл для submit
+- UUID имена файлов для безопасности
+- Все endpoints протестированы через curl
+
 ### ⏳ TODO
-**Stage 3:** User profiles
-**Stage 4:** Applications (CRUD + file uploads)
 **Stage 5:** Contact form
 **Stage 6:** Admin panel
 **Stage 7:** Testing & security
@@ -282,12 +307,17 @@ backend/
 
 ## 📝 Important Implementation Notes
 
-### Frontend Integration (TODO)
-Frontend (`pages/app.vue`, `pages/contacts.vue`) has placeholder logic:
-- Need to create composables for API calls
-- Connect forms to backend endpoints
-- Implement file upload with progress tracking
-- Handle authentication state and tokens
+### Frontend Integration
+**Completed:**
+- ✅ useAuth() composable connected to backend API
+- ✅ useProfile() composable for profile management
+- ✅ pages/app.vue integrated with profile API
+
+**TODO:**
+- Need to integrate applications API in pages/app.vue
+- Implement file upload with progress tracking for business plans
+- Connect contact form (pages/contacts.vue) to backend
+- Handle authentication state and tokens globally
 
 ### Countdown Timer (TODO)
 Landing page (`pages/index.vue`) has static timer placeholder:

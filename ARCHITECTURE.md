@@ -123,8 +123,8 @@ businessqoldau/
 * `user_id` (UUID, FK → users.id)
 * `category` (enum: 'starter', 'active', 'it')
 * `summary` (text)
-* `plan_file_path` (varchar)
-* `video_file_path` (varchar)
+* `plan_file_path` (varchar) - путь к бизнес-плану (PDF/DOC/DOCX)
+* `video_file_path` (varchar, nullable) - зарезервировано для будущего
 * `status` (enum: 'draft', 'submitted')
 * `created_at`, `updated_at`
 
@@ -148,17 +148,19 @@ businessqoldau/
 * `POST /api/auth/reset-password` - сброс пароля
 * `POST /api/auth/verify-email` - подтверждение email
 
-### Профили (TODO)
+### Профили ✅
 * `GET /api/profile` - получить свой профиль
 * `PUT /api/profile` - обновить профиль
 * `POST /api/profile` - создать профиль
 
-### Заявки (TODO)
+### Заявки ✅
 * `GET /api/applications` - получить свои заявки
 * `GET /api/applications/:id` - получить заявку по ID
 * `POST /api/applications` - создать заявку
 * `PUT /api/applications/:id` - обновить заявку (только draft)
+* `DELETE /api/applications/:id` - удалить заявку (только draft)
 * `POST /api/applications/:id/submit` - отправить заявку
+* `POST /api/applications/:id/upload` - загрузить бизнес-план
 
 ### Контакты (TODO)
 * `POST /api/contacts` - отправить сообщение
@@ -181,7 +183,7 @@ businessqoldau/
 - ✅ **Этап 1**: Настройка окружения и БД
 - ✅ **Этап 2**: Аутентификация (JWT, email, валидация)
 - ✅ **Этап 3**: Профили пользователей (GET/POST/PUT /api/profile)
-- ⚠️ **Этап 4**: Заявки (CRUD + загрузка файлов) (TODO)
+- ✅ **Этап 4**: Заявки (CRUD + загрузка файлов PDF/DOC/DOCX)
 - ⚠️ **Этап 5**: Контактная форма (TODO)
 - ⚠️ **Этап 6**: Администрирование (TODO)
 
@@ -219,11 +221,17 @@ businessqoldau/
 - ✅ Интеграция в pages/app.vue
 - ✅ Автозагрузка и автосохранение профиля
 
-### Этап 4: Заявки ❌
-- API эндпоинты для заявок
-- Загрузка файлов (PDF, MP4)
-- Логика статусов (draft/submitted)
-- Интеграция с фронтендом
+### Этап 4: Заявки ✅ COMPLETE
+- ✅ Application service (getApplications, getApplicationById, createApplication, updateApplication, submitApplication, deleteApplication)
+- ✅ File upload service с Multer (PDF/DOC/DOCX, 20MB limit, UUID имена)
+- ✅ Application controller с валидацией Zod
+- ✅ Application routes подключены к main router
+- ✅ 7 API эндпоинтов (GET, POST, PUT, DELETE, submit, upload)
+- ✅ Логика статусов (draft/submitted)
+- ✅ Защита: проверка владения, запрет редактирования submitted заявок
+- ✅ Валидация: требуется профиль + файл для submit
+- ✅ Все endpoints протестированы через curl
+- ⚠️ Интеграция с фронтендом (TODO)
 
 ### Этап 5: Контактная форма ❌
 - API эндпоинт для контактов
@@ -260,10 +268,11 @@ businessqoldau/
 - **✅ Этап 1 (завершен)**: 1-2 дня
 - **✅ Этап 2 (завершен)**: 2-3 дня
 - **✅ Этап 3 (завершен)**: 1 день
-- **Backend разработка (Этап 4-6)**: 6-10 дней
-- **Интеграция с фронтендом (Этап 4-5)**: 2-3 дня
+- **✅ Этап 4 (завершен)**: 1 день
+- **Backend разработка (Этап 5-6)**: 2-3 дня
+- **Frontend интеграция (Этап 4-5)**: 2-3 дня
 - **Тестирование и деплой (Этап 7-8)**: 3-4 дня
-- **Оставшееся время**: ~2 недели разработки
+- **Оставшееся время**: ~1 неделя разработки
 
 ---
 
