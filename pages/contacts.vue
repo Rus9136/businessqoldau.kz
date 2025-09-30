@@ -97,6 +97,8 @@
 </template>
 
 <script setup lang="ts">
+const { submitContact } = useContact()
+
 const form = reactive({
   name: '',
   email: '',
@@ -113,15 +115,19 @@ const handleSubmit = async () => {
   success.value = false
 
   try {
-    // TODO: Implement Supabase contact form submission
-    await new Promise(resolve => setTimeout(resolve, 1000)) // Placeholder
+    await submitContact({
+      name: form.name,
+      email: form.email,
+      message: form.message,
+    })
 
     success.value = true
     form.name = ''
     form.email = ''
     form.message = ''
   } catch (e: any) {
-    error.value = e.message || 'Произошла ошибка при отправке'
+    console.error('Contact form error:', e)
+    error.value = e.data?.message || e.message || 'Произошла ошибка при отправке'
   } finally {
     loading.value = false
   }

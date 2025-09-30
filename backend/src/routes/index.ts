@@ -2,6 +2,7 @@ import { Router } from 'express';
 import authRoutes from './auth';
 import profileRoutes from './profile';
 import applicationRoutes from './application';
+import contactRoutes from './contact';
 
 const router = Router();
 
@@ -23,8 +24,6 @@ router.get('/', (req, res) => {
 router.use('/auth', authRoutes);
 router.use('/profile', profileRoutes);
 router.use('/applications', applicationRoutes);
-
-// TODO: Add remaining route modules
-// router.use('/contacts', contactRoutes);
+router.use('/contacts', contactRoutes);
 
 export default router;

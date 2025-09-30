@@ -162,8 +162,10 @@ businessqoldau/
 * `POST /api/applications/:id/submit` - отправить заявку
 * `POST /api/applications/:id/upload` - загрузить бизнес-план
 
-### Контакты (TODO)
-* `POST /api/contacts` - отправить сообщение
+### Контакты ✅
+* `POST /api/contacts` - отправить сообщение (публичный)
+* `GET /api/contacts` - получить все контакты (admin only)
+* `GET /api/contacts/:id` - получить контакт по ID (admin only)
 
 ---
 
@@ -184,7 +186,7 @@ businessqoldau/
 - ✅ **Этап 2**: Аутентификация (JWT, email, валидация)
 - ✅ **Этап 3**: Профили пользователей (GET/POST/PUT /api/profile)
 - ✅ **Этап 4**: Заявки (CRUD + загрузка файлов PDF/DOC/DOCX)
-- ⚠️ **Этап 5**: Контактная форма (TODO)
+- ✅ **Этап 5**: Контактная форма (API + email уведомления + frontend)
 - ⚠️ **Этап 6**: Администрирование (TODO)
 
 ### ⚠️ Требует завершения
@@ -233,10 +235,17 @@ businessqoldau/
 - ✅ Все endpoints протестированы через curl
 - ⚠️ Интеграция с фронтендом (TODO)
 
-### Этап 5: Контактная форма ❌
-- API эндпоинт для контактов
-- Email уведомление администратору
-- Интеграция с фронтендом
+### Этап 5: Контактная форма ✅ COMPLETE
+- ✅ Contact service (createContact, getAllContacts, getContactById)
+- ✅ Contact controller с валидацией Zod (name 2-100, email, message 10-1000)
+- ✅ Contact routes подключены к main router
+- ✅ 3 API эндпоинта (POST публичный, GET admin-only)
+- ✅ Email уведомления администратору через Nodemailer
+- ✅ Frontend composable useContact()
+- ✅ Интеграция в pages/contacts.vue
+- ✅ Обработка success/error состояний
+- ✅ Все endpoints протестированы через curl
+- ⚠️ Требует настройки SMTP credentials в .env для email
 
 ### Этап 6: Администрирование ❌
 - Роль admin в таблице users
@@ -269,8 +278,9 @@ businessqoldau/
 - **✅ Этап 2 (завершен)**: 2-3 дня
 - **✅ Этап 3 (завершен)**: 1 день
 - **✅ Этап 4 (завершен)**: 1 день
-- **Backend разработка (Этап 5-6)**: 2-3 дня
-- **Frontend интеграция (Этап 4-5)**: 2-3 дня
+- **✅ Этап 5 (завершен)**: 0.5 дня
+- **Backend разработка (Этап 6)**: 2-3 дня
+- **Frontend интеграция (Этап 4)**: 2-3 дня
 - **Тестирование и деплой (Этап 7-8)**: 3-4 дня
 - **Оставшееся время**: ~1 неделя разработки
 

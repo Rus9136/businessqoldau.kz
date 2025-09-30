@@ -299,8 +299,21 @@ backend/
 - UUID имена файлов для безопасности
 - Все endpoints протестированы через curl
 
+**Stage 5: Contact Form** ✅ COMPLETE
+- Contact service (createContact, getAllContacts, getContactById)
+- Contact controller с валидацией Zod (name 2-100, email, message 10-1000)
+- Contact routes подключены к main router
+- 3 API endpoints:
+  - `POST /api/contacts` - создать контактное сообщение (публичный)
+  - `GET /api/contacts` - список всех контактов (admin only)
+  - `GET /api/contacts/:id` - получить контакт по ID (admin only)
+- Email уведомления администратору через Nodemailer
+- Frontend composable useContact()
+- Интеграция в pages/contacts.vue с обработкой success/error состояний
+- Все endpoints протестированы через curl
+- ⚠️ Требует настройки SMTP credentials в .env для email
+
 ### ⏳ TODO
-**Stage 5:** Contact form
 **Stage 6:** Admin panel
 **Stage 7:** Testing & security
 **Stage 8:** Deployment
@@ -312,11 +325,12 @@ backend/
 - ✅ useAuth() composable connected to backend API
 - ✅ useProfile() composable for profile management
 - ✅ pages/app.vue integrated with profile API
+- ✅ useContact() composable for contact form
+- ✅ pages/contacts.vue integrated with backend API
 
 **TODO:**
 - Need to integrate applications API in pages/app.vue
 - Implement file upload with progress tracking for business plans
-- Connect contact form (pages/contacts.vue) to backend
 - Handle authentication state and tokens globally
 
 ### Countdown Timer (TODO)
