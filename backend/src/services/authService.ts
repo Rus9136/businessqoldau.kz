@@ -100,6 +100,7 @@ export const login = async (input: LoginInput): Promise<AuthResponse> => {
       id: user.id,
       email: user.email,
       emailVerified: user.emailVerified,
+      role: user.role,
     },
   };
 };
@@ -240,6 +241,7 @@ export const getCurrentUser = async (userId: string) => {
       id: true,
       email: true,
       emailVerified: true,
+      role: true,
     },
   });
 

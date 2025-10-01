@@ -101,6 +101,9 @@
           <NuxtLink to="/contacts" class="hover:text-blue-600 transition-colors">
             {{ $t('nav.contacts') }}
           </NuxtLink>
+          <NuxtLink v-if="user" to="/app" class="hover:text-blue-600 transition-colors">
+            {{ $t('nav.cabinet') }}
+          </NuxtLink>
         </div>
       </div>
     </nav>

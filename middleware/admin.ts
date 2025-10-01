@@ -1,13 +1,14 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const { accessToken, user } = useAuth()
 
-  // Check if user has access token in cookies
+  // Check if user is authenticated
   if (!accessToken.value) {
     return navigateTo('/login')
   }
 
-  // Fetch user data if not loaded
+  // Check if user data is loaded
   if (!user.value) {
+    // Try to fetch user data
     const config = useRuntimeConfig()
     try {
       const response = await $fetch(`${config.public.apiUrl}/auth/me`, {
@@ -22,8 +23,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     }
   }
 
-  // Redirect admin users to admin panel
-  if (user.value?.role === 'admin') {
-    return navigateTo('/admin')
+  // Check if user has admin role
+  if (user.value?.role !== 'admin') {
+    return navigateTo('/app')
   }
 })

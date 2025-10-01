@@ -15,6 +15,7 @@ model User {
   email          String        @unique
   passwordHash   String        @map("password_hash")
   emailVerified  Boolean       @default(false) @map("email_verified")
+  role           UserRole      @default(user)
   createdAt      DateTime      @default(now()) @map("created_at")
   updatedAt      DateTime      @updatedAt @map("updated_at")
 
@@ -112,4 +113,9 @@ enum ApplicationCategory {
 enum ApplicationStatus {
   draft
   submitted
+}
+
+enum UserRole {
+  user
+  admin
 }

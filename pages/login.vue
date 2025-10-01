@@ -152,7 +152,7 @@ definePageMeta({
 })
 
 const router = useRouter()
-const { login, register } = useAuth()
+const { login, register, user } = useAuth()
 
 const mode = ref<'login' | 'register'>('login')
 const form = reactive({
@@ -190,8 +190,13 @@ const handleSubmit = async () => {
         hasRefreshToken: !!response.refreshToken,
         hasUser: !!response.user
       })
-      // Navigate to app
-      await navigateTo('/app')
+
+      // Check user role and redirect accordingly
+      if (user.value?.role === 'admin') {
+        await navigateTo('/admin')
+      } else {
+        await navigateTo('/app')
+      }
     }
   } catch (e: any) {
     console.error('Login error:', e)

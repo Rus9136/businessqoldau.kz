@@ -3,6 +3,7 @@ import authRoutes from './auth';
 import profileRoutes from './profile';
 import applicationRoutes from './application';
 import contactRoutes from './contact';
+import adminRoutes from './adminRoutes';
 
 const router = Router();
 
@@ -16,6 +17,7 @@ router.get('/', (req, res) => {
       profile: '/api/profile',
       applications: '/api/applications',
       contacts: '/api/contacts',
+      admin: '/api/admin',
     },
   });
 });
@@ -25,5 +27,6 @@ router.use('/auth', authRoutes);
 router.use('/profile', profileRoutes);
 router.use('/applications', applicationRoutes);
 router.use('/contacts', contactRoutes);
+router.use('/admin', adminRoutes);
 
 export default router;
