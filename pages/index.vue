@@ -11,22 +11,30 @@
             {{ $t('home.subtitle') }}
           </p>
 
-          <!-- Timer Placeholder -->
+          <!-- Application Period -->
           <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 mb-8">
-            <div class="text-sm mb-2">{{ $t('home.timer.title') }}</div>
-            <div class="flex space-x-4 text-3xl font-bold">
-              <div class="flex flex-col items-center">
-                <span>30</span>
-                <span class="text-sm font-normal">{{ $t('home.timer.days') }}</span>
+            <div v-if="loading" class="text-center">
+              <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+            </div>
+
+            <div v-else-if="settings && periodStatus">
+              <div class="flex items-center space-x-3">
+                <div class="text-3xl">📅</div>
+                <div>
+                  <div class="text-sm opacity-90">Период подачи заявок</div>
+                  <div class="text-2xl font-bold">
+                    {{ formatDate(settings.start_date) }} — {{ formatDate(settings.end_date) }}
+                  </div>
+                </div>
               </div>
-              <div class="flex flex-col items-center">
-                <span>12</span>
-                <span class="text-sm font-normal">{{ $t('home.timer.hours') }}</span>
+
+              <div v-if="periodStatus.message" class="text-sm opacity-90 mt-4">
+                {{ periodStatus.message }}
               </div>
-              <div class="flex flex-col items-center">
-                <span>45</span>
-                <span class="text-sm font-normal">{{ $t('home.timer.minutes') }}</span>
-              </div>
+            </div>
+
+            <div v-else class="text-center text-sm opacity-90">
+              Информация о периоде подачи заявок временно недоступна
             </div>
           </div>
 
@@ -107,6 +115,13 @@
 </template>
 
 <script setup lang="ts">
+const { settings, periodStatus, loading, getApplicationSettings, formatDate } = useSettings()
+
+// Загрузить настройки периода при монтировании
+onMounted(async () => {
+  await getApplicationSettings()
+})
+
 useSeoMeta({
   title: 'Бизнес Camp 2025 - Конкурс для предпринимателей',
   description: 'Конкурс для предпринимателей Казахстана. Призовой фонд до 10 млн тенге.',

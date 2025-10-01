@@ -1,14 +1,16 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full">
-      <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold">Вход</h1>
-        <p class="mt-2 text-gray-600">
-          Войдите в личный кабинет для подачи заявки
-        </p>
-      </div>
+  <div class="min-h-screen bg-gray-50">
+    <Header />
+    <div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-md w-full">
+        <div class="text-center mb-8">
+          <h1 class="text-3xl font-bold">Вход</h1>
+          <p class="mt-2 text-gray-600">
+            Войдите в личный кабинет для подачи заявки
+          </p>
+        </div>
 
-      <div class="bg-white p-8 rounded-lg shadow-md">
+        <div class="bg-white p-8 rounded-lg shadow-md">
         <!-- Application Period Status -->
         <div v-if="periodStatus && !periodStatus.isActive" class="mb-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
           <div class="flex items-start">
@@ -160,11 +162,6 @@
             {{ success }}
           </div>
         </form>
-
-        <div class="mt-6 text-center">
-          <NuxtLink to="/" class="text-sm text-blue-600 hover:underline">
-            Вернуться на главную
-          </NuxtLink>
         </div>
       </div>
     </div>
