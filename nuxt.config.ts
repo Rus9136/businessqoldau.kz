@@ -13,11 +13,11 @@ export default defineNuxtConfig({
   // i18n configuration
   i18n: {
     defaultLocale: 'ru',
+    langDir: 'locales',
     locales: [
-      { code: 'ru', language: 'ru' },
-      { code: 'kk', language: 'kk' }
-    ],
-    vueI18n: './i18n.config.ts'
+      { code: 'ru', file: 'ru.json', name: 'Русский' },
+      { code: 'kk', file: 'kk.json', name: 'Қазақша' }
+    ]
   },
 
   // Supabase configuration
