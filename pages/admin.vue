@@ -294,8 +294,91 @@
       <!-- Contacts Tab -->
       <div v-else-if="activeTab === 'contacts'" class="space-y-6">
         <div class="bg-white rounded-lg shadow-sm border p-6">
-          <h3 class="text-lg font-semibold text-gray-900 mb-4">Сообщения от пользователей</h3>
-          <p class="text-gray-600">Раздел в разработке...</p>
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-lg font-semibold text-gray-900">Сообщения от пользователей</h3>
+            <div class="text-sm text-gray-500">
+              Всего: {{ contacts.length }}
+            </div>
+          </div>
+
+          <!-- Loading State -->
+          <div v-if="loading" class="text-center py-8">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <p class="mt-2 text-gray-600">Загрузка сообщений...</p>
+          </div>
+
+          <!-- Error State -->
+          <div v-else-if="error" class="text-center py-8">
+            <div class="text-red-600 mb-2">Ошибка загрузки</div>
+            <p class="text-gray-600">{{ error }}</p>
+            <button 
+              @click="loadContacts" 
+              class="mt-4 btn-primary text-sm"
+            >
+              Попробовать снова
+            </button>
+          </div>
+
+          <!-- Empty State -->
+          <div v-else-if="contacts.length === 0" class="text-center py-8">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">Нет сообщений</h3>
+            <p class="mt-1 text-sm text-gray-500">Пока нет сообщений от пользователей</p>
+          </div>
+
+          <!-- Contacts List -->
+          <div v-else class="space-y-4">
+            <div 
+              v-for="contact in contacts" 
+              :key="contact.id"
+              class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors cursor-pointer"
+              @click="selectedContact = contact"
+            >
+              <div class="flex justify-between items-start">
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-3 mb-2">
+                    <h4 class="text-sm font-medium text-gray-900 truncate">
+                      {{ contact.name }}
+                    </h4>
+                    <span class="text-xs text-gray-500">
+                      {{ contact.email }}
+                    </span>
+                  </div>
+                  <p class="text-sm text-gray-600 line-clamp-2">
+                    {{ contact.message }}
+                  </p>
+                </div>
+                <div class="ml-4 flex-shrink-0 text-xs text-gray-500">
+                  {{ formatDate(contact.createdAt) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <div v-if="contactPagination && contactPagination.totalPages > 1" class="mt-6 flex justify-center">
+            <nav class="flex items-center space-x-2">
+              <button
+                @click="loadContacts(contactPagination.page - 1)"
+                :disabled="contactPagination.page <= 1"
+                class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Назад
+              </button>
+              <span class="px-3 py-2 text-sm text-gray-700">
+                Страница {{ contactPagination.page }} из {{ contactPagination.totalPages }}
+              </span>
+              <button
+                @click="loadContacts(contactPagination.page + 1)"
+                :disabled="contactPagination.page >= contactPagination.totalPages"
+                class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Вперед
+              </button>
+            </nav>
+          </div>
         </div>
       </div>
 
@@ -478,6 +561,70 @@
         </div>
       </div>
     </div>
+
+    <!-- Contact Details Modal -->
+    <div v-if="selectedContact" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" @click.self="selectedContact = null">
+      <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
+          <h2 class="text-2xl font-semibold text-gray-900">Сообщение от пользователя</h2>
+          <button @click="selectedContact = null" class="text-gray-400 hover:text-gray-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="p-6 space-y-6">
+          <!-- Contact Info -->
+          <div class="bg-gray-50 rounded-lg p-4">
+            <h3 class="font-medium text-gray-900 mb-3">Информация об отправителе</h3>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <span class="text-gray-500">Имя:</span>
+                <span class="ml-2 text-gray-900">{{ selectedContact.name }}</span>
+              </div>
+              <div>
+                <span class="text-gray-500">Email:</span>
+                <a :href="`mailto:${selectedContact.email}`" class="ml-2 text-blue-600 hover:underline">
+                  {{ selectedContact.email }}
+                </a>
+              </div>
+              <div class="col-span-2">
+                <span class="text-gray-500">Дата отправки:</span>
+                <span class="ml-2 text-gray-900">{{ formatDate(selectedContact.createdAt) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Message Content -->
+          <div>
+            <label class="block text-sm font-medium text-gray-500 mb-2">Сообщение</label>
+            <div class="bg-gray-50 rounded-lg p-4">
+              <p class="text-gray-900 whitespace-pre-wrap">{{ selectedContact.message }}</p>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex justify-end gap-3">
+            <a 
+              :href="`mailto:${selectedContact.email}?subject=Ответ на ваше сообщение&body=Здравствуйте, ${selectedContact.name}!%0A%0AСпасибо за ваше сообщение:%0A%0A${selectedContact.message}%0A%0A---%0AОтвет:%0A`"
+              class="btn-primary text-sm inline-flex items-center gap-2"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+              Ответить
+            </a>
+            <button 
+              @click="selectedContact = null" 
+              class="btn-secondary text-sm"
+            >
+              Закрыть
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -488,7 +635,7 @@ definePageMeta({
 })
 
 const { user, logout } = useAuth()
-const { applications, users, stats, loading, error, getAllApplications, updateApplicationStatus, getAllUsers, getStats } = useAdmin()
+const { applications, users, contacts, stats, loading, error, getAllApplications, updateApplicationStatus, getAllUsers, getStats, getAllContacts, getContactById } = useAdmin()
 const { activeTemplate, uploadTemplate, getActiveTemplate, downloadTemplate, deleteTemplate } = useTemplate()
 
 const config = useRuntimeConfig()
@@ -502,7 +649,9 @@ const filters = ref({
   limit: 20
 })
 const pagination = ref<{ page: number; limit: number; total: number; pages: number } | null>(null)
+const contactPagination = ref<{ page: number; limit: number; total: number; totalPages: number } | null>(null)
 const selectedApplication = ref<any>(null)
+const selectedContact = ref<any>(null)
 
 // Template state
 const currentTemplate = ref<any>(null)
@@ -597,6 +746,28 @@ const getCategoryLabel = (category: string) => {
   return labels[category] || category
 }
 
+const loadContacts = async (page: number = 1) => {
+  try {
+    const response = await getAllContacts({
+      page,
+      limit: 20
+    })
+    contactPagination.value = response.pagination
+  } catch (err) {
+    console.error('Failed to load contacts:', err)
+  }
+}
+
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleString('ru-RU', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+
 const handleLogout = async () => {
   await logout()
 }
@@ -652,6 +823,13 @@ const handleDeleteTemplate = async () => {
     alert('Не удалось удалить шаблон')
   }
 }
+
+// Watch for tab changes to load data
+watch(activeTab, (newTab) => {
+  if (newTab === 'contacts' && contacts.value.length === 0) {
+    loadContacts()
+  }
+})
 
 useSeoMeta({
   title: 'Админ-панель - Business Camp 2025',

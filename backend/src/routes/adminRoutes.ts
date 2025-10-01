@@ -35,4 +35,17 @@ router.get('/users', authenticate, adminAuth, adminController.getUsersHandler);
  */
 router.get('/stats', authenticate, adminAuth, adminController.getStatsHandler);
 
+/**
+ * GET /api/admin/contacts
+ * Get all contacts with pagination
+ * Query params: page, limit
+ */
+router.get('/contacts', authenticate, adminAuth, adminController.getContactsHandler);
+
+/**
+ * GET /api/admin/contacts/:id
+ * Get contact by ID
+ */
+router.get('/contacts/:id', authenticate, adminAuth, adminController.getContactHandler);
+
 export default router;

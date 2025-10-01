@@ -33,6 +33,14 @@ interface Application {
   }
 }
 
+interface Contact {
+  id: string
+  name: string
+  email: string
+  message: string
+  createdAt: string
+}
+
 interface ApplicationStats {
   total: number
   byStatus: {
@@ -63,12 +71,28 @@ interface GetApplicationsResponse {
   }
 }
 
+interface GetContactsParams {
+  page?: number
+  limit?: number
+}
+
+interface GetContactsResponse {
+  contacts: Contact[]
+  pagination: {
+    page: number
+    limit: number
+    total: number
+    totalPages: number
+  }
+}
+
 export const useAdmin = () => {
   const { fetchWithAuth } = useAuth()
   const config = useRuntimeConfig()
 
   const applications = ref<Application[]>([])
   const users = ref<User[]>([])
+  const contacts = ref<Contact[]>([])
   const stats = ref<ApplicationStats | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
@@ -177,9 +201,56 @@ export const useAdmin = () => {
     }
   }
 
+  /**
+   * Get all contacts with pagination
+   */
+  const getAllContacts = async (params?: GetContactsParams) => {
+    loading.value = true
+    error.value = null
+
+    try {
+      const queryParams = new URLSearchParams()
+      if (params?.page) queryParams.append('page', params.page.toString())
+      if (params?.limit) queryParams.append('limit', params.limit.toString())
+
+      const queryString = queryParams.toString()
+      const url = `${config.public.apiUrl}/admin/contacts${queryString ? `?${queryString}` : ''}`
+
+      const response = await fetchWithAuth<{ success: boolean; data: GetContactsResponse }>(url)
+      contacts.value = response.data.contacts
+      return response.data
+    } catch (err: any) {
+      error.value = err.message || 'Failed to fetch contacts'
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  /**
+   * Get contact by ID
+   */
+  const getContactById = async (contactId: string) => {
+    loading.value = true
+    error.value = null
+
+    try {
+      const response = await fetchWithAuth<{ success: boolean; data: Contact }>(
+        `${config.public.apiUrl}/admin/contacts/${contactId}`
+      )
+      return response.data
+    } catch (err: any) {
+      error.value = err.message || 'Failed to fetch contact'
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     applications,
     users,
+    contacts,
     stats,
     loading,
     error,
@@ -187,5 +258,7 @@ export const useAdmin = () => {
     updateApplicationStatus,
     getAllUsers,
     getStats,
+    getAllContacts,
+    getContactById,
   }
 }

@@ -163,6 +163,53 @@ export const getAllUsers = async (params: {
 };
 
 /**
+ * Get all contacts with pagination
+ */
+export const getAllContacts = async (params: {
+  page?: number;
+  limit?: number;
+}) => {
+  const { page = 1, limit = 50 } = params;
+  const skip = (page - 1) * limit;
+
+  const [contacts, total] = await Promise.all([
+    prisma.contact.findMany({
+      skip,
+      take: limit,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    }),
+    prisma.contact.count(),
+  ]);
+
+  return {
+    contacts,
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    },
+  };
+};
+
+/**
+ * Get contact by ID
+ */
+export const getContactById = async (contactId: string) => {
+  const contact = await prisma.contact.findUnique({
+    where: { id: contactId },
+  });
+
+  if (!contact) {
+    throw new Error('Contact not found');
+  }
+
+  return contact;
+};
+
+/**
  * Get application statistics
  */
 export const getApplicationStats = async () => {

@@ -1,6 +1,6 @@
 export const useContact = () => {
   const config = useRuntimeConfig()
-  const apiUrl = config.public.apiUrl || 'http://localhost:3001/api'
+  const apiUrl = config.public.apiUrl || 'http://localhost:4000/api'
 
   interface ContactData {
     name: string

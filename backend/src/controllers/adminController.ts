@@ -5,6 +5,8 @@ import {
   updateApplicationStatus,
   getAllUsers,
   getApplicationStats,
+  getAllContacts,
+  getContactById,
 } from '../services/adminService';
 
 // Validation schemas
@@ -23,6 +25,11 @@ const getUsersSchema = z.object({
   page: z.string().regex(/^\d+$/).transform(Number).optional(),
   limit: z.string().regex(/^\d+$/).transform(Number).optional(),
   role: z.enum(['user', 'admin']).optional(),
+});
+
+const getContactsSchema = z.object({
+  page: z.string().regex(/^\d+$/).transform(Number).optional(),
+  limit: z.string().regex(/^\d+$/).transform(Number).optional(),
 });
 
 /**
@@ -153,6 +160,76 @@ export const getStatsHandler = async (req: Request, res: Response) => {
     return res.status(500).json({
       success: false,
       error: 'Failed to fetch statistics',
+    });
+  }
+};
+
+/**
+ * GET /api/admin/contacts
+ * Get all contacts with pagination
+ */
+export const getContactsHandler = async (req: Request, res: Response) => {
+  try {
+    const validation = getContactsSchema.safeParse(req.query);
+
+    if (!validation.success) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid query parameters',
+        details: validation.error.errors,
+      });
+    }
+
+    const result = await getAllContacts(validation.data);
+
+    return res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    console.error('Get contacts error:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to fetch contacts',
+    });
+  }
+};
+
+/**
+ * GET /api/admin/contacts/:id
+ * Get contact by ID
+ */
+export const getContactHandler = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    // Validate UUID
+    if (!z.string().uuid().safeParse(id).success) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid contact ID',
+      });
+    }
+
+    const contact = await getContactById(id);
+
+    return res.status(200).json({
+      success: true,
+      data: contact,
+    });
+  } catch (error: any) {
+    console.error('Get contact error:', error);
+
+    if (error.message === 'Contact not found') {
+      return res.status(404).json({
+        success: false,
+        error: error.message,
+      });
+    }
+
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to fetch contact',
     });
   }
 };
