@@ -7,10 +7,15 @@ import { AppError } from '../middleware/errorHandler';
 // Ensure upload directories exist
 const UPLOAD_DIR = process.env.UPLOAD_DIR || './uploads';
 const BUSINESS_PLANS_DIR = path.join(UPLOAD_DIR, 'business-plans');
+const TEMPLATES_DIR = path.join(UPLOAD_DIR, 'templates');
 
 // Create directories if they don't exist
 if (!fs.existsSync(BUSINESS_PLANS_DIR)) {
   fs.mkdirSync(BUSINESS_PLANS_DIR, { recursive: true });
+}
+
+if (!fs.existsSync(TEMPLATES_DIR)) {
+  fs.mkdirSync(TEMPLATES_DIR, { recursive: true });
 }
 
 // File size limits (from .env or defaults)
@@ -56,6 +61,26 @@ export const uploadBusinessPlan = multer({
     fileSize: MAX_FILE_SIZE_DOC,
   },
 }).single('planFile');
+
+// Storage configuration for templates
+const templateStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, TEMPLATES_DIR);
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = `${uuidv4()}${path.extname(file.originalname)}`;
+    cb(null, uniqueName);
+  },
+});
+
+// Multer upload middleware for templates
+export const uploadTemplate = multer({
+  storage: templateStorage,
+  fileFilter: businessPlanFileFilter, // Same file types: PDF, DOC, DOCX
+  limits: {
+    fileSize: MAX_FILE_SIZE_DOC, // 20MB
+  },
+}).single('file');
 
 /**
  * Delete a file from filesystem

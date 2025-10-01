@@ -34,11 +34,27 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Request logging (can be removed in production)
+app.use((req, res, next) => {
+  console.log('📥 Request:', req.method, req.path);
+  next();
+});
+
+// Test routes removed - Router is working correctly
+
 // Routes
-app.use('/api', routes);
+console.log('🔧 Mounting routes, typeof routes:', typeof routes);
+console.log('🔧 Routes object:', routes);
+
+app.use('/api', (req, res, next) => {
+  console.log('🔍 API middleware called, path:', req.path, 'method:', req.method);
+  next();
+}, routes);
+console.log('✅ Routes mounted successfully');
 
 // 404 handler (must be after all routes)
 app.use((req, res, next) => {
+  console.log('⚠️  404 handler called for path:', req.path);
   res.status(404).json({
     error: 'Not found',
     code: 'NOT_FOUND',

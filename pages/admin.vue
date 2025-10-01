@@ -40,6 +40,15 @@
           >
             Пользователи
           </button>
+          <button
+            @click="activeTab = 'templates'"
+            :class="[
+              'px-6 py-3 font-medium transition-colors border-b-2',
+              activeTab === 'templates' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-600 hover:text-gray-900'
+            ]"
+          >
+            Шаблоны
+          </button>
         </div>
       </div>
 
@@ -231,6 +240,81 @@
           </div>
         </div>
       </div>
+
+      <!-- Templates Tab -->
+      <div v-else-if="activeTab === 'templates'" class="space-y-6">
+        <!-- Upload Template Form -->
+        <div class="bg-white rounded-lg shadow-sm border p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Загрузить шаблон бизнес-плана</h3>
+          <form @submit.prevent="handleUploadTemplate" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Название шаблона</label>
+              <input
+                v-model="templateForm.name"
+                type="text"
+                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                placeholder="Например: Шаблон бизнес-плана 2025"
+                required
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Файл шаблона (PDF, DOC, DOCX)</label>
+              <input
+                type="file"
+                @change="handleFileSelect"
+                accept=".pdf,.doc,.docx"
+                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                required
+              />
+              <p class="text-sm text-gray-500 mt-1">Максимальный размер: 20 МБ</p>
+            </div>
+            <div v-if="templateError" class="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700 text-sm">
+              {{ templateError }}
+            </div>
+            <div v-if="uploadSuccess" class="bg-green-50 border border-green-200 rounded-lg p-4 text-green-700 text-sm">
+              Шаблон успешно загружен!
+            </div>
+            <button
+              type="submit"
+              :disabled="templateLoading"
+              class="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {{ templateLoading ? 'Загрузка...' : 'Загрузить шаблон' }}
+            </button>
+          </form>
+        </div>
+
+        <!-- Current Template -->
+        <div class="bg-white rounded-lg shadow-sm border p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Текущий шаблон</h3>
+          <div v-if="currentTemplate" class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            <div>
+              <p class="font-medium text-gray-900">{{ currentTemplate.name }}</p>
+              <p class="text-sm text-gray-500">{{ currentTemplate.fileName }}</p>
+              <p class="text-xs text-gray-400 mt-1">
+                Загружен: {{ new Date(currentTemplate.createdAt).toLocaleString('ru-RU') }}
+              </p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button
+                @click="downloadCurrentTemplate"
+                class="btn-secondary text-sm"
+              >
+                Скачать
+              </button>
+              <button
+                @click="handleDeleteTemplate"
+                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
+              >
+                Удалить
+              </button>
+            </div>
+          </div>
+          <div v-else class="text-center py-12 text-gray-500">
+            Шаблон не загружен
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Application Details Modal -->
@@ -338,11 +422,12 @@ definePageMeta({
 
 const { user, logout } = useAuth()
 const { applications, users, stats, loading, error, getAllApplications, updateApplicationStatus, getAllUsers, getStats } = useAdmin()
+const { activeTemplate, uploadTemplate, getActiveTemplate, downloadTemplate, deleteTemplate } = useTemplate()
 
 const config = useRuntimeConfig()
 const apiUrl = config.public.apiUrl
 
-const activeTab = ref<'applications' | 'users'>('applications')
+const activeTab = ref<'applications' | 'users' | 'templates'>('applications')
 const filters = ref({
   status: 'submitted' as '' | 'draft' | 'submitted',
   category: '' as '' | 'starter' | 'active' | 'it',
@@ -351,6 +436,16 @@ const filters = ref({
 })
 const pagination = ref<{ page: number; limit: number; total: number; pages: number } | null>(null)
 const selectedApplication = ref<any>(null)
+
+// Template state
+const currentTemplate = ref<any>(null)
+const templateForm = ref({
+  name: '',
+  file: null as File | null
+})
+const templateLoading = ref(false)
+const templateError = ref<string | null>(null)
+const uploadSuccess = ref(false)
 
 // Load data on mount
 onMounted(async () => {
@@ -363,6 +458,8 @@ watch(activeTab, async (newTab) => {
     await loadApplications()
   } else if (newTab === 'users' && users.value.length === 0) {
     await loadUsers()
+  } else if (newTab === 'templates' && !currentTemplate.value) {
+    await loadTemplate()
   }
 })
 
@@ -371,7 +468,14 @@ const loadData = async () => {
     await loadApplications()
   } else if (activeTab.value === 'users') {
     await loadUsers()
+  } else if (activeTab.value === 'templates') {
+    await loadTemplate()
   }
+}
+
+const loadTemplate = async () => {
+  const template = await getActiveTemplate()
+  currentTemplate.value = template
 }
 
 const loadApplications = async () => {
@@ -428,6 +532,58 @@ const getCategoryLabel = (category: string) => {
 
 const handleLogout = async () => {
   await logout()
+}
+
+// Template handlers
+const handleFileSelect = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  if (target.files && target.files[0]) {
+    templateForm.value.file = target.files[0]
+  }
+}
+
+const handleUploadTemplate = async () => {
+  if (!templateForm.value.name || !templateForm.value.file) return
+
+  templateLoading.value = true
+  templateError.value = null
+  uploadSuccess.value = false
+
+  try {
+    await uploadTemplate(templateForm.value.file, templateForm.value.name)
+    uploadSuccess.value = true
+
+    // Reset form
+    templateForm.value = { name: '', file: null }
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement
+    if (fileInput) fileInput.value = ''
+
+    // Reload template
+    await loadTemplate()
+  } catch (err: any) {
+    templateError.value = err.data?.error || 'Не удалось загрузить шаблон'
+  } finally {
+    templateLoading.value = false
+  }
+}
+
+const downloadCurrentTemplate = () => {
+  if (currentTemplate.value) {
+    downloadTemplate(currentTemplate.value)
+  }
+}
+
+const handleDeleteTemplate = async () => {
+  if (!currentTemplate.value) return
+
+  if (!confirm('Вы уверены, что хотите удалить текущий шаблон?')) return
+
+  try {
+    await deleteTemplate(currentTemplate.value.id)
+    currentTemplate.value = null
+  } catch (err) {
+    alert('Не удалось удалить шаблон')
+  }
 }
 
 useSeoMeta({

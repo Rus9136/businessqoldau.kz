@@ -162,6 +162,29 @@
 
             <!-- Applications Tab -->
             <div v-show="activeTab === 'applications'">
+              <!-- Template Download Section -->
+              <div v-if="templateInfo" class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+                <div class="flex items-start justify-between">
+                  <div class="flex items-start gap-4">
+                    <div class="p-3 bg-blue-100 rounded-lg">
+                      <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-gray-900 mb-1">{{ templateInfo.name }}</h3>
+                      <p class="text-sm text-gray-600 mb-3">Используйте этот шаблон для подготовки бизнес-плана</p>
+                      <button @click="handleDownloadTemplate" class="btn-primary text-sm inline-flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        Скачать шаблон
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div v-if="applicationLoading" class="bg-white rounded-lg shadow-md p-6">
                 <div class="text-center py-12">
                   <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -425,9 +448,13 @@ const {
   submitApplication,
   uploadFile
 } = useApplication()
+const { getActiveTemplate, downloadTemplate } = useTemplate()
 
 // Tab state
 const activeTab = ref<'profile' | 'applications'>('profile')
+
+// Template state
+const templateInfo = ref<any>(null)
 
 // Profile editing state
 const editingProfile = ref(false)
@@ -447,12 +474,13 @@ const applicationForm = ref<{ category: ApplicationCategory | '', summary: strin
 const selectedFile = ref<File | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
 
-// Fetch user, profile and application on mount
+// Fetch user, profile, application and template on mount
 onMounted(async () => {
   try {
     await fetchCurrentUser()
     await fetchProfile()
     await fetchApplications()
+    templateInfo.value = await getActiveTemplate()
 
     // If profile doesn't exist, enable edit mode
     if (!profile.value) {
@@ -665,6 +693,12 @@ const getCategoryLabel = (category: ApplicationCategory) => {
 
 const handleLogout = async () => {
   await logout()
+}
+
+const handleDownloadTemplate = () => {
+  if (templateInfo.value) {
+    downloadTemplate(templateInfo.value)
+  }
 }
 
 useSeoMeta({
