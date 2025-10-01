@@ -9,6 +9,29 @@
       </div>
 
       <div class="bg-white p-8 rounded-lg shadow-md">
+        <!-- Application Period Status -->
+        <div v-if="periodStatus && !periodStatus.isActive" class="mb-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <div class="flex items-start">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-yellow-600 flex-shrink-0 mt-0.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <div class="ml-3">
+              <h3 class="text-sm font-semibold text-yellow-800">
+                Регистрация временно недоступна
+              </h3>
+              <p class="mt-1 text-sm text-yellow-700">
+                {{ periodStatus.message || 'Период подачи заявок не активен в данный момент' }}
+              </p>
+              <p v-if="settings" class="mt-2 text-xs text-yellow-600">
+                Период подачи заявок: с {{ formatDate(settings.start_date) }} по {{ formatDate(settings.end_date) }}
+              </p>
+              <p class="mt-2 text-xs text-yellow-600 font-medium">
+                Администраторы могут войти в систему в любое время
+              </p>
+            </div>
+          </div>
+        </div>
+
         <div class="mb-6">
           <div class="flex border-b">
             <button
@@ -28,8 +51,10 @@
                 'flex-1 py-3 font-semibold transition-colors',
                 mode === 'register'
                   ? 'text-blue-600 border-b-2 border-blue-600'
-                  : 'text-gray-500'
+                  : 'text-gray-500',
+                periodStatus && !periodStatus.isActive ? 'opacity-50 cursor-not-allowed' : ''
               ]"
+              :disabled="periodStatus && !periodStatus.isActive"
             >
               Регистрация
             </button>
@@ -153,6 +178,7 @@ definePageMeta({
 
 const router = useRouter()
 const { login, register, user } = useAuth()
+const { getApplicationSettings, settings, periodStatus, formatDate } = useSettings()
 
 const mode = ref<'login' | 'register'>('login')
 const form = reactive({
@@ -167,7 +193,22 @@ const error = ref('')
 const success = ref('')
 const showPassword = ref(false)
 
+// Check application period on page load
+onMounted(async () => {
+  try {
+    await getApplicationSettings()
+  } catch (e) {
+    console.error('Failed to load application period settings:', e)
+  }
+})
+
 const handleSubmit = async () => {
+  // Check if registration is blocked during inactive period
+  if (mode.value === 'register' && periodStatus.value && !periodStatus.value.isActive) {
+    error.value = 'Регистрация временно недоступна. ' + (periodStatus.value.message || '')
+    return
+  }
+
   loading.value = true
   error.value = ''
   success.value = ''
@@ -200,7 +241,15 @@ const handleSubmit = async () => {
     }
   } catch (e: any) {
     console.error('Login error:', e)
-    error.value = e.data?.message || e.message || 'Произошла ошибка'
+
+    // Handle APPLICATION_PERIOD_INACTIVE error from backend
+    if (e.data?.code === 'APPLICATION_PERIOD_INACTIVE') {
+      error.value = e.data.message
+      // Refresh period status
+      await getApplicationSettings()
+    } else {
+      error.value = e.data?.message || e.message || 'Произошла ошибка'
+    }
   } finally {
     loading.value = false
   }

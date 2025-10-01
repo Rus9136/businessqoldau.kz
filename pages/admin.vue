@@ -96,6 +96,21 @@
             </svg>
             <span>Статистика</span>
           </button>
+
+          <button
+            @click="activeTab = 'settings'"
+            :class="[
+              'w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors text-left',
+              activeTab === 'settings'
+                ? 'bg-blue-50 text-blue-700'
+                : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+            ]"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Период подачи</span>
+          </button>
         </nav>
       </aside>
 
@@ -390,6 +405,120 @@
         </div>
       </div>
 
+      <!-- Settings Tab - Application Period -->
+      <div v-else-if="activeTab === 'settings'" class="space-y-6">
+        <!-- Current Status -->
+        <div class="bg-white rounded-lg shadow-sm border p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Текущий статус периода</h3>
+          <div v-if="settingsLoading" class="text-center py-8">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <p class="text-gray-500 mt-2">Загрузка...</p>
+          </div>
+          <div v-else-if="periodSettings" class="space-y-4">
+            <div class="flex items-center gap-3">
+              <span v-if="periodStatus?.isActive" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                Период активен
+              </span>
+              <span v-else class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                </svg>
+                Период неактивен
+              </span>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-4">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <p class="text-sm text-gray-600">Начало периода</p>
+                  <p class="text-lg font-semibold text-gray-900">{{ formatSettingsDate(periodSettings.start_date) }}</p>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-600">Окончание периода</p>
+                  <p class="text-lg font-semibold text-gray-900">{{ formatSettingsDate(periodSettings.end_date) }}</p>
+                </div>
+              </div>
+              <div v-if="periodStatus?.message" class="mt-4 pt-4 border-t">
+                <p class="text-sm text-gray-600">Сообщение пользователям:</p>
+                <p class="text-gray-900 mt-1">{{ periodStatus.message }}</p>
+              </div>
+            </div>
+          </div>
+          <div v-else class="text-center py-8 text-gray-500">
+            Настройки периода не установлены
+          </div>
+        </div>
+
+        <!-- Update Period Form -->
+        <div class="bg-white rounded-lg shadow-sm border p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Изменить период подачи заявок</h3>
+          <form @submit.prevent="handleUpdatePeriod" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Дата начала
+                </label>
+                <input
+                  v-model="periodForm.start_date"
+                  type="datetime-local"
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Дата окончания
+                </label>
+                <input
+                  v-model="periodForm.end_date"
+                  type="datetime-local"
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+            </div>
+
+            <div v-if="settingsError" class="bg-red-50 border border-red-200 rounded-lg p-4">
+              <p class="text-red-700 text-sm">{{ settingsError }}</p>
+            </div>
+
+            <div v-if="settingsSuccess" class="bg-green-50 border border-green-200 rounded-lg p-4">
+              <p class="text-green-700 text-sm">Настройки периода успешно обновлены!</p>
+            </div>
+
+            <div class="flex gap-3">
+              <button
+                type="submit"
+                :disabled="settingsLoading"
+                class="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {{ settingsLoading ? 'Сохранение...' : 'Сохранить изменения' }}
+              </button>
+              <button
+                type="button"
+                @click="resetPeriodForm"
+                class="btn-secondary"
+              >
+                Сбросить
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Info Box -->
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+          <h4 class="font-semibold text-blue-900 mb-2">ℹ️ Информация</h4>
+          <ul class="text-sm text-blue-800 space-y-2">
+            <li>• Регистрация и вход пользователей будут заблокированы вне указанного периода</li>
+            <li>• Пользователи увидят информативное сообщение с указанием дат периода</li>
+            <li>• Изменения вступают в силу немедленно</li>
+            <li>• Убедитесь, что даты указаны правильно перед сохранением</li>
+          </ul>
+        </div>
+      </div>
+
       <!-- Templates Tab -->
       <div v-else-if="activeTab === 'templates'" class="space-y-6">
         <!-- Upload Template Form -->
@@ -637,11 +766,12 @@ definePageMeta({
 const { user, logout } = useAuth()
 const { applications, users, contacts, stats, loading, error, getAllApplications, updateApplicationStatus, getAllUsers, getStats, getAllContacts, getContactById } = useAdmin()
 const { activeTemplate, uploadTemplate, getActiveTemplate, downloadTemplate, deleteTemplate } = useTemplate()
+const { settings: periodSettings, periodStatus, loading: settingsLoading, error: settingsError, getApplicationSettings, updateApplicationSettings, formatDateForInput, formatDate: formatSettingsDate } = useSettings()
 
 const config = useRuntimeConfig()
 const apiUrl = config.public.apiUrl
 
-const activeTab = ref<'applications' | 'users' | 'templates' | 'contacts' | 'stats'>('applications')
+const activeTab = ref<'applications' | 'users' | 'templates' | 'contacts' | 'stats' | 'settings'>('applications')
 const filters = ref({
   status: 'submitted' as '' | 'draft' | 'submitted',
   category: '' as '' | 'starter' | 'active' | 'it',
@@ -663,6 +793,13 @@ const templateLoading = ref(false)
 const templateError = ref<string | null>(null)
 const uploadSuccess = ref(false)
 
+// Settings state
+const periodForm = ref({
+  start_date: '',
+  end_date: ''
+})
+const settingsSuccess = ref(false)
+
 // Load data on mount
 onMounted(async () => {
   await loadData()
@@ -676,6 +813,8 @@ watch(activeTab, async (newTab) => {
     await loadUsers()
   } else if (newTab === 'templates' && !currentTemplate.value) {
     await loadTemplate()
+  } else if (newTab === 'settings' && !periodSettings.value) {
+    await loadSettings()
   }
 })
 
@@ -822,6 +961,47 @@ const handleDeleteTemplate = async () => {
   } catch (err) {
     alert('Не удалось удалить шаблон')
   }
+}
+
+// Settings handlers
+const loadSettings = async () => {
+  try {
+    await getApplicationSettings()
+    if (periodSettings.value) {
+      periodForm.value.start_date = formatDateForInput(periodSettings.value.start_date)
+      periodForm.value.end_date = formatDateForInput(periodSettings.value.end_date)
+    }
+  } catch (err) {
+    console.error('Failed to load settings:', err)
+  }
+}
+
+const handleUpdatePeriod = async () => {
+  settingsSuccess.value = false
+
+  try {
+    // Convert local datetime to ISO string
+    const startDate = new Date(periodForm.value.start_date).toISOString()
+    const endDate = new Date(periodForm.value.end_date).toISOString()
+
+    await updateApplicationSettings(startDate, endDate)
+    settingsSuccess.value = true
+
+    // Hide success message after 3 seconds
+    setTimeout(() => {
+      settingsSuccess.value = false
+    }, 3000)
+  } catch (err: any) {
+    console.error('Failed to update settings:', err)
+  }
+}
+
+const resetPeriodForm = () => {
+  if (periodSettings.value) {
+    periodForm.value.start_date = formatDateForInput(periodSettings.value.start_date)
+    periodForm.value.end_date = formatDateForInput(periodSettings.value.end_date)
+  }
+  settingsSuccess.value = false
 }
 
 // Watch for tab changes to load data

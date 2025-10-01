@@ -5,6 +5,7 @@ import applicationRoutes from './application';
 import contactRoutes from './contact';
 import adminRoutes from './adminRoutes';
 import templateRoutes from './templateRoutes';
+import settingsRoutes from './settingsRoutes';
 
 const router = Router();
 
@@ -21,6 +22,7 @@ router.get('', (req, res) => {
       contacts: '/api/contacts',
       admin: '/api/admin',
       templates: '/api/templates',
+      settings: '/api/settings',
     },
   });
 });
@@ -32,5 +34,6 @@ router.use('/applications', applicationRoutes);
 router.use('/contacts', contactRoutes);
 router.use('/admin', adminRoutes);
 router.use('/templates', templateRoutes);
+router.use('/settings', settingsRoutes);
 
 export default router;

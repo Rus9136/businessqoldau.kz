@@ -1,14 +1,15 @@
 import { Router } from 'express';
 import * as authController from '../controllers/authController';
 import { authenticate } from '../middleware/auth';
+import { checkApplicationPeriodForAuth } from '../middleware/applicationPeriod';
 
 const router = Router();
 
 // POST /api/auth/register - Register new user
-router.post('/register', authController.register);
+router.post('/register', checkApplicationPeriodForAuth, authController.register);
 
 // POST /api/auth/login - Login user
-router.post('/login', authController.login);
+router.post('/login', checkApplicationPeriodForAuth, authController.login);
 
 // POST /api/auth/refresh - Refresh access token
 router.post('/refresh', authController.refresh);

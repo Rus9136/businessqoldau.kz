@@ -171,6 +171,13 @@ Schema defined in `backend/prisma/schema.prisma`:
 - `name`, `email`, `message` (text)
 - `created_at`
 
+**application_settings** table:
+- `id` (UUID, PK)
+- `setting_key` (string, unique) - ключ настройки (например, "application_period")
+- `setting_value` (JSON) - значение настройки с полями: start_date, end_date, is_active, message
+- `updated_by_id` (UUID, FK to users.id) - администратор, который обновил настройку
+- `created_at`, `updated_at`
+
 ### File Storage
 Local filesystem storage in `backend/uploads/`:
 - `business-plans/` - Business plans in PDF/DOC/DOCX format (max 20MB)
@@ -234,16 +241,27 @@ backend/
 │   │   ├── database.ts      # Prisma client singleton
 │   │   └── jwt.ts           # JWT configuration
 │   ├── middleware/
-│   │   ├── auth.ts          # JWT authentication middleware
-│   │   └── errorHandler.ts # Global error handler
+│   │   ├── auth.ts              # JWT authentication middleware
+│   │   ├── adminAuth.ts         # Admin role verification
+│   │   ├── applicationPeriod.ts # Application period checker
+│   │   └── errorHandler.ts      # Global error handler
 │   ├── routes/
-│   │   └── index.ts         # Main router (stages 2-6)
-│   ├── controllers/         # Request handlers (stages 2-6)
-│   ├── services/            # Business logic (stages 2-6)
-│   ├── utils/               # Helper functions (stages 2-6)
+│   │   ├── index.ts            # Main router
+│   │   ├── auth.ts             # Auth endpoints
+│   │   ├── profile.ts          # Profile endpoints
+│   │   ├── application.ts      # Application endpoints
+│   │   ├── contact.ts          # Contact endpoints
+│   │   ├── adminRoutes.ts      # Admin endpoints
+│   │   └── settingsRoutes.ts   # Settings endpoints (application period)
+│   ├── controllers/         # Request handlers
+│   │   └── settingsController.ts  # Application period controller
+│   ├── services/            # Business logic
+│   │   └── settingsService.ts     # Application period service
+│   ├── utils/               # Helper functions
 │   └── index.ts             # Express app entry point
 ├── prisma/
-│   └── schema.prisma        # Database schema
+│   ├── schema.prisma        # Database schema
+│   └── migrations/          # Database migrations
 ├── uploads/
 │   └── business-plans/      # PDF/DOC/DOCX files
 └── .env                     # Environment variables
@@ -344,6 +362,23 @@ backend/
 - Backend file serving (✅ COMPLETE):
   - Статические файлы из /uploads доступны через express.static
   - Файлы доступны по URL: http://localhost:3001/uploads/business-plans/{filename}
+
+**Application Period System** ✅ COMPLETE
+- Backend (✅ COMPLETE):
+  - Таблица `application_settings` для хранения настроек периода (JSON)
+  - SettingsService с методами: getApplicationSettings, updateApplicationSettings, isApplicationPeriodActive
+  - SettingsController с валидацией дат и логикой проверки периода
+  - Settings routes: GET/PUT /api/settings/application-period
+  - Middleware `checkApplicationPeriodForAuth` - блокирует регистрацию вне периода, вход разрешен всегда
+  - Код ошибки: `APPLICATION_PERIOD_INACTIVE`
+- Frontend (✅ COMPLETE):
+  - Composable useSettings() для работы с API периода
+  - Admin panel: вкладка "Период подачи" для управления датами start_date/end_date
+  - Login page: автоматическая проверка периода при загрузке
+  - Информационный баннер при неактивном периоде
+  - Блокировка кнопки "Регистрация" вне периода
+  - Вход администратора разрешен всегда
+- Документация: См. `APPLICATION_PERIOD_SYSTEM.md` для полной информации
 
 ### ⏳ TODO
 **Stage 7:** Testing & security
