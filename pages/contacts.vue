@@ -9,8 +9,8 @@
           <div class="space-y-4">
             <div>
               <h3 class="font-semibold mb-2">Email</h3>
-              <a href="mailto:info@businesscamp.kz" class="text-blue-600 hover:underline">
-                info@businesscamp.kz
+              <a href="mailto:qoldaubusiness@gmail.com" class="text-blue-600 hover:underline">
+                qoldaubusiness@gmail.com
               </a>
             </div>
             <div>
