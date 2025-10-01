@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import * as authService from '../services/authService';
 import { AppError } from '../middleware/errorHandler';
+import { AuthRequest } from '../middleware/auth';
 
 // Validation schemas
 const registerSchema = z.object({
@@ -152,5 +153,22 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
     } else {
       next(error);
     }
+  }
+};
+
+export const getCurrentUser = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    if (!req.userId) {
+      throw new AppError('Unauthorized', 401);
+    }
+
+    const user = await authService.getCurrentUser(req.userId);
+
+    res.json({
+      message: 'User retrieved successfully',
+      user,
+    });
+  } catch (error) {
+    next(error);
   }
 };

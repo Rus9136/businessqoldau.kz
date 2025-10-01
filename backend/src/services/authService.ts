@@ -232,3 +232,20 @@ export const resetPassword = async (token: string, newPassword: string): Promise
     where: { userId: resetToken.userId },
   });
 };
+
+export const getCurrentUser = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      email: true,
+      emailVerified: true,
+    },
+  });
+
+  if (!user) {
+    throw new AppError('User not found', 404);
+  }
+
+  return user;
+};

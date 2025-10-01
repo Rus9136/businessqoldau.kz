@@ -5,7 +5,7 @@ export interface Profile {
   userId: string
   fullName: string
   phone: string
-  city: string
+  city: string | null
   createdAt: string
   updatedAt: string
 }
@@ -13,7 +13,7 @@ export interface Profile {
 export interface ProfileInput {
   fullName: string
   phone: string
-  city: string
+  city?: string
 }
 
 export interface ProfileUpdateInput {
@@ -100,6 +100,7 @@ export const useProfile = () => {
     loading,
     error,
     getProfile,
+    fetchProfile: getProfile, // Alias for consistency
     createProfile,
     updateProfile,
   }

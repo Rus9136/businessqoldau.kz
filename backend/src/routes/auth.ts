@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as authController from '../controllers/authController';
+import { authenticate } from '../middleware/auth';
 
 const router = Router();
 
@@ -23,5 +24,8 @@ router.post('/forgot-password', authController.forgotPassword);
 
 // POST /api/auth/reset-password - Reset password with token
 router.post('/reset-password', authController.resetPassword);
+
+// GET /api/auth/me - Get current user info
+router.get('/me', authenticate, authController.getCurrentUser);
 
 export default router;

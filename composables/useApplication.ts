@@ -54,6 +54,12 @@ export const useApplication = () => {
       )
 
       applications.value = response.applications
+      // Set current application to the first one (users can have only one application)
+      if (response.applications.length > 0) {
+        currentApplication.value = response.applications[0]
+      } else {
+        currentApplication.value = null
+      }
       return response.applications
     } catch (err: any) {
       error.value = err?.data?.message || 'Failed to fetch applications'
@@ -221,7 +227,7 @@ export const useApplication = () => {
 
     try {
       const formData = new FormData()
-      formData.append('file', file)
+      formData.append('planFile', file)
 
       // Use XMLHttpRequest for upload progress tracking
       const response = await new Promise<Application>((resolve, reject) => {
@@ -304,10 +310,12 @@ export const useApplication = () => {
   return {
     applications,
     currentApplication,
+    application: currentApplication, // Alias for single application
     loading,
     uploadProgress,
     error,
     getApplications,
+    fetchApplications: getApplications, // Alias for consistency
     getApplicationById,
     createApplication,
     updateApplication,

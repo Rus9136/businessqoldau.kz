@@ -142,6 +142,24 @@ export const useAuth = () => {
     }
   }
 
+  const fetchCurrentUser = async () => {
+    if (!accessToken.value) {
+      return null
+    }
+
+    try {
+      const response = await fetchWithAuth<{ message: string; user: User }>(
+        `${config.public.apiUrl}/auth/me`
+      )
+
+      user.value = response.user
+      return response.user
+    } catch (error) {
+      console.error('Failed to fetch current user:', error)
+      return null
+    }
+  }
+
   return {
     user,
     isAuthenticated,
@@ -153,5 +171,6 @@ export const useAuth = () => {
     refreshAccessToken,
     getAuthHeaders,
     fetchWithAuth,
+    fetchCurrentUser,
   }
 }
