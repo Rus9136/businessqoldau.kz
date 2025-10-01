@@ -6,6 +6,12 @@ import * as templateController from '../controllers/templateController';
 
 const router = Router();
 
+// Test route - no auth
+router.post('/test', (req, res) => {
+  console.log('🧪 TEST POST route called!');
+  res.json({ message: 'Test POST works!' });
+});
+
 // Public/authenticated user routes
 router.get('/active', authenticate, templateController.getActiveTemplate);
 
