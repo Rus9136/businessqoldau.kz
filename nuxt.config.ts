@@ -12,16 +12,16 @@ export default defineNuxtConfig({
   // i18n configuration
   i18n: {
     defaultLocale: 'ru',
-    langDir: 'locales',
-    locales: [
-      { code: 'ru', file: 'ru.json', name: 'Русский' },
-      { code: 'kk', file: 'kk.json', name: 'Қазақша' }
-    ]
+    locales: ['ru', 'kk'],
+    strategy: 'no_prefix',
+    vueI18n: './i18n.config.ts'
   },
 
   // Content configuration
   content: {
-    watch: false
+    watch: {
+      enabled: false
+    }
   },
 
   // App configuration

@@ -1,6 +1,6 @@
 export const useTemplate = () => {
   const config = useRuntimeConfig();
-  const { getToken } = useAuth();
+  const { fetchWithAuth } = useAuth();
 
   const activeTemplate = ref<any>(null);
   const loading = ref(false);
@@ -12,12 +12,7 @@ export const useTemplate = () => {
     error.value = null;
 
     try {
-      const token = getToken();
-      const response = await $fetch(`${config.public.apiUrl}/templates/active`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      const response = await fetchWithAuth(`${config.public.apiUrl}/templates/active`);
 
       activeTemplate.value = response;
       return response;
@@ -47,16 +42,12 @@ export const useTemplate = () => {
     error.value = null;
 
     try {
-      const token = getToken();
       const formData = new FormData();
       formData.append('file', file);
       formData.append('name', name);
 
-      const response = await $fetch(`${config.public.apiUrl}/templates/upload`, {
+      const response = await fetchWithAuth(`${config.public.apiUrl}/templates/upload`, {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
         body: formData
       });
 
@@ -76,12 +67,7 @@ export const useTemplate = () => {
     error.value = null;
 
     try {
-      const token = getToken();
-      const response = await $fetch(`${config.public.apiUrl}/templates/all`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      const response = await fetchWithAuth(`${config.public.apiUrl}/templates/all`);
 
       return response;
     } catch (err: any) {
@@ -99,12 +85,8 @@ export const useTemplate = () => {
     error.value = null;
 
     try {
-      const token = getToken();
-      const response = await $fetch(`${config.public.apiUrl}/templates/${id}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+      const response = await fetchWithAuth(`${config.public.apiUrl}/templates/${id}`, {
+        method: 'DELETE'
       });
 
       return response;

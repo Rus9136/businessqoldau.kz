@@ -2,7 +2,7 @@
   <div class="py-16">
     <div class="container-custom">
       <div class="max-w-4xl mx-auto">
-        <h1 class="mb-8">Как подать заявку</h1>
+        <h1 class="mb-8">{{ $t('howToApply.title') }}</h1>
 
         <div class="space-y-8">
           <!-- Step 1 -->
@@ -12,9 +12,9 @@
                 1
               </div>
               <div class="flex-1">
-                <h3 class="mb-2">Регистрация</h3>
+                <h3 class="mb-2">{{ $t('howToApply.step1.title') }}</h3>
                 <p class="text-gray-600">
-                  Зарегистрируйтесь на сайте, используя ваш email. Вы получите письмо для подтверждения email адреса.
+                  {{ $t('howToApply.step1.description') }}
                 </p>
               </div>
             </div>
@@ -27,9 +27,9 @@
                 2
               </div>
               <div class="flex-1">
-                <h3 class="mb-2">Заполнение анкеты</h3>
+                <h3 class="mb-2">{{ $t('howToApply.step2.title') }}</h3>
                 <p class="text-gray-600">
-                  Войдите в личный кабинет и заполните форму заявки: укажите ваши данные, выберите категорию участия и опишите ваш бизнес.
+                  {{ $t('howToApply.step2.description') }}
                 </p>
               </div>
             </div>
@@ -42,9 +42,9 @@
                 3
               </div>
               <div class="flex-1">
-                <h3 class="mb-2">Загрузка документов</h3>
+                <h3 class="mb-2">{{ $t('howToApply.step3.title') }}</h3>
                 <p class="text-gray-600">
-                  Загрузите бизнес-план (PDF, до 20 МБ) и видео-презентацию вашего проекта (MP4, до 300 МБ).
+                  {{ $t('howToApply.step3.description') }}
                 </p>
               </div>
             </div>
@@ -57,9 +57,9 @@
                 4
               </div>
               <div class="flex-1">
-                <h3 class="mb-2">Отправка заявки</h3>
+                <h3 class="mb-2">{{ $t('howToApply.step4.title') }}</h3>
                 <p class="text-gray-600">
-                  Проверьте все данные и нажмите "Отправить заявку". После отправки изменения будут недоступны.
+                  {{ $t('howToApply.step4.description') }}
                 </p>
               </div>
             </div>
@@ -67,19 +67,19 @@
 
           <!-- Categories -->
           <div class="bg-blue-50 p-6 rounded-lg mt-12">
-            <h3 class="mb-4">Категории участия</h3>
+            <h3 class="mb-4">{{ $t('howToApply.categories.title') }}</h3>
             <div class="space-y-4">
               <div>
-                <h4 class="font-semibold text-blue-600">Стартап</h4>
-                <p class="text-gray-600">Для новых проектов на стадии запуска (до 1 года)</p>
+                <h4 class="font-semibold text-blue-600">{{ $t('howToApply.categories.starter.title') }}</h4>
+                <p class="text-gray-600">{{ $t('howToApply.categories.starter.description') }}</p>
               </div>
               <div>
-                <h4 class="font-semibold text-blue-600">Действующий бизнес</h4>
-                <p class="text-gray-600">Для действующих компаний (от 1 до 5 лет)</p>
+                <h4 class="font-semibold text-blue-600">{{ $t('howToApply.categories.active.title') }}</h4>
+                <p class="text-gray-600">{{ $t('howToApply.categories.active.description') }}</p>
               </div>
               <div>
-                <h4 class="font-semibold text-blue-600">IT проект</h4>
-                <p class="text-gray-600">Для технологических и IT проектов</p>
+                <h4 class="font-semibold text-blue-600">{{ $t('howToApply.categories.it.title') }}</h4>
+                <p class="text-gray-600">{{ $t('howToApply.categories.it.description') }}</p>
               </div>
             </div>
           </div>
@@ -87,7 +87,7 @@
           <!-- CTA -->
           <div class="text-center mt-12">
             <NuxtLink to="/app" class="btn-primary">
-              Подать заявку
+              {{ $t('howToApply.applyButton') }}
             </NuxtLink>
           </div>
         </div>

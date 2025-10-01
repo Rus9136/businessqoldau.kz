@@ -4,8 +4,8 @@
       <div class="max-w-6xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
-          <h1 class="text-3xl font-bold text-gray-900 mb-2">Личный кабинет</h1>
-          <p class="text-gray-600">Управление профилем и заявками</p>
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $t('cabinet.title') }}</h1>
+          <p class="text-gray-600">{{ $t('cabinet.subtitle') }}</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -20,7 +20,7 @@
                       {{ profile?.fullName?.charAt(0).toUpperCase() || 'U' }}
                     </div>
                     <div>
-                      <p class="font-semibold text-gray-900">{{ profile?.fullName || 'Пользователь' }}</p>
+                      <p class="font-semibold text-gray-900">{{ profile?.fullName || $t('cabinet.user') }}</p>
                       <p class="text-sm text-gray-500">{{ user?.email }}</p>
                     </div>
                   </div>
@@ -39,7 +39,7 @@
                       <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                       </svg>
-                      Мой профиль
+                      {{ $t('cabinet.myProfile') }}
                     </span>
                   </button>
                   <button
@@ -53,9 +53,9 @@
                       <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                       </svg>
-                      Мои заявки
+                      {{ $t('cabinet.myApplications') }}
                       <span v-if="application" class="ml-auto px-2 py-0.5 text-xs rounded-full" :class="application.status === 'submitted' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'">
-                        {{ application.status === 'submitted' ? 'Отправлена' : 'Черновик' }}
+                        {{ application.status === 'submitted' ? $t('cabinet.submitted') : $t('cabinet.draft') }}
                       </span>
                     </span>
                   </button>
@@ -66,7 +66,7 @@
                   <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                   </svg>
-                  Выйти
+                  {{ $t('cabinet.logout') }}
                 </button>
               </div>
             </div>
@@ -77,38 +77,38 @@
             <!-- Profile Tab -->
             <div v-show="activeTab === 'profile'" class="bg-white rounded-lg shadow-md p-6">
               <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-semibold text-gray-900">Профиль пользователя</h2>
+                <h2 class="text-2xl font-semibold text-gray-900">{{ $t('cabinet.profile.title') }}</h2>
                 <button v-if="profile && !editingProfile" @click="editingProfile = true" class="btn-secondary">
-                  Редактировать
+                  {{ $t('cabinet.profile.edit') }}
                 </button>
                 <button v-if="editingProfile" @click="cancelEdit" class="btn-secondary">
-                  Отмена
+                  {{ $t('cabinet.profile.cancel') }}
                 </button>
               </div>
 
               <div v-if="profileLoading" class="text-center py-12">
                 <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                <p class="text-gray-500 mt-4">Загрузка...</p>
+                <p class="text-gray-500 mt-4">{{ $t('cabinet.loading') }}</p>
               </div>
 
               <!-- View Mode -->
               <div v-else-if="profile && !editingProfile" class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div class="bg-gray-50 rounded-lg p-4">
-                    <label class="block text-sm font-medium text-gray-500 mb-2">Полное имя</label>
+                    <label class="block text-sm font-medium text-gray-500 mb-2">{{ $t('cabinet.profile.fullName') }}</label>
                     <p class="text-lg font-medium text-gray-900">{{ profile.fullName }}</p>
                   </div>
                   <div class="bg-gray-50 rounded-lg p-4">
-                    <label class="block text-sm font-medium text-gray-500 mb-2">Email</label>
-                    <p class="text-lg font-medium text-gray-900">{{ user?.email || 'Не указан' }}</p>
+                    <label class="block text-sm font-medium text-gray-500 mb-2">{{ $t('cabinet.profile.email') }}</label>
+                    <p class="text-lg font-medium text-gray-900">{{ user?.email || $t('cabinet.profile.notSpecified') }}</p>
                   </div>
                   <div class="bg-gray-50 rounded-lg p-4">
-                    <label class="block text-sm font-medium text-gray-500 mb-2">Телефон</label>
+                    <label class="block text-sm font-medium text-gray-500 mb-2">{{ $t('cabinet.profile.phone') }}</label>
                     <p class="text-lg font-medium text-gray-900">{{ profile.phone }}</p>
                   </div>
                   <div class="bg-gray-50 rounded-lg p-4">
-                    <label class="block text-sm font-medium text-gray-500 mb-2">Город</label>
-                    <p class="text-lg font-medium text-gray-900">{{ profile.city || 'Не указан' }}</p>
+                    <label class="block text-sm font-medium text-gray-500 mb-2">{{ $t('cabinet.profile.city') }}</label>
+                    <p class="text-lg font-medium text-gray-900">{{ profile.city || $t('cabinet.profile.notSpecified') }}</p>
                   </div>
                 </div>
               </div>
@@ -116,17 +116,17 @@
               <!-- Edit Mode -->
               <form v-else @submit.prevent="saveProfile" class="space-y-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Полное имя *</label>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('cabinet.profile.fullName') }} *</label>
                   <input
                     v-model="profileForm.fullName"
                     type="text"
                     required
                     class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                    placeholder="Введите ваше полное имя"
+                    :placeholder="$t('cabinet.profile.enterFullName')"
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Телефон *</label>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('cabinet.profile.phone') }} *</label>
                   <input
                     v-model="profileForm.phone"
                     type="tel"
@@ -136,18 +136,18 @@
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Город</label>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('cabinet.profile.city') }}</label>
                   <input
                     v-model="profileForm.city"
                     type="text"
                     class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                    placeholder="Введите ваш город"
+                    :placeholder="$t('cabinet.profile.enterCity')"
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                  <p class="text-lg text-gray-500">{{ user?.email || 'Не указан' }}</p>
-                  <p class="text-xs text-gray-400 mt-1">Email нельзя изменить</p>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('cabinet.profile.email') }}</label>
+                  <p class="text-lg text-gray-500">{{ user?.email || $t('cabinet.profile.notSpecified') }}</p>
+                  <p class="text-xs text-gray-400 mt-1">{{ $t('cabinet.profile.emailCannotChange') }}</p>
                 </div>
 
                 <div v-if="profileError" class="text-red-600 text-sm bg-red-50 p-3 rounded-lg">
@@ -155,7 +155,7 @@
                 </div>
 
                 <button type="submit" class="btn-primary w-full">
-                  Сохранить изменения
+                  {{ $t('cabinet.profile.saveChanges') }}
                 </button>
               </form>
             </div>
@@ -173,12 +173,12 @@
                     </div>
                     <div>
                       <h3 class="font-semibold text-gray-900 mb-1">{{ templateInfo.name }}</h3>
-                      <p class="text-sm text-gray-600 mb-3">Используйте этот шаблон для подготовки бизнес-плана</p>
+                      <p class="text-sm text-gray-600 mb-3">{{ $t('cabinet.application.templateDescription') }}</p>
                       <button @click="handleDownloadTemplate" class="btn-primary text-sm inline-flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                         </svg>
-                        Скачать шаблон
+                        {{ $t('cabinet.application.downloadTemplate') }}
                       </button>
                     </div>
                   </div>
@@ -188,7 +188,7 @@
               <div v-if="applicationLoading" class="bg-white rounded-lg shadow-md p-6">
                 <div class="text-center py-12">
                   <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                  <p class="text-gray-500 mt-4">Загрузка...</p>
+                  <p class="text-gray-500 mt-4">{{ $t('cabinet.loading') }}</p>
                 </div>
               </div>
 
@@ -198,10 +198,10 @@
                   <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                   </svg>
-                  <h3 class="mt-4 text-lg font-medium text-gray-900">У вас пока нет заявок</h3>
-                  <p class="mt-2 text-sm text-gray-500">Создайте новую заявку на участие в конкурсе</p>
+                  <h3 class="mt-4 text-lg font-medium text-gray-900">{{ $t('cabinet.application.noApplications') }}</h3>
+                  <p class="mt-2 text-sm text-gray-500">{{ $t('cabinet.application.createApplicationPrompt') }}</p>
                   <button @click="showApplicationForm = true" class="mt-6 btn-primary">
-                    Создать заявку
+                    {{ $t('cabinet.application.createApplication') }}
                   </button>
                 </div>
               </div>
@@ -561,13 +561,14 @@ const cancelApplicationEdit = () => {
 
 const saveApplication = async () => {
   try {
+    const { $t } = useI18n()
     // Validate form
     if (!applicationForm.value.category || !applicationForm.value.summary) {
       return
     }
 
     if (applicationForm.value.summary.length < 50) {
-      alert('Описание бизнеса должно содержать минимум 50 символов')
+      alert($t('cabinet.application.minLengthError'))
       return
     }
 
@@ -593,14 +594,16 @@ const saveApplication = async () => {
         selectedFile.value = null
       } catch (uploadError) {
         console.error('Failed to upload file:', uploadError)
-        alert('Заявка сохранена, но произошла ошибка при загрузке файла. Попробуйте загрузить файл еще раз.')
+        const { $t } = useI18n()
+        alert($t('cabinet.application.uploadError'))
       }
     }
 
     showApplicationForm.value = false
   } catch (error) {
     console.error('Failed to save application:', error)
-    alert('Ошибка при сохранении заявки')
+    const { $t } = useI18n()
+    alert($t('cabinet.application.saveError'))
   }
 }
 
@@ -610,17 +613,18 @@ const handleFileSelect = async (event: Event) => {
 
   if (!file) return
 
+  const { $t } = useI18n()
   // Validate file type
   const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
   if (!allowedTypes.includes(file.type)) {
-    alert('Пожалуйста, загрузите файл в формате PDF, DOC или DOCX')
+    alert($t('cabinet.application.fileTypeError'))
     return
   }
 
   // Validate file size (20MB)
   const maxSize = 20 * 1024 * 1024
   if (file.size > maxSize) {
-    alert('Размер файла не должен превышать 20 МБ')
+    alert($t('cabinet.application.fileSizeError'))
     return
   }
 
@@ -639,29 +643,31 @@ const handleFileSelect = async (event: Event) => {
 
 const handleSubmitApplication = async () => {
   if (!application.value) return
+  const { $t } = useI18n()
 
   if (!canSubmitApplication.value) {
-    alert('Для отправки заявки необходимо загрузить бизнес-план')
+    alert($t('cabinet.application.uploadRequired').replace('⚠️ ', ''))
     return
   }
 
-  const confirmed = confirm('Вы уверены, что хотите отправить заявку? После отправки её нельзя будет изменить.')
+  const confirmed = confirm($t('cabinet.application.submitConfirm'))
   if (!confirmed) return
 
   try {
     await submitApplication(application.value.id)
-    alert('Заявка успешно отправлена!')
+    alert($t('cabinet.application.submitSuccess'))
     viewingApplication.value = false
   } catch (error) {
     console.error('Failed to submit application:', error)
-    alert('Ошибка при отправке заявки. Пожалуйста, попробуйте позже.')
+    alert($t('cabinet.application.submitError'))
   }
 }
 
 const confirmDelete = async () => {
   if (!application.value) return
+  const { $t } = useI18n()
 
-  const confirmed = confirm('Вы уверены, что хотите удалить заявку?')
+  const confirmed = confirm($t('cabinet.application.deleteConfirm'))
   if (!confirmed) return
 
   try {
@@ -674,7 +680,7 @@ const confirmDelete = async () => {
     }
   } catch (error) {
     console.error('Failed to delete application:', error)
-    alert('Ошибка при удалении заявки. Пожалуйста, попробуйте позже.')
+    alert($t('cabinet.application.deleteError'))
   }
 }
 
@@ -683,10 +689,11 @@ const canSubmitApplication = computed(() => {
 })
 
 const getCategoryLabel = (category: ApplicationCategory) => {
+  const { $t } = useI18n()
   const labels = {
-    starter: 'Стартап (начинающий бизнес)',
-    active: 'Активный бизнес',
-    it: 'IT проект'
+    starter: $t('cabinet.application.categoryStarter'),
+    active: $t('cabinet.application.categoryActive'),
+    it: $t('cabinet.application.categoryIT')
   }
   return labels[category] || category
 }

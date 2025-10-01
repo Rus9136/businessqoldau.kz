@@ -14,15 +14,15 @@
               </a>
             </div>
             <div>
-              <h3 class="font-semibold mb-2">Телефон</h3>
+              <h3 class="font-semibold mb-2">{{ $t('contactPage.phone') }}</h3>
               <a href="tel:+77000000000" class="text-blue-600 hover:underline">
                 +7 (700) 000-00-00
               </a>
             </div>
             <div>
-              <h3 class="font-semibold mb-2">Адрес</h3>
+              <h3 class="font-semibold mb-2">{{ $t('contactPage.address') }}</h3>
               <p class="text-gray-600">
-                г. Алматы, ул. Примерная, 123
+                {{ $t('contactPage.addressValue') }}
               </p>
             </div>
           </div>
@@ -30,7 +30,7 @@
 
         <!-- Contact Form -->
         <div class="bg-white p-8 rounded-lg shadow-md">
-          <h2 class="text-2xl font-semibold mb-6">Обратная связь</h2>
+          <h2 class="text-2xl font-semibold mb-6">{{ $t('contactPage.formTitle') }}</h2>
 
           <form @submit.prevent="handleSubmit" class="space-y-6">
             <div>
@@ -78,12 +78,12 @@
                 :disabled="loading"
                 class="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {{ loading ? 'Отправка...' : $t('forms.submit') }}
+                {{ loading ? $t('contactPage.sending') : $t('forms.submit') }}
               </button>
             </div>
 
             <div v-if="success" class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg">
-              Сообщение успешно отправлено!
+              {{ $t('contactPage.successMessage') }}
             </div>
 
             <div v-if="error" class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
@@ -127,7 +127,8 @@ const handleSubmit = async () => {
     form.message = ''
   } catch (e: any) {
     console.error('Contact form error:', e)
-    error.value = e.data?.message || e.message || 'Произошла ошибка при отправке'
+    const { $t } = useI18n()
+    error.value = e.data?.message || e.message || $t('contactPage.errorMessage')
   } finally {
     loading.value = false
   }
