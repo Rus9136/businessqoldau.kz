@@ -44,7 +44,7 @@ export async function uploadTemplateHandler(req: Request, res: Response) {
       });
     }
 
-    const uploadedById = (req as any).user.userId;
+    const uploadedById = (req as any).userId;
     const template = await templateService.uploadTemplate(req.file, uploadedById, name);
 
     return res.status(201).json({
