@@ -216,18 +216,18 @@
                         <div class="flex items-center gap-3 mb-2">
                           <h3 class="text-xl font-semibold text-gray-900">{{ getCategoryLabel(application.category) }}</h3>
                           <span class="px-3 py-1 rounded-full text-xs font-medium" :class="application.status === 'submitted' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'">
-                            {{ application.status === 'submitted' ? '✓ Отправлена' : 'Черновик' }}
+                            {{ application.status === 'submitted' ? '✓ ' + $t('cabinet.application.statusSubmitted') : $t('cabinet.application.statusDraft') }}
                           </span>
                         </div>
                         <p class="text-sm text-gray-500">
-                          Создана: {{ new Date(application.createdAt).toLocaleDateString('ru-RU') }}
+                          {{ $t('cabinet.application.createdOn') }}: {{ new Date(application.createdAt).toLocaleDateString('ru-RU') }}
                         </p>
                       </div>
                       <button
                         @click="viewingApplication = true"
                         class="btn-secondary"
                       >
-                        Посмотреть
+                        {{ $t('cabinet.application.viewApplication') }}
                       </button>
                     </div>
 
@@ -239,7 +239,7 @@
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
                         <span :class="application.planFilePath ? 'text-green-600 font-medium' : 'text-gray-500'">
-                          {{ application.planFilePath ? '✓ Бизнес-план загружен' : 'Бизнес-план не загружен' }}
+                          {{ application.planFilePath ? '✓ ' + $t('cabinet.application.businessPlanUploaded') : $t('cabinet.application.businessPlanNotUploaded') }}
                         </span>
                       </div>
                     </div>
@@ -269,10 +269,10 @@
             <!-- Status Badge -->
             <div class="mb-6">
               <span class="px-4 py-2 rounded-full text-sm font-medium" :class="application.status === 'submitted' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'">
-                {{ application.status === 'submitted' ? '✓ Заявка отправлена' : 'Черновик' }}
+                {{ application.status === 'submitted' ? '✓ ' + $t('cabinet.application.applicationSubmitted') : $t('cabinet.application.statusDraft') }}
               </span>
               <p class="text-sm text-gray-500 mt-2">
-                Создана: {{ new Date(application.createdAt).toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' }) }}
+                {{ $t('cabinet.application.createdOn') }}: {{ new Date(application.createdAt).toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' }) }}
               </p>
             </div>
 
@@ -358,7 +358,7 @@
                 required
                 rows="6"
                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                placeholder="Расскажите о вашем бизнесе..."
+                :placeholder="$t('cabinet.application.describeYourBusiness')"
               ></textarea>
               <p class="text-xs text-gray-500 mt-1">Минимум 50 символов</p>
             </div>
@@ -401,9 +401,9 @@
                     <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                   <button type="button" @click="$refs.fileInput.click()" class="mt-2 text-sm font-medium text-blue-600 hover:text-blue-700">
-                    Загрузить бизнес-план
+                    {{ $t('cabinet.application.uploadBusinessPlan') }}
                   </button>
-                  <p class="text-xs text-gray-500 mt-1">PDF, DOC или DOCX до 20 МБ</p>
+                  <p class="text-xs text-gray-500 mt-1">{{ $t('cabinet.application.fileFormat') }}</p>
                 </div>
               </div>
             </div>
@@ -414,10 +414,10 @@
 
             <div class="flex gap-4">
               <button type="submit" class="btn-primary flex-1">
-                {{ application ? 'Сохранить изменения' : 'Создать заявку' }}
+                {{ application ? $t('cabinet.application.saveChanges') : $t('cabinet.application.createApplication') }}
               </button>
               <button type="button" @click="cancelApplicationEdit" class="btn-secondary">
-                Отмена
+                {{ $t('cabinet.application.cancel') }}
               </button>
             </div>
           </form>
