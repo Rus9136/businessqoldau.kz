@@ -1,27 +1,42 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
+  <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
     <div class="container-custom">
-      <div class="max-w-6xl mx-auto">
+      <div class="max-w-7xl mx-auto">
         <!-- Header -->
-        <div class="mb-8">
-          <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ t('cabinet.title') }}</h1>
-          <p class="text-gray-600">{{ t('cabinet.subtitle') }}</p>
+        <div class="mb-8 animate-fade-in-up">
+          <div class="flex items-center justify-between flex-wrap gap-4">
+            <div>
+              <h1 class="text-4xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent mb-2">{{ t('cabinet.title') }}</h1>
+              <p class="text-gray-600 text-lg">{{ t('cabinet.subtitle') }}</p>
+            </div>
+            <div class="flex items-center space-x-3">
+              <div class="px-4 py-2 bg-white rounded-xl shadow-soft">
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span class="text-sm text-gray-600">Онлайн</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <!-- Sidebar -->
           <div class="lg:col-span-1">
-            <div class="bg-white rounded-lg shadow-md p-6 sticky top-6">
-              <div class="space-y-4">
+            <div class="card p-6 sticky top-6 animate-slide-in-right">
+              <div class="space-y-6">
                 <!-- User Info -->
-                <div class="border-b pb-4">
-                  <div class="flex items-center space-x-3 mb-3">
-                    <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-lg">
-                      {{ profile?.fullName?.charAt(0).toUpperCase() || 'U' }}
+                <div class="border-b border-gray-100 pb-6">
+                  <div class="flex items-center space-x-3 mb-4">
+                    <div class="relative">
+                      <div class="w-14 h-14 bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                        {{ profile?.fullName?.charAt(0).toUpperCase() || 'U' }}
+                      </div>
+                      <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
                     </div>
-                    <div>
-                      <p class="font-semibold text-gray-900">{{ profile?.fullName || t('cabinet.user') }}</p>
-                      <p class="text-sm text-gray-500">{{ user?.email }}</p>
+                    <div class="flex-1 min-w-0">
+                      <p class="font-bold text-gray-900 truncate">{{ profile?.fullName || t('cabinet.user') }}</p>
+                      <p class="text-sm text-gray-500 truncate">{{ user?.email }}</p>
                     </div>
                   </div>
                 </div>
@@ -31,130 +46,207 @@
                   <button
                     @click="activeTab = 'profile'"
                     :class="[
-                      'w-full text-left px-4 py-2 rounded-lg transition-colors',
-                      activeTab === 'profile' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
+                      'w-full text-left px-4 py-3 rounded-xl transition-all duration-200 group',
+                      activeTab === 'profile'
+                        ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-200'
+                        : 'text-gray-700 hover:bg-gray-50'
                     ]"
                   >
                     <span class="flex items-center">
-                      <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                       </svg>
-                      {{ t('cabinet.myProfile') }}
+                      <span class="font-medium">{{ t('cabinet.myProfile') }}</span>
                     </span>
                   </button>
                   <button
                     @click="activeTab = 'applications'"
                     :class="[
-                      'w-full text-left px-4 py-2 rounded-lg transition-colors',
-                      activeTab === 'applications' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
+                      'w-full text-left px-4 py-3 rounded-xl transition-all duration-200 group',
+                      activeTab === 'applications'
+                        ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-200'
+                        : 'text-gray-700 hover:bg-gray-50'
                     ]"
                   >
                     <span class="flex items-center">
-                      <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                       </svg>
-                      {{ t('cabinet.myApplications') }}
-                      <span v-if="application" class="ml-auto px-2 py-0.5 text-xs rounded-full" :class="application.status === 'submitted' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'">
+                      <span class="font-medium flex-1">{{ t('cabinet.myApplications') }}</span>
+                      <span v-if="application" class="px-2.5 py-1 text-xs rounded-lg font-semibold" :class="application.status === 'submitted' ? 'bg-green-500/20 text-green-700' : 'bg-yellow-500/20 text-yellow-700'">
                         {{ application.status === 'submitted' ? t('cabinet.submitted') : t('cabinet.draft') }}
                       </span>
                     </span>
                   </button>
                 </nav>
 
+                <!-- Quick Stats -->
+                <div class="border-t border-gray-100 pt-6 space-y-3">
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">Статус профиля</span>
+                    <span class="font-semibold text-green-600">{{ profile ? 'Заполнен' : 'Не заполнен' }}</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">Заявок</span>
+                    <span class="font-semibold text-primary-600">{{ application ? '1' : '0' }}</span>
+                  </div>
+                </div>
+
                 <!-- Logout Button -->
-                <button @click="handleLogout" class="w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 rounded-lg transition-colors flex items-center">
-                  <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button @click="handleLogout" class="w-full px-4 py-3 text-left text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200 flex items-center group border-t border-gray-100 pt-6">
+                  <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                   </svg>
-                  {{ t('cabinet.logout') }}
+                  <span class="font-medium">{{ t('cabinet.logout') }}</span>
                 </button>
               </div>
             </div>
           </div>
 
           <!-- Main Content -->
-          <div class="lg:col-span-2">
+          <div class="lg:col-span-3">
             <!-- Profile Tab -->
-            <div v-show="activeTab === 'profile'" class="bg-white rounded-lg shadow-md p-6">
-              <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-semibold text-gray-900">{{ t('cabinet.profile.title') }}</h2>
-                <button v-if="profile && !editingProfile" @click="editingProfile = true" class="btn-secondary">
-                  {{ t('cabinet.profile.edit') }}
+            <div v-show="activeTab === 'profile'" class="card p-8 animate-fade-in">
+              <div class="flex justify-between items-center mb-8">
+                <div>
+                  <h2 class="text-3xl font-bold text-gray-900 mb-2">{{ t('cabinet.profile.title') }}</h2>
+                  <p class="text-gray-600">Управление личной информацией</p>
+                </div>
+                <button
+                  v-if="profile && !editingProfile"
+                  @click="editingProfile = true"
+                  class="btn-outline flex items-center space-x-2"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  <span>{{ t('cabinet.profile.edit') }}</span>
                 </button>
-                <button v-if="editingProfile" @click="cancelEdit" class="btn-secondary">
-                  {{ t('cabinet.profile.cancel') }}
+                <button
+                  v-if="editingProfile"
+                  @click="cancelEdit"
+                  class="btn-ghost flex items-center space-x-2"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  <span>{{ t('cabinet.profile.cancel') }}</span>
                 </button>
               </div>
 
-              <div v-if="profileLoading" class="text-center py-12">
-                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                <p class="text-gray-500 mt-4">{{ t('cabinet.loading') }}</p>
+              <div v-if="profileLoading" class="text-center py-16">
+                <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-primary-200 border-t-primary-600 rounded-full"></div>
+                <p class="text-gray-500 mt-4 font-medium">{{ t('cabinet.loading') }}</p>
               </div>
 
               <!-- View Mode -->
               <div v-else-if="profile && !editingProfile" class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div class="bg-gray-50 rounded-lg p-4">
-                    <label class="block text-sm font-medium text-gray-500 mb-2">{{ t('cabinet.profile.fullName') }}</label>
-                    <p class="text-lg font-medium text-gray-900">{{ profile.fullName }}</p>
+                  <div class="card-gradient p-6 border-l-4 border-primary-500">
+                    <div class="flex items-start space-x-3">
+                      <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                      </div>
+                      <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-500 mb-1">{{ t('cabinet.profile.fullName') }}</label>
+                        <p class="text-lg font-bold text-gray-900">{{ profile.fullName }}</p>
+                      </div>
+                    </div>
                   </div>
-                  <div class="bg-gray-50 rounded-lg p-4">
-                    <label class="block text-sm font-medium text-gray-500 mb-2">{{ t('cabinet.profile.email') }}</label>
-                    <p class="text-lg font-medium text-gray-900">{{ user?.email || t('cabinet.profile.notSpecified') }}</p>
+                  <div class="card-gradient p-6 border-l-4 border-secondary-500">
+                    <div class="flex items-start space-x-3">
+                      <div class="w-10 h-10 bg-secondary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-secondary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                      <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-500 mb-1">{{ t('cabinet.profile.email') }}</label>
+                        <p class="text-lg font-bold text-gray-900 truncate">{{ user?.email || t('cabinet.profile.notSpecified') }}</p>
+                      </div>
+                    </div>
                   </div>
-                  <div class="bg-gray-50 rounded-lg p-4">
-                    <label class="block text-sm font-medium text-gray-500 mb-2">{{ t('cabinet.profile.phone') }}</label>
-                    <p class="text-lg font-medium text-gray-900">{{ profile.phone }}</p>
+                  <div class="card-gradient p-6 border-l-4 border-primary-500">
+                    <div class="flex items-start space-x-3">
+                      <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                      </div>
+                      <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-500 mb-1">{{ t('cabinet.profile.phone') }}</label>
+                        <p class="text-lg font-bold text-gray-900">{{ profile.phone }}</p>
+                      </div>
+                    </div>
                   </div>
-                  <div class="bg-gray-50 rounded-lg p-4">
-                    <label class="block text-sm font-medium text-gray-500 mb-2">{{ t('cabinet.profile.city') }}</label>
-                    <p class="text-lg font-medium text-gray-900">{{ profile.city || t('cabinet.profile.notSpecified') }}</p>
+                  <div class="card-gradient p-6 border-l-4 border-secondary-500">
+                    <div class="flex items-start space-x-3">
+                      <div class="w-10 h-10 bg-secondary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-secondary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                      </div>
+                      <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-500 mb-1">{{ t('cabinet.profile.city') }}</label>
+                        <p class="text-lg font-bold text-gray-900">{{ profile.city || t('cabinet.profile.notSpecified') }}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <!-- Edit Mode -->
-              <form v-else @submit.prevent="saveProfile" class="space-y-4">
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">{{ t('cabinet.profile.fullName') }} *</label>
-                  <input
-                    v-model="profileForm.fullName"
-                    type="text"
-                    required
-                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                    :placeholder="t('cabinet.profile.enterFullName')"
-                  />
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">{{ t('cabinet.profile.phone') }} *</label>
-                  <input
-                    v-model="profileForm.phone"
-                    type="tel"
-                    required
-                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                    placeholder="+77001234567"
-                  />
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">{{ t('cabinet.profile.city') }}</label>
-                  <input
-                    v-model="profileForm.city"
-                    type="text"
-                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                    :placeholder="t('cabinet.profile.enterCity')"
-                  />
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">{{ t('cabinet.profile.email') }}</label>
-                  <p class="text-lg text-gray-500">{{ user?.email || t('cabinet.profile.notSpecified') }}</p>
-                  <p class="text-xs text-gray-400 mt-1">{{ t('cabinet.profile.emailCannotChange') }}</p>
+              <form v-else @submit.prevent="saveProfile" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">{{ t('cabinet.profile.fullName') }} *</label>
+                    <input
+                      v-model="profileForm.fullName"
+                      type="text"
+                      required
+                      class="input-field"
+                      :placeholder="t('cabinet.profile.enterFullName')"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">{{ t('cabinet.profile.phone') }} *</label>
+                    <input
+                      v-model="profileForm.phone"
+                      type="tel"
+                      required
+                      class="input-field"
+                      placeholder="+77001234567"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">{{ t('cabinet.profile.city') }}</label>
+                    <input
+                      v-model="profileForm.city"
+                      type="text"
+                      class="input-field"
+                      :placeholder="t('cabinet.profile.enterCity')"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">{{ t('cabinet.profile.email') }}</label>
+                    <div class="p-4 bg-gray-50 rounded-xl border-2 border-gray-200">
+                      <p class="text-lg font-medium text-gray-700">{{ user?.email || t('cabinet.profile.notSpecified') }}</p>
+                      <p class="text-xs text-gray-500 mt-1">{{ t('cabinet.profile.emailCannotChange') }}</p>
+                    </div>
+                  </div>
                 </div>
 
-                <div v-if="profileError" class="text-red-600 text-sm bg-red-50 p-3 rounded-lg">
-                  {{ profileError }}
+                <div v-if="profileError" class="flex items-start space-x-3 text-red-700 bg-red-50 p-4 rounded-xl border-2 border-red-200">
+                  <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="font-medium">{{ profileError }}</span>
                 </div>
 
-                <button type="submit" class="btn-primary w-full">
+                <button type="submit" class="btn-primary w-full text-lg py-4">
                   {{ t('cabinet.profile.saveChanges') }}
                 </button>
               </form>
