@@ -6,8 +6,7 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/i18n',
-    '@nuxt/content',
-    '@nuxtjs/supabase'
+    '@nuxt/content'
   ],
 
   // i18n configuration
@@ -20,13 +19,9 @@ export default defineNuxtConfig({
     ]
   },
 
-  // Supabase configuration
-  supabase: {
-    redirectOptions: {
-      login: '/login',
-      callback: '/confirm',
-      exclude: ['/', '/how-to-apply', '/terms', '/contacts', '/privacy']
-    }
+  // Content configuration
+  content: {
+    watch: false
   },
 
   // App configuration

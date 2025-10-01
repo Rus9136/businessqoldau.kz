@@ -30,7 +30,7 @@ export const errorHandler = (
   console.error('💥 Unexpected error:', err);
 
   // Send generic error response
-  res.status(500).json({
+  return res.status(500).json({
     status: 'error',
     message: process.env.NODE_ENV === 'production'
       ? 'Something went wrong'

@@ -33,7 +33,7 @@ export const contactController = {
         // Don't fail the request if email fails
       });
 
-      res.status(201).json({
+      return res.status(201).json({
         message: 'Contact message sent successfully',
         contact: {
           id: contact.id,
@@ -47,12 +47,12 @@ export const contactController = {
       if (error instanceof z.ZodError) {
         return res.status(400).json({
           message: 'Validation error',
-          errors: error.errors,
+          errors: error.issues,
         });
       }
 
       console.error('Error creating contact:', error);
-      res.status(500).json({
+      return res.status(500).json({
         message: 'Failed to send contact message',
       });
     }
@@ -66,13 +66,13 @@ export const contactController = {
     try {
       const contacts = await contactService.getAllContacts();
 
-      res.json({
+      return res.json({
         contacts,
         total: contacts.length,
       });
     } catch (error) {
       console.error('Error fetching contacts:', error);
-      res.status(500).json({
+      return res.status(500).json({
         message: 'Failed to fetch contacts',
       });
     }
@@ -94,10 +94,10 @@ export const contactController = {
         });
       }
 
-      res.json({ contact });
+      return res.json({ contact });
     } catch (error) {
       console.error('Error fetching contact:', error);
-      res.status(500).json({
+      return res.status(500).json({
         message: 'Failed to fetch contact',
       });
     }

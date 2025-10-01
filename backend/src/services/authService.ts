@@ -9,6 +9,8 @@ const SALT_ROUNDS = 10;
 export interface RegisterInput {
   email: string;
   password: string;
+  fullName: string;
+  phone: string;
 }
 
 export interface LoginInput {
@@ -27,7 +29,7 @@ export interface AuthResponse {
 }
 
 export const register = async (input: RegisterInput): Promise<{ userId: string }> => {
-  const { email, password } = input;
+  const { email, password, fullName, phone } = input;
 
   // Check if user already exists
   const existingUser = await prisma.user.findUnique({
@@ -41,35 +43,20 @@ export const register = async (input: RegisterInput): Promise<{ userId: string }
   // Hash password
   const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
 
-  // Create user
+  // Create user and profile in a transaction
   const user = await prisma.user.create({
     data: {
       email,
       passwordHash,
-      emailVerified: false,
+      emailVerified: true, // Auto-verify user on registration
+      profile: {
+        create: {
+          fullName,
+          phone,
+        },
+      },
     },
   });
-
-  // Generate verification token
-  const token = generateToken();
-  const expiresAt = new Date();
-  expiresAt.setHours(expiresAt.getHours() + 24); // 24 hours
-
-  await prisma.emailVerificationToken.create({
-    data: {
-      userId: user.id,
-      token,
-      expiresAt,
-    },
-  });
-
-  // Send verification email
-  try {
-    await sendVerificationEmail(email, token);
-  } catch (error) {
-    console.error('Failed to send verification email:', error);
-    // Continue registration even if email fails
-  }
 
   return { userId: user.id };
 };

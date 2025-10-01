@@ -44,12 +44,12 @@ export const useAuth = () => {
     return response
   }
 
-  const register = async (email: string, password: string) => {
+  const register = async (email: string, password: string, fullName: string, phone: string) => {
     const response = await $fetch<{ message: string; userId: string }>(
       `${config.public.apiUrl}/auth/register`,
       {
         method: 'POST',
-        body: { email, password },
+        body: { email, password, fullName, phone },
       }
     )
 

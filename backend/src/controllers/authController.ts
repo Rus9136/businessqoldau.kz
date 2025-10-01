@@ -7,6 +7,8 @@ import { AppError } from '../middleware/errorHandler';
 const registerSchema = z.object({
   email: z.string().email('Invalid email format'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
+  fullName: z.string().min(2, 'Full name must be at least 2 characters').max(100, 'Full name must not exceed 100 characters'),
+  phone: z.string().regex(/^\+77\d{9}$/, 'Phone must be in format +77XXXXXXXXX'),
 });
 
 const loginSchema = z.object({
@@ -37,12 +39,12 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     const result = await authService.register(validatedData);
 
     res.status(201).json({
-      message: 'Registration successful. Please check your email to verify your account.',
+      message: 'Регистрация успешно завершена! Теперь вы можете войти в систему.',
       userId: result.userId,
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      next(new AppError(error.errors[0].message, 400));
+      next(new AppError(error.issues[0].message, 400));
     } else {
       next(error);
     }
@@ -60,7 +62,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      next(new AppError(error.errors[0].message, 400));
+      next(new AppError(error.issues[0].message, 400));
     } else {
       next(error);
     }
@@ -78,7 +80,7 @@ export const refresh = async (req: Request, res: Response, next: NextFunction) =
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      next(new AppError(error.errors[0].message, 400));
+      next(new AppError(error.issues[0].message, 400));
     } else {
       next(error);
     }
@@ -95,7 +97,7 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      next(new AppError(error.errors[0].message, 400));
+      next(new AppError(error.issues[0].message, 400));
     } else {
       next(error);
     }
@@ -112,7 +114,7 @@ export const verifyEmail = async (req: Request, res: Response, next: NextFunctio
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      next(new AppError(error.errors[0].message, 400));
+      next(new AppError(error.issues[0].message, 400));
     } else {
       next(error);
     }
@@ -129,7 +131,7 @@ export const forgotPassword = async (req: Request, res: Response, next: NextFunc
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      next(new AppError(error.errors[0].message, 400));
+      next(new AppError(error.issues[0].message, 400));
     } else {
       next(error);
     }
@@ -146,7 +148,7 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      next(new AppError(error.errors[0].message, 400));
+      next(new AppError(error.issues[0].message, 400));
     } else {
       next(error);
     }

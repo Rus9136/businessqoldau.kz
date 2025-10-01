@@ -32,7 +32,7 @@ model Profile {
   userId    String   @unique @map("user_id") @db.Uuid
   fullName  String   @map("full_name")
   phone     String
-  city      String
+  city      String?
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

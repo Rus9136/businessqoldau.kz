@@ -1,7 +1,8 @@
 export default defineNuxtRouteMiddleware((to, from) => {
-  const { isAuthenticated } = useAuth()
+  const { accessToken } = useAuth()
 
-  if (!isAuthenticated.value) {
+  // Check if user has access token in cookies
+  if (!accessToken.value) {
     return navigateTo('/login')
   }
 })
