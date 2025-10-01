@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-gray-50">
     <!-- Header -->
     <div class="bg-white border-b sticky top-0 z-10">
-      <div class="container-custom">
+      <div class="px-6">
         <div class="flex items-center justify-between py-4">
           <div>
             <h1 class="text-2xl font-bold text-gray-900">Админ-панель</h1>
@@ -18,39 +18,89 @@
       </div>
     </div>
 
-    <div class="container-custom py-8">
-      <!-- Tabs -->
-      <div class="bg-white rounded-lg shadow-sm border mb-6">
-        <div class="flex border-b">
+    <div class="flex">
+      <!-- Sidebar Navigation -->
+      <aside class="w-64 bg-white border-r min-h-[calc(100vh-73px)] sticky top-[73px]">
+        <nav class="p-4 space-y-1">
           <button
             @click="activeTab = 'applications'"
             :class="[
-              'px-6 py-3 font-medium transition-colors border-b-2',
-              activeTab === 'applications' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-600 hover:text-gray-900'
+              'w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors text-left',
+              activeTab === 'applications'
+                ? 'bg-blue-50 text-blue-700'
+                : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
             ]"
           >
-            Заявки
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            <span>Заявки</span>
           </button>
+
           <button
             @click="activeTab = 'users'"
             :class="[
-              'px-6 py-3 font-medium transition-colors border-b-2',
-              activeTab === 'users' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-600 hover:text-gray-900'
+              'w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors text-left',
+              activeTab === 'users'
+                ? 'bg-blue-50 text-blue-700'
+                : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
             ]"
           >
-            Пользователи
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+            <span>Пользователи</span>
           </button>
+
           <button
             @click="activeTab = 'templates'"
             :class="[
-              'px-6 py-3 font-medium transition-colors border-b-2',
-              activeTab === 'templates' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-600 hover:text-gray-900'
+              'w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors text-left',
+              activeTab === 'templates'
+                ? 'bg-blue-50 text-blue-700'
+                : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
             ]"
           >
-            Шаблоны
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+            </svg>
+            <span>Шаблоны</span>
           </button>
-        </div>
-      </div>
+
+          <button
+            @click="activeTab = 'contacts'"
+            :class="[
+              'w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors text-left',
+              activeTab === 'contacts'
+                ? 'bg-blue-50 text-blue-700'
+                : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+            ]"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+            <span>Сообщения</span>
+          </button>
+
+          <button
+            @click="activeTab = 'stats'"
+            :class="[
+              'w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors text-left',
+              activeTab === 'stats'
+                ? 'bg-blue-50 text-blue-700'
+                : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+            ]"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+            <span>Статистика</span>
+          </button>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1 p-6">
 
       <!-- Loading State -->
       <div v-if="loading" class="bg-white rounded-lg shadow-sm p-12 text-center">
@@ -241,6 +291,22 @@
         </div>
       </div>
 
+      <!-- Contacts Tab -->
+      <div v-else-if="activeTab === 'contacts'" class="space-y-6">
+        <div class="bg-white rounded-lg shadow-sm border p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Сообщения от пользователей</h3>
+          <p class="text-gray-600">Раздел в разработке...</p>
+        </div>
+      </div>
+
+      <!-- Stats Tab -->
+      <div v-else-if="activeTab === 'stats'" class="space-y-6">
+        <div class="bg-white rounded-lg shadow-sm border p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Статистика платформы</h3>
+          <p class="text-gray-600">Раздел в разработке...</p>
+        </div>
+      </div>
+
       <!-- Templates Tab -->
       <div v-else-if="activeTab === 'templates'" class="space-y-6">
         <!-- Upload Template Form -->
@@ -315,6 +381,7 @@
           </div>
         </div>
       </div>
+      </main>
     </div>
 
     <!-- Application Details Modal -->
@@ -427,7 +494,7 @@ const { activeTemplate, uploadTemplate, getActiveTemplate, downloadTemplate, del
 const config = useRuntimeConfig()
 const apiUrl = config.public.apiUrl
 
-const activeTab = ref<'applications' | 'users' | 'templates'>('applications')
+const activeTab = ref<'applications' | 'users' | 'templates' | 'contacts' | 'stats'>('applications')
 const filters = ref({
   status: 'submitted' as '' | 'draft' | 'submitted',
   category: '' as '' | 'starter' | 'active' | 'it',
