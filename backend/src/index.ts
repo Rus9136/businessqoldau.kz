@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+import path from 'path';
 import routes from './routes';
 import { errorHandler } from './middleware/errorHandler';
 
@@ -19,6 +20,9 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Static files - serve uploads directory
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Health check (before API routes)
 app.get('/health', (req, res) => {

@@ -23,15 +23,6 @@
       <div class="bg-white rounded-lg shadow-sm border mb-6">
         <div class="flex border-b">
           <button
-            @click="activeTab = 'stats'"
-            :class="[
-              'px-6 py-3 font-medium transition-colors border-b-2',
-              activeTab === 'stats' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-600 hover:text-gray-900'
-            ]"
-          >
-            Статистика
-          </button>
-          <button
             @click="activeTab = 'applications'"
             :class="[
               'px-6 py-3 font-medium transition-colors border-b-2',
@@ -66,92 +57,11 @@
         </button>
       </div>
 
-      <!-- Stats Tab -->
-      <div v-else-if="activeTab === 'stats'" class="space-y-6">
-        <div v-if="stats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <!-- Total Applications -->
-          <div class="bg-white rounded-lg shadow-sm border p-6">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm font-medium text-gray-600">Всего заявок</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">{{ stats.total }}</p>
-              </div>
-              <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          <!-- Draft Applications -->
-          <div class="bg-white rounded-lg shadow-sm border p-6">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm font-medium text-gray-600">Черновиков</p>
-                <p class="text-3xl font-bold text-yellow-600 mt-2">{{ stats.byStatus.draft || 0 }}</p>
-              </div>
-              <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          <!-- Submitted Applications -->
-          <div class="bg-white rounded-lg shadow-sm border p-6">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm font-medium text-gray-600">Отправлено</p>
-                <p class="text-3xl font-bold text-green-600 mt-2">{{ stats.byStatus.submitted || 0 }}</p>
-              </div>
-              <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          <!-- Category Stats -->
-          <div class="bg-white rounded-lg shadow-sm border p-6">
-            <p class="text-sm font-medium text-gray-600 mb-4">По категориям</p>
-            <div class="space-y-2">
-              <div class="flex justify-between text-sm">
-                <span class="text-gray-600">Стартапы:</span>
-                <span class="font-medium text-gray-900">{{ stats.byCategory.starter || 0 }}</span>
-              </div>
-              <div class="flex justify-between text-sm">
-                <span class="text-gray-600">Активные:</span>
-                <span class="font-medium text-gray-900">{{ stats.byCategory.active || 0 }}</span>
-              </div>
-              <div class="flex justify-between text-sm">
-                <span class="text-gray-600">IT проекты:</span>
-                <span class="font-medium text-gray-900">{{ stats.byCategory.it || 0 }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Applications Tab -->
       <div v-else-if="activeTab === 'applications'" class="space-y-6">
         <!-- Filters -->
         <div class="bg-white rounded-lg shadow-sm border p-4">
           <div class="flex flex-wrap gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Статус</label>
-              <select
-                v-model="filters.status"
-                @change="loadApplications"
-                class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Все</option>
-                <option value="draft">Черновики</option>
-                <option value="submitted">Отправленные</option>
-              </select>
-            </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Категория</label>
               <select
@@ -182,14 +92,13 @@
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Пользователь</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Категория</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Статус</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Дата создания</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Действия</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200">
                 <tr v-if="applications.length === 0">
-                  <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                  <td colspan="5" class="px-6 py-12 text-center text-gray-500">
                     Заявок не найдено
                   </td>
                 </tr>
@@ -204,21 +113,36 @@
                   <td class="px-6 py-4 whitespace-nowrap">
                     <span class="text-sm text-gray-900">{{ getCategoryLabel(app.category) }}</span>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <span
-                      class="px-2 py-1 text-xs font-medium rounded-full"
-                      :class="app.status === 'submitted' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'"
-                    >
-                      {{ app.status === 'submitted' ? 'Отправлена' : 'Черновик' }}
-                    </span>
-                  </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {{ new Date(app.createdAt).toLocaleDateString('ru-RU') }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm">
-                    <button @click="viewApplication(app)" class="text-blue-600 hover:text-blue-800 font-medium">
-                      Посмотреть
-                    </button>
+                    <div class="flex items-center gap-3">
+                      <button @click="viewApplication(app)" class="text-blue-600 hover:text-blue-800 font-medium">
+                        Посмотреть
+                      </button>
+                      <a
+                        v-if="app.planFilePath"
+                        :href="`${apiUrl.replace('/api', '')}/${app.planFilePath}`"
+                        download
+                        target="_blank"
+                        class="text-green-600 hover:text-green-800 transition-colors"
+                        title="Скачать бизнес-план"
+                      >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                      </a>
+                      <span
+                        v-else
+                        class="text-gray-300"
+                        title="Файл не загружен"
+                      >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                      </span>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -322,33 +246,6 @@
         </div>
 
         <div class="p-6 space-y-6">
-          <!-- Status -->
-          <div>
-            <label class="block text-sm font-medium text-gray-500 mb-2">Статус</label>
-            <div class="flex items-center gap-4">
-              <span
-                class="px-4 py-2 rounded-full text-sm font-medium"
-                :class="selectedApplication.status === 'submitted' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'"
-              >
-                {{ selectedApplication.status === 'submitted' ? 'Отправлена' : 'Черновик' }}
-              </span>
-              <button
-                v-if="selectedApplication.status === 'draft'"
-                @click="changeStatus(selectedApplication.id, 'submitted')"
-                class="btn-secondary text-sm"
-              >
-                Отметить как отправленную
-              </button>
-              <button
-                v-if="selectedApplication.status === 'submitted'"
-                @click="changeStatus(selectedApplication.id, 'draft')"
-                class="btn-secondary text-sm"
-              >
-                Вернуть в черновики
-              </button>
-            </div>
-          </div>
-
           <!-- User Info -->
           <div class="bg-gray-50 rounded-lg p-4">
             <h3 class="font-medium text-gray-900 mb-3">Информация о пользователе</h3>
@@ -387,19 +284,33 @@
 
           <div>
             <label class="block text-sm font-medium text-gray-500 mb-2">Бизнес-план</label>
-            <div class="flex items-center gap-2">
-              <svg
-                class="w-5 h-5"
-                :class="selectedApplication.planFilePath ? 'text-green-600' : 'text-gray-400'"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            <div class="flex items-center gap-4">
+              <div class="flex items-center gap-2">
+                <svg
+                  class="w-5 h-5"
+                  :class="selectedApplication.planFilePath ? 'text-green-600' : 'text-gray-400'"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <span :class="selectedApplication.planFilePath ? 'text-green-600 font-medium' : 'text-gray-500'">
+                  {{ selectedApplication.planFilePath ? 'Файл загружен' : 'Файл не загружен' }}
+                </span>
+              </div>
+              <a
+                v-if="selectedApplication.planFilePath"
+                :href="`${apiUrl.replace('/api', '')}/${selectedApplication.planFilePath}`"
+                download
+                target="_blank"
+                class="btn-primary text-sm inline-flex items-center gap-2"
               >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-              </svg>
-              <span :class="selectedApplication.planFilePath ? 'text-green-600 font-medium' : 'text-gray-500'">
-                {{ selectedApplication.planFilePath ? 'Файл загружен' : 'Файл не загружен' }}
-              </span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                </svg>
+                Скачать файл
+              </a>
             </div>
           </div>
 
@@ -428,9 +339,12 @@ definePageMeta({
 const { user, logout } = useAuth()
 const { applications, users, stats, loading, error, getAllApplications, updateApplicationStatus, getAllUsers, getStats } = useAdmin()
 
-const activeTab = ref<'stats' | 'applications' | 'users'>('stats')
+const config = useRuntimeConfig()
+const apiUrl = config.public.apiUrl
+
+const activeTab = ref<'applications' | 'users'>('applications')
 const filters = ref({
-  status: '' as '' | 'draft' | 'submitted',
+  status: 'submitted' as '' | 'draft' | 'submitted',
   category: '' as '' | 'starter' | 'active' | 'it',
   page: 1,
   limit: 20
@@ -449,26 +363,14 @@ watch(activeTab, async (newTab) => {
     await loadApplications()
   } else if (newTab === 'users' && users.value.length === 0) {
     await loadUsers()
-  } else if (newTab === 'stats' && !stats.value) {
-    await loadStats()
   }
 })
 
 const loadData = async () => {
-  if (activeTab.value === 'stats') {
-    await loadStats()
-  } else if (activeTab.value === 'applications') {
+  if (activeTab.value === 'applications') {
     await loadApplications()
   } else if (activeTab.value === 'users') {
     await loadUsers()
-  }
-}
-
-const loadStats = async () => {
-  try {
-    await getStats()
-  } catch (err) {
-    console.error('Failed to load stats:', err)
   }
 }
 
@@ -498,7 +400,7 @@ const loadUsers = async () => {
 
 const resetFilters = () => {
   filters.value = {
-    status: '',
+    status: 'submitted',
     category: '',
     page: 1,
     limit: 20
@@ -513,20 +415,6 @@ const changePage = (page: number) => {
 
 const viewApplication = (app: any) => {
   selectedApplication.value = app
-}
-
-const changeStatus = async (applicationId: string, newStatus: 'draft' | 'submitted') => {
-  try {
-    await updateApplicationStatus(applicationId, newStatus)
-    selectedApplication.value = null
-    await loadApplications()
-    if (stats.value) {
-      await loadStats()
-    }
-  } catch (err) {
-    console.error('Failed to change status:', err)
-    alert('Ошибка при изменении статуса')
-  }
 }
 
 const getCategoryLabel = (category: string) => {

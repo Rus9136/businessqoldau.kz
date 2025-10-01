@@ -321,8 +321,31 @@ backend/
 - Все endpoints протестированы через curl
 - ⚠️ Требует настройки SMTP credentials в .env для email
 
+**Stage 6: Admin Panel** ✅ COMPLETE
+- Backend (✅ COMPLETE):
+  - Добавлено поле `role` (enum: user/admin) в таблицу users
+  - AdminAuth middleware для проверки прав администратора
+  - Admin service с функциями: getAllApplications, updateApplicationStatus, getAllUsers, getApplicationStats
+  - Admin controller с валидацией Zod
+  - Admin routes: GET /api/admin/applications, PUT /api/admin/applications/:id/status, GET /api/admin/users, GET /api/admin/stats
+  - Все endpoints протестированы
+  - Учетная запись администратора: admin@businesscamp.kz / AdminPass123
+- Frontend (✅ COMPLETE):
+  - Middleware admin.ts для защиты маршрута /admin
+  - Composable useAdmin() для работы с Admin API
+  - Страница /admin с админ-панелью:
+    - Показывает только отправленные заявки (status: 'submitted')
+    - Фильтрация по категории (starter/active/it)
+    - Таблица заявок: ID, Пользователь, Категория, Дата создания, Действия
+    - Модальное окно для просмотра деталей заявки
+    - Скачивание прикрепленных бизнес-планов (PDF/DOC/DOCX)
+    - Иконка скачивания файлов прямо в таблице
+    - Таблица пользователей с информацией о профилях
+- Backend file serving (✅ COMPLETE):
+  - Статические файлы из /uploads доступны через express.static
+  - Файлы доступны по URL: http://localhost:3001/uploads/business-plans/{filename}
+
 ### ⏳ TODO
-**Stage 6:** Admin panel
 **Stage 7:** Testing & security
 **Stage 8:** Deployment
 
@@ -403,6 +426,6 @@ Landing page (`pages/index.vue`) has static timer placeholder:
 
 ---
 
-**📅 Updated**: 2025-09-30
+**📅 Updated**: 2025-10-01
 **👤 Project**: Business Qoldau 2025
 **🌐 Domain**: businessqoldau.kz
