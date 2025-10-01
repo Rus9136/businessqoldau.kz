@@ -63,7 +63,7 @@
                   : 'text-gray-600 hover:text-gray-900'
               ]"
             >
-              {{ locale.code.toUpperCase() }}
+              {{ locale.code === 'kk' ? 'KZ' : locale.code.toUpperCase() }}
             </button>
           </div>
 
@@ -167,7 +167,7 @@
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               ]"
             >
-              {{ locale.code.toUpperCase() }}
+              {{ locale.code === 'kk' ? 'KZ' : locale.code.toUpperCase() }}
             </button>
           </div>
 

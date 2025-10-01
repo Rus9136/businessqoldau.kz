@@ -57,7 +57,7 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-4">
-              <NuxtLink to="/app" class="btn-primary bg-white text-primary-600 hover:bg-gray-50 shadow-xl">
+              <NuxtLink to="/app" class="btn-outline border-white text-white hover:bg-white hover:text-primary-600">
                 {{ $t('home.cta.button') }}
               </NuxtLink>
               <NuxtLink to="/how-to-apply" class="btn-outline border-white text-white hover:bg-white hover:text-primary-600">
@@ -170,59 +170,59 @@
     </section>
 
     <!-- Призовой фонд -->
-    <section class="section-padding bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
-      <!-- Decorative background -->
-      <div class="absolute inset-0 opacity-5">
-        <div class="absolute top-0 left-0 w-96 h-96 bg-primary-500 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-0 right-0 w-96 h-96 bg-secondary-500 rounded-full blur-3xl"></div>
-      </div>
-
-      <div class="container-custom relative z-10">
+    <section class="section-padding bg-white">
+      <div class="container-custom">
         <div class="text-center max-w-3xl mx-auto mb-16">
-          <h2 class="mb-4 bg-gradient-to-r from-primary-600 to-secondary-500 bg-clip-text text-transparent">{{ $t('home.prizes.title') }}</h2>
+          <h2 class="mb-4 text-gray-900">{{ $t('home.prizes.title') }}</h2>
           <p class="text-xl text-gray-600">Общий призовой фонд составляет 10 миллионов тенге</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           <!-- First Place -->
-          <div class="card-gradient p-8 text-center relative overflow-hidden group">
-            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-yellow-400 to-yellow-500"></div>
+          <div class="bg-white border-2 border-yellow-400 rounded-2xl p-8 text-center relative overflow-hidden group hover:shadow-xl transition-all duration-300">
+            <div class="absolute top-0 left-0 right-0 h-1 bg-yellow-400"></div>
 
             <div class="relative z-10">
-              <div class="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center text-4xl shadow-xl group-hover:scale-110 transition-transform duration-300">
-                🥇
+              <div class="w-20 h-20 mx-auto mb-6 bg-yellow-50 border-2 border-yellow-400 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-10 h-10 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
               </div>
-              <div class="text-2xl font-bold text-gray-800 mb-3">{{ $t('home.prizes.first') }}</div>
-              <div class="text-4xl font-bold text-gradient-primary mb-2">5 000 000 ₸</div>
-              <p class="text-gray-600 text-sm">Главный приз конкурса</p>
+              <div class="text-xl font-bold text-gray-900 mb-3">{{ $t('home.prizes.first') }}</div>
+              <div class="text-4xl font-bold text-gray-900 mb-2">5 000 000 ₸</div>
+              <p class="text-gray-500 text-sm">Главный приз конкурса</p>
             </div>
           </div>
 
           <!-- Second Place -->
-          <div class="card-gradient p-8 text-center relative overflow-hidden group md:mt-8">
-            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-gray-400 to-gray-500"></div>
+          <div class="bg-white border-2 border-gray-300 rounded-2xl p-8 text-center relative overflow-hidden group hover:shadow-xl transition-all duration-300 md:mt-8">
+            <div class="absolute top-0 left-0 right-0 h-1 bg-gray-300"></div>
 
             <div class="relative z-10">
-              <div class="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-gray-400 to-gray-500 rounded-full flex items-center justify-center text-4xl shadow-xl group-hover:scale-110 transition-transform duration-300">
-                🥈
+              <div class="w-20 h-20 mx-auto mb-6 bg-gray-50 border-2 border-gray-300 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
               </div>
-              <div class="text-2xl font-bold text-gray-800 mb-3">{{ $t('home.prizes.second') }}</div>
-              <div class="text-4xl font-bold text-gradient-primary mb-2">3 000 000 ₸</div>
-              <p class="text-gray-600 text-sm">Второе место</p>
+              <div class="text-xl font-bold text-gray-900 mb-3">{{ $t('home.prizes.second') }}</div>
+              <div class="text-4xl font-bold text-gray-900 mb-2">3 000 000 ₸</div>
+              <p class="text-gray-500 text-sm">Второе место</p>
             </div>
           </div>
 
           <!-- Third Place -->
-          <div class="card-gradient p-8 text-center relative overflow-hidden group">
-            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-secondary-400 to-secondary-500"></div>
+          <div class="bg-white border-2 border-orange-300 rounded-2xl p-8 text-center relative overflow-hidden group hover:shadow-xl transition-all duration-300">
+            <div class="absolute top-0 left-0 right-0 h-1 bg-orange-300"></div>
 
             <div class="relative z-10">
-              <div class="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-secondary-400 to-secondary-500 rounded-full flex items-center justify-center text-4xl shadow-xl group-hover:scale-110 transition-transform duration-300">
-                🥉
+              <div class="w-20 h-20 mx-auto mb-6 bg-orange-50 border-2 border-orange-300 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-10 h-10 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
               </div>
-              <div class="text-2xl font-bold text-gray-800 mb-3">{{ $t('home.prizes.third') }}</div>
-              <div class="text-4xl font-bold bg-gradient-to-r from-secondary-500 to-secondary-700 bg-clip-text text-transparent mb-2">2 000 000 ₸</div>
-              <p class="text-gray-600 text-sm">Третье место</p>
+              <div class="text-xl font-bold text-gray-900 mb-3">{{ $t('home.prizes.third') }}</div>
+              <div class="text-4xl font-bold text-gray-900 mb-2">2 000 000 ₸</div>
+              <p class="text-gray-500 text-sm">Третье место</p>
             </div>
           </div>
         </div>
