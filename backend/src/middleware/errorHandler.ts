@@ -3,11 +3,13 @@ import { Request, Response, NextFunction } from 'express';
 export class AppError extends Error {
   statusCode: number;
   isOperational: boolean;
+  code?: string;
 
-  constructor(message: string, statusCode: number = 500) {
+  constructor(message: string, statusCode: number = 500, code?: string) {
     super(message);
     this.statusCode = statusCode;
     this.isOperational = true;
+    this.code = code;
 
     Error.captureStackTrace(this, this.constructor);
   }
@@ -20,10 +22,16 @@ export const errorHandler = (
   next: NextFunction
 ) => {
   if (err instanceof AppError) {
-    return res.status(err.statusCode).json({
+    const response: any = {
       status: 'error',
       message: err.message,
-    });
+    };
+
+    if (err.code) {
+      response.code = err.code;
+    }
+
+    return res.status(err.statusCode).json(response);
   }
 
   // Log unexpected errors

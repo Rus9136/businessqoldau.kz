@@ -6,32 +6,43 @@ import { AuthRequest } from '../middleware/auth';
 
 // Validation schemas
 const registerSchema = z.object({
-  email: z.string().email('Invalid email format'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-  fullName: z.string().min(2, 'Full name must be at least 2 characters').max(100, 'Full name must not exceed 100 characters'),
-  phone: z.string().regex(/^\+77\d{9}$/, 'Phone must be in format +77XXXXXXXXX'),
+  email: z.string().email('Неверный формат email'),
+  password: z.string().min(8, 'Пароль должен содержать минимум 8 символов'),
+  fullName: z.string().min(2, 'Полное имя должно содержать минимум 2 символа').max(100, 'Полное имя не должно превышать 100 символов'),
+  phone: z.string().regex(/^\+77\d{9}$/, 'Телефон должен быть в формате +77XXXXXXXXX'),
 });
 
 const loginSchema = z.object({
-  email: z.string().email('Invalid email format'),
-  password: z.string().min(1, 'Password is required'),
+  email: z.string().email('Неверный формат email'),
+  password: z.string().min(1, 'Пароль обязателен'),
 });
 
 const refreshTokenSchema = z.object({
-  refreshToken: z.string().min(1, 'Refresh token is required'),
+  refreshToken: z.string().min(1, 'Токен обновления обязателен'),
 });
 
 const verifyEmailSchema = z.object({
-  token: z.string().min(1, 'Token is required'),
+  email: z.string().email('Неверный формат email'),
+  code: z.string().length(6, 'Код подтверждения должен содержать 6 цифр'),
+});
+
+const resendVerificationSchema = z.object({
+  email: z.string().email('Неверный формат email'),
 });
 
 const forgotPasswordSchema = z.object({
-  email: z.string().email('Invalid email format'),
+  email: z.string().email('Неверный формат email'),
+});
+
+const verifyResetCodeSchema = z.object({
+  email: z.string().email('Неверный формат email'),
+  code: z.string().length(6, 'Код восстановления должен содержать 6 цифр'),
 });
 
 const resetPasswordSchema = z.object({
-  token: z.string().min(1, 'Token is required'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  email: z.string().email('Неверный формат email'),
+  code: z.string().length(6, 'Код восстановления должен содержать 6 цифр'),
+  password: z.string().min(8, 'Пароль должен содержать минимум 8 символов'),
 });
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
@@ -40,7 +51,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     const result = await authService.register(validatedData);
 
     res.status(201).json({
-      message: 'Регистрация успешно завершена! Теперь вы можете войти в систему.',
+      message: 'Регистрация успешно завершена! Проверьте ваш email для подтверждения.',
       userId: result.userId,
     });
   } catch (error) {
@@ -108,10 +119,27 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
 export const verifyEmail = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const validatedData = verifyEmailSchema.parse(req.body);
-    await authService.verifyEmail(validatedData.token);
+    await authService.verifyEmail(validatedData.email, validatedData.code);
 
     res.json({
       message: 'Email verified successfully',
+    });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      next(new AppError(error.issues[0].message, 400));
+    } else {
+      next(error);
+    }
+  }
+};
+
+export const resendVerificationCode = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const validatedData = resendVerificationSchema.parse(req.body);
+    await authService.resendVerificationCode(validatedData.email);
+
+    res.json({
+      message: 'Verification code sent to your email',
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -128,7 +156,24 @@ export const forgotPassword = async (req: Request, res: Response, next: NextFunc
     await authService.requestPasswordReset(validatedData.email);
 
     res.json({
-      message: 'If the email exists, a password reset link has been sent',
+      message: 'Код восстановления отправлен на ваш email',
+    });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      next(new AppError(error.issues[0].message, 400));
+    } else {
+      next(error);
+    }
+  }
+};
+
+export const verifyResetCode = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const validatedData = verifyResetCodeSchema.parse(req.body);
+    await authService.verifyResetCode(validatedData.email, validatedData.code);
+
+    res.json({
+      message: 'Код подтвержден',
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -142,10 +187,10 @@ export const forgotPassword = async (req: Request, res: Response, next: NextFunc
 export const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const validatedData = resetPasswordSchema.parse(req.body);
-    await authService.resetPassword(validatedData.token, validatedData.password);
+    await authService.resetPassword(validatedData.email, validatedData.code, validatedData.password);
 
     res.json({
-      message: 'Password reset successful. Please login with your new password.',
+      message: 'Пароль успешно изменен',
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
