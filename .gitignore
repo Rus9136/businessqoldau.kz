@@ -37,3 +37,6 @@ backend/*.log
 *.db
 *.db-journal
 image_svg/
+
+# Security - do not commit credentials
+ADMIN_CREDENTIALS.md

@@ -38,7 +38,7 @@ export const getApplicationSettings = async (req: Request, res: Response) => {
  * PUT /api/settings/application-period
  * Обновить настройки периода подачи заявок (admin only)
  */
-export const updateApplicationSettings = async (req: Request, res: Response) => {
+export const updateApplicationSettings = async (req: Request, res: Response): Promise<Response | undefined> => {
   try {
     const validationResult = updateSettingsSchema.safeParse(req.body);
 
@@ -46,7 +46,7 @@ export const updateApplicationSettings = async (req: Request, res: Response) => 
       return res.status(400).json({
         success: false,
         message: 'Неверные данные',
-        errors: validationResult.error.errors
+        errors: validationResult.error.issues
       });
     }
 
@@ -77,14 +77,14 @@ export const updateApplicationSettings = async (req: Request, res: Response) => 
       adminId
     );
 
-    res.json({
+    return res.json({
       success: true,
       data: settings,
       message: 'Настройки периода обновлены'
     });
   } catch (error) {
     console.error('Error updating application settings:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Ошибка обновления настроек'
     });

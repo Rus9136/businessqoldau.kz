@@ -44,7 +44,7 @@ export const getApplicationsHandler = async (req: Request, res: Response) => {
       return res.status(400).json({
         success: false,
         error: 'Invalid query parameters',
-        details: validation.error.errors,
+        details: validation.error.issues,
       });
     }
 
@@ -85,7 +85,7 @@ export const updateApplicationStatusHandler = async (req: Request, res: Response
       return res.status(400).json({
         success: false,
         error: 'Invalid request body',
-        details: validation.error.errors,
+        details: validation.error.issues,
       });
     }
 
@@ -124,7 +124,7 @@ export const getUsersHandler = async (req: Request, res: Response) => {
       return res.status(400).json({
         success: false,
         error: 'Invalid query parameters',
-        details: validation.error.errors,
+        details: validation.error.issues,
       });
     }
 
@@ -176,7 +176,7 @@ export const getContactsHandler = async (req: Request, res: Response) => {
       return res.status(400).json({
         success: false,
         error: 'Invalid query parameters',
-        details: validation.error.errors,
+        details: validation.error.issues,
       });
     }
 

@@ -11,7 +11,6 @@ const router = Router();
 
 // API info endpoint
 router.get('', (req, res) => {
-  console.log('🎯 Root API handler called');
   res.json({
     message: 'Business Camp 2025 API',
     version: '1.0.0',

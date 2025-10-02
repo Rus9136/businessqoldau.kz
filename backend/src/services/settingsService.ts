@@ -16,7 +16,7 @@ export class SettingsService {
       where: { settingKey: 'application_period' }
     });
 
-    return setting ? (setting.settingValue as ApplicationPeriodSettings) : null;
+    return setting ? (setting.settingValue as unknown as ApplicationPeriodSettings) : null;
   }
 
   /**

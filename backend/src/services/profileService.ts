@@ -12,7 +12,7 @@ export interface ProfileResponse {
   userId: string;
   fullName: string;
   phone: string;
-  city: string;
+  city: string | null;
   createdAt: Date;
   updatedAt: Date;
 }

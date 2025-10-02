@@ -7,7 +7,7 @@ import { AuthRequest } from './auth';
  * Verifies that the authenticated user has admin role
  * Must be used after auth middleware
  */
-export const adminAuth = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const adminAuth = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     // Check if user is authenticated (should be set by auth middleware)
     if (!req.userId) {

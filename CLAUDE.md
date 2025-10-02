@@ -380,9 +380,36 @@ backend/
   - Вход администратора разрешен всегда
 - Документация: См. `APPLICATION_PERIOD_SYSTEM.md` для полной информации
 
+**Stage 7: Production Deployment** ✅ COMPLETE
+- Production database setup:
+  - PostgreSQL database `businesscamp` on port 5436
+  - User `businesscamp` with secure password
+  - All 8 Prisma migrations applied successfully
+- Environment configuration:
+  - Production JWT secrets (128-char hex strings)
+  - Backend `.env` configured for production
+  - Frontend `.env` configured with HTTPS URLs
+- Build process:
+  - Backend compiled: TypeScript → JavaScript (dist/)
+  - Frontend built: Nuxt.js SSR (.output/)
+- Process management with PM2:
+  - `businessqoldau-nuxt` on port 3004 (fork mode)
+  - `businessqoldau-backend` on port 3001 (fork mode)
+  - PM2 configured for auto-restart on reboot
+  - Logs in `/home/rus/projects/businessqoldau/logs/`
+- Nginx reverse proxy:
+  - SSL/TLS with Let's Encrypt (valid until 2025-12-29)
+  - Frontend proxied from port 3004
+  - API routes `/api/*` proxied to backend port 3001
+  - Static file serving from `/uploads`
+- Production URLs:
+  - Frontend: https://businessqoldau.kz
+  - API: https://businessqoldau.kz/api/
+  - Health: http://localhost:3001/health
+- All services tested and operational
+
 ### ⏳ TODO
-**Stage 7:** Testing & security
-**Stage 8:** Deployment
+**Stage 8:** Testing & security hardening
 
 ## 📝 Important Implementation Notes
 
@@ -432,35 +459,124 @@ Landing page (`pages/index.vue`) has static timer placeholder:
 - @nuxt/content warns about missing content config (optional, using default collection)
 - TypeScript may show i18n config errors in `nuxt.config.ts` (works at runtime)
 
-## 🚀 Deployment Notes
+## 🚀 Production Deployment
 
-**Frontend (Vercel):**
-1. Connect GitHub repo to Vercel
-2. Add environment variables: `BASE_URL`, `NUXT_PUBLIC_API_URL`
-3. Auto-deploys on push to main branch
+### Current Production Setup
+**Deployed on VPS with PM2 + Nginx:**
 
-**Backend (VPS/Railway/Render):**
-1. Set up PostgreSQL database (managed or self-hosted)
-2. Configure environment variables (see `backend/.env.example`)
-3. Run migrations: `npm run prisma:migrate`
-4. Start server: `npm start`
-5. Configure reverse proxy (nginx) if using VPS
-6. Set up SSL certificates (Let's Encrypt)
+**Infrastructure:**
+- Domain: businessqoldau.kz
+- PostgreSQL: Port 5436 (database: `businesscamp`)
+- Backend API: Port 3001 (internal)
+- Frontend: Port 3004 (internal)
+- Web Server: Nginx with SSL/TLS (Let's Encrypt)
+
+**PM2 Process Management:**
+```bash
+# View running processes
+pm2 list
+
+# Restart services
+pm2 restart businessqoldau-nuxt
+pm2 restart businessqoldau-backend
+
+# View logs
+pm2 logs businessqoldau-nuxt
+pm2 logs businessqoldau-backend
+
+# Save process list
+pm2 save
+```
+
+**Deployment Steps:**
+```bash
+# 1. Pull latest changes
+git pull origin main
+
+# 2. Install dependencies (if needed)
+npm install
+cd backend && npm install && cd ..
+
+# 3. Run migrations (if schema changed)
+cd backend && npx prisma migrate deploy && cd ..
+
+# 4. Build frontend
+npm run build
+
+# 5. Build backend
+cd backend && npm run build && cd ..
+
+# 6. Restart PM2 processes
+pm2 restart all
+
+# 7. Verify deployment
+curl https://businessqoldau.kz/api/
+pm2 list
+```
+
+**Production Environment Files:**
+- Frontend: `.env` (BASE_URL, NUXT_PUBLIC_API_URL)
+- Backend: `backend/.env` (DATABASE_URL, JWT secrets, SMTP config)
+
+**Nginx Configuration:**
+- Location: `/home/rus/infrastructure/nginx/sites-enabled/businessqoldau.kz.conf`
+- SSL Cert: `/etc/letsencrypt/live/businessqoldau.kz/`
+- Reload: `sudo systemctl reload nginx`
+
+**Logs:**
+- Nginx access: `/var/log/nginx/businessqoldau_access.log`
+- Nginx error: `/var/log/nginx/businessqoldau_error.log`
+- PM2 logs: `/home/rus/projects/businessqoldau/logs/`
+
+**Security:**
+- SSL/TLS enabled (HTTPS only)
+- JWT authentication on all protected routes
+- CORS configured for businessqoldau.kz domain
+- Rate limiting on auth endpoints (5 attempts/15min)
+- Password hashing with bcrypt
+- File upload validation (type, size limits)
 
 > See `DEPLOYMENT.md` for detailed deployment instructions.
 
 ---
 
-## 📝 Recent Updates (2025-09-30)
+## 📝 Recent Updates
 
-### Fixed: Nuxt Welcome Page Issue
+### 2025-10-02: Production Deployment Complete ✅
+- Successfully deployed to https://businessqoldau.kz
+- PostgreSQL database migrated to production (port 5436)
+- PM2 process manager configured with auto-restart
+- Nginx reverse proxy with SSL/TLS (Let's Encrypt)
+- All API endpoints tested and working
+- Frontend and backend services operational
+
+### 2025-09-30: Fixed Nuxt Welcome Page Issue
 - **Problem**: Site was showing default Nuxt welcome page instead of actual content
 - **Cause**: Conflicting `/app/app.vue` file interfering with main `app.vue`
 - **Solution**: Removed `/app/app.vue` and empty `app/` directory
-- **Result**: Site now correctly displays landing page at http://localhost:3000/
+- **Result**: Site now correctly displays landing page
 
 ---
 
-**📅 Updated**: 2025-10-01
+**📅 Updated**: 2025-10-02
 **👤 Project**: Business Qoldau 2025
 **🌐 Domain**: businessqoldau.kz
+**🔗 Production**: https://businessqoldau.kz
+
+## 👤 Администратор
+
+Создан администратор для управления сайтом. Учетные данные находятся в файле `ADMIN_CREDENTIALS.md` (не коммитится в git).
+
+**Возможности:**
+- Доступ к админ-панели: https://businessqoldau.kz/admin
+- Управление заявками (просмотр, фильтрация, скачивание бизнес-планов)
+- Просмотр всех пользователей и контактов
+- Управление шаблонами бизнес-планов
+- Настройка периода подачи заявок
+- Просмотр статистики
+
+**Безопасность:**
+- ✅ Пароль хеширован с bcrypt (10 rounds)
+- ✅ Email верифицирован
+- ✅ JWT аутентификация
+- ✅ Роль `admin` для доступа к защищенным endpoints

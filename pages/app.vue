@@ -93,7 +93,7 @@
                 </div>
 
                 <!-- Logout Button -->
-                <button @click="handleLogout" class="w-full px-4 py-3 text-left text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200 flex items-center group border-t border-gray-100 pt-6">
+                <button @click="handleLogout" class="w-full px-4 py-3 text-left text-gray-700 hover:bg-gray-50 rounded-xl transition-all duration-200 flex items-center group border-t border-gray-100 pt-6">
                   <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                   </svg>
@@ -292,7 +292,7 @@
                   </svg>
                   <h3 class="mt-4 text-lg font-medium text-gray-900">{{ t('cabinet.application.noApplications') }}</h3>
                   <p class="mt-2 text-sm text-gray-500">{{ t('cabinet.application.createApplicationPrompt') }}</p>
-                  <button @click="showApplicationForm = true" class="mt-6 btn-primary">
+                  <button @click="createNewApplication" class="mt-6 btn-primary">
                     {{ t('cabinet.application.createApplication') }}
                   </button>
                 </div>
@@ -416,7 +416,7 @@
               <button
                 v-if="application.status === 'draft'"
                 @click="confirmDelete"
-                class="btn-secondary text-red-600 hover:bg-red-50"
+                class="btn-secondary"
               >
                 Удалить
               </button>
@@ -786,6 +786,16 @@ const getCategoryLabel = (category: ApplicationCategory) => {
 
 const handleLogout = async () => {
   await logout()
+}
+
+const createNewApplication = () => {
+  applicationForm.value = {
+    category: '',
+    summary: ''
+  }
+  selectedFile.value = null
+  showApplicationForm.value = true
+  viewingApplication.value = true
 }
 
 const handleDownloadTemplate = () => {

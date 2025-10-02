@@ -2,14 +2,17 @@ import { Router } from 'express';
 import * as authController from '../controllers/authController';
 import { authenticate } from '../middleware/auth';
 import { checkApplicationPeriodForAuth } from '../middleware/applicationPeriod';
+import { authLimiter, passwordResetLimiter } from '../middleware/rateLimiter';
 
 const router = Router();
 
 // POST /api/auth/register - Register new user
-router.post('/register', checkApplicationPeriodForAuth, authController.register);
+// Rate limit: 5 attempts per 15 minutes per IP
+router.post('/register', authLimiter, checkApplicationPeriodForAuth, authController.register);
 
 // POST /api/auth/login - Login user
-router.post('/login', checkApplicationPeriodForAuth, authController.login);
+// Rate limit: 5 attempts per 15 minutes per IP
+router.post('/login', authLimiter, checkApplicationPeriodForAuth, authController.login);
 
 // POST /api/auth/refresh - Refresh access token
 router.post('/refresh', authController.refresh);
@@ -24,7 +27,8 @@ router.post('/verify-email', authController.verifyEmail);
 router.post('/resend-code', authController.resendVerificationCode);
 
 // POST /api/auth/forgot-password - Request password reset
-router.post('/forgot-password', authController.forgotPassword);
+// Rate limit: 3 attempts per 15 minutes per IP (stricter to prevent email spam)
+router.post('/forgot-password', passwordResetLimiter, authController.forgotPassword);
 
 // POST /api/auth/verify-reset-code - Verify reset code
 router.post('/verify-reset-code', authController.verifyResetCode);

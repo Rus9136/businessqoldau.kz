@@ -5,11 +5,11 @@ module.exports = {
       script: '.output/server/index.mjs',
       cwd: '/home/rus/projects/businessqoldau',
       instances: 1,
-      exec_mode: 'cluster',
+      exec_mode: 'fork',
       env: {
         NODE_ENV: 'production',
-        PORT: 3002,
-        NITRO_PORT: 3002
+        PORT: 3004,
+        NITRO_PORT: 3004
       },
       error_file: './logs/nuxt-error.log',
       out_file: './logs/nuxt-out.log',
@@ -25,7 +25,7 @@ module.exports = {
       script: 'dist/index.js',
       cwd: '/home/rus/projects/businessqoldau/backend',
       instances: 1,
-      exec_mode: 'cluster',
+      exec_mode: 'fork',
       env: {
         NODE_ENV: 'production',
         PORT: 3001
