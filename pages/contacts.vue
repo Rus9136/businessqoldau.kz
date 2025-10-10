@@ -19,12 +19,6 @@
                 +7 (700) 000-00-00
               </a>
             </div>
-            <div>
-              <h3 class="font-semibold mb-2">{{ $t('contactPage.address') }}</h3>
-              <p class="text-gray-600">
-                {{ $t('contactPage.addressValue') }}
-              </p>
-            </div>
           </div>
         </div>
 

@@ -35,10 +35,10 @@
             {{ $t('nav.howToApply') }}
           </NuxtLink>
           <NuxtLink
-            to="/terms"
+            to="/documents"
             class="px-4 py-2 rounded-lg font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200"
           >
-            {{ $t('nav.terms') }}
+            {{ $t('nav.documents') }}
           </NuxtLink>
           <NuxtLink
             to="/contacts"
@@ -140,11 +140,11 @@
             {{ $t('nav.howToApply') }}
           </NuxtLink>
           <NuxtLink
-            to="/terms"
+            to="/documents"
             @click="mobileMenuOpen = false"
             class="block px-4 py-3 rounded-lg font-medium text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors"
           >
-            {{ $t('nav.terms') }}
+            {{ $t('nav.documents') }}
           </NuxtLink>
           <NuxtLink
             to="/contacts"
