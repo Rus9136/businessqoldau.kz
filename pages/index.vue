@@ -86,11 +86,12 @@
           <p class="text-xl text-gray-600">{{ $t('home.simpleProcess') }}</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+        <!-- Первый ряд: этапы 1-3 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative mb-8">
           <!-- Connection lines for desktop -->
-          <div class="hidden md:block absolute top-24 left-0 right-0 h-1 bg-gradient-to-r from-primary-200 via-primary-300 to-secondary-200 z-0" style="width: 66%; left: 17%;"></div>
+          <div class="hidden md:block absolute top-24 left-0 right-0 h-1 bg-gradient-to-r from-primary-200 via-primary-300 to-primary-400 z-0" style="width: 66%; left: 17%;"></div>
 
-          <!-- Stage 1 -->
+          <!-- Stage 1: Подача заявок -->
           <div class="card p-8 relative z-10 group">
             <div class="flex justify-center mb-6">
               <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">
@@ -100,7 +101,7 @@
             <div class="flex justify-center mb-6">
               <img
                 src="/image_svg/undraw_data-input_whqw.svg"
-                alt="Registration"
+                alt="Подача заявок"
                 class="w-32 h-32 object-contain"
               />
             </div>
@@ -110,7 +111,7 @@
             </p>
           </div>
 
-          <!-- Stage 2 -->
+          <!-- Stage 2: Обучение -->
           <div class="card p-8 relative z-10 group">
             <div class="flex justify-center mb-6">
               <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-600 to-primary-700 flex items-center justify-center text-white text-3xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">
@@ -119,8 +120,8 @@
             </div>
             <div class="flex justify-center mb-6">
               <img
-                src="/image_svg/undraw_data-analysis_b7cp.svg"
-                alt="Evaluation"
+                src="/image_svg/undraw_conference-speaker_kl0d.svg"
+                alt="Обучение"
                 class="w-32 h-32 object-contain"
               />
             </div>
@@ -130,23 +131,89 @@
             </p>
           </div>
 
-          <!-- Stage 3 -->
+          <!-- Stage 3: Подача бизнес-планов -->
           <div class="card p-8 relative z-10 group">
             <div class="flex justify-center mb-6">
-              <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-secondary-500 to-secondary-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">
+              <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-700 to-primary-800 flex items-center justify-center text-white text-3xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">
                 03
               </div>
             </div>
             <div class="flex justify-center mb-6">
               <img
-                src="/image_svg/undraw_success_288d.svg"
-                alt="Winners"
+                src="/image_svg/undraw_add-file_lf11.svg"
+                alt="Подача бизнес-планов"
                 class="w-32 h-32 object-contain"
               />
             </div>
             <h3 class="mb-4 text-center">{{ $t('home.stages.step3.title') }}</h3>
             <p class="text-gray-600 text-center leading-relaxed">
               {{ $t('home.stages.step3.description') }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Второй ряд: этапы 4-6 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+          <!-- Connection lines for desktop -->
+          <div class="hidden md:block absolute top-24 left-0 right-0 h-1 bg-gradient-to-r from-primary-400 via-secondary-300 to-secondary-500 z-0" style="width: 66%; left: 17%;"></div>
+
+          <!-- Stage 4: Защита проектов -->
+          <div class="card p-8 relative z-10 group">
+            <div class="flex justify-center mb-6">
+              <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-800 to-secondary-500 flex items-center justify-center text-white text-3xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">
+                04
+              </div>
+            </div>
+            <div class="flex justify-center mb-6">
+              <img
+                src="/image_svg/undraw_visual-data_1eya.svg"
+                alt="Защита проектов"
+                class="w-32 h-32 object-contain"
+              />
+            </div>
+            <h3 class="mb-4 text-center">{{ $t('home.stages.step4.title') }}</h3>
+            <p class="text-gray-600 text-center leading-relaxed">
+              {{ $t('home.stages.step4.description') }}
+            </p>
+          </div>
+
+          <!-- Stage 5: Отбор экспертами -->
+          <div class="card p-8 relative z-10 group">
+            <div class="flex justify-center mb-6">
+              <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-secondary-500 to-secondary-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">
+                05
+              </div>
+            </div>
+            <div class="flex justify-center mb-6">
+              <img
+                src="/image_svg/undraw_data-analysis_b7cp.svg"
+                alt="Отбор экспертами"
+                class="w-32 h-32 object-contain"
+              />
+            </div>
+            <h3 class="mb-4 text-center">{{ $t('home.stages.step5.title') }}</h3>
+            <p class="text-gray-600 text-center leading-relaxed">
+              {{ $t('home.stages.step5.description') }}
+            </p>
+          </div>
+
+          <!-- Stage 6: Финал и награждение -->
+          <div class="card p-8 relative z-10 group">
+            <div class="flex justify-center mb-6">
+              <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-secondary-600 to-secondary-700 flex items-center justify-center text-white text-3xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">
+                06
+              </div>
+            </div>
+            <div class="flex justify-center mb-6">
+              <img
+                src="/image_svg/undraw_success_288d.svg"
+                alt="Финал и награждение"
+                class="w-32 h-32 object-contain"
+              />
+            </div>
+            <h3 class="mb-4 text-center">{{ $t('home.stages.step6.title') }}</h3>
+            <p class="text-gray-600 text-center leading-relaxed">
+              {{ $t('home.stages.step6.description') }}
             </p>
           </div>
         </div>
