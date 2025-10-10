@@ -11,8 +11,8 @@
     "logout": "Шығу"
   },
   "home": {
-    "title": "Бизнес Camp 2025",
-    "subtitle": "Қазақстан кәсіпкерлеріне арналған конкурс",
+    "title": "Инновациялық грант Business Qoldau",
+    "subtitle": "Қазақстан кәсіпкерлеріне арналған грант",
     "applyButton": "Өтінім беру",
     "learnMore": "Толығырақ",
     "timer": {
@@ -22,7 +22,7 @@
       "minutes": "минут"
     },
     "stages": {
-      "title": "Конкурс кезеңдері",
+      "title": "Грант кезеңдері",
       "step1": {
         "title": "Өтінімдерді қабылдау",
         "description": "Бизнес-жоспар және бейне-презентациямен тіркелу және өтінім беру"
@@ -49,16 +49,16 @@
     }
   },
   "footer": {
-    "copyright": "© 2025 Бизнес Camp. Барлық құқықтар қорғалған."
+    "copyright": "© 2025 Business Qoldau. Барлық құқықтар қорғалған."
   },
   "terms": {
     "title": "Қатысу ережелері",
-    "metaTitle": "Қатысу ережелері - Бизнес Camp 2025",
-    "metaDescription": "Кәсіпкерлерге арналған конкурсқа қатысу ережелері"
+    "metaTitle": "Қатысу ережелері - Business Qoldau 2025",
+    "metaDescription": "Кәсіпкерлерге арналған грантқа қатысу ережелері"
   },
   "privacy": {
     "title": "Құпиялылық саясаты",
-    "metaTitle": "Құпиялылық саясаты - Бизнес Camp 2025",
+    "metaTitle": "Құпиялылық саясаты - Business Qoldau 2025",
     "metaDescription": "Құпиялылық саясаты және жеке деректерді өңдеу"
   },
   "forms": {
@@ -142,11 +142,13 @@
       "enterCity": "Қалаңызды енгізіңіз"
     },
     "application": {
+      "statusSubmitted": "Жіберілді",
+      "statusDraft": "Жоба",
       "templateName": "Бизнес-жоспар үлгісі",
       "templateDescription": "Бизнес-жоспарды дайындау үшін осы үлгіді пайдаланыңыз",
       "downloadTemplate": "Үлгіні жүктеу",
       "noApplications": "Сізде әлі өтінімдер жоқ",
-      "createApplicationPrompt": "Конкурсқа қатысу үшін жаңа өтінім жасаңыз",
+      "createApplicationPrompt": "Грантқа қатысу үшін жаңа өтінім жасаңыз",
       "createApplication": "Өтінім жасау",
       "viewApplication": "Қарау",
       "createdOn": "Жасалды",

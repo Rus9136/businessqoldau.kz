@@ -12,15 +12,15 @@
         <div class="lg:col-span-2">
           <div class="flex items-center space-x-2 mb-4">
             <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center">
-              <span class="text-white font-bold text-xl">BC</span>
+              <span class="text-white font-bold text-xl">BQ</span>
             </div>
             <div class="flex flex-col">
-              <span class="text-2xl font-bold leading-none">Бизнес Camp</span>
+              <span class="text-2xl font-bold leading-none">Business Qoldau</span>
               <span class="text-sm text-gray-400 font-medium">2025</span>
             </div>
           </div>
           <p class="text-gray-400 leading-relaxed mb-6 max-w-md">
-            Национальный конкурс для предпринимателей Казахстана. Получите финансирование, менторство и возможность развить свой бизнес.
+            Национальный грант для предпринимателей Казахстана. Получите финансирование, менторство и возможность развить свой бизнес.
           </p>
           <!-- Social links -->
           <div class="flex space-x-3">

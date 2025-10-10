@@ -9,11 +9,11 @@
         >
           <div class="flex items-center space-x-2">
             <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
-              <span class="text-white font-bold text-xl">BC</span>
+              <span class="text-white font-bold text-xl">BQ</span>
             </div>
             <div class="flex flex-col">
               <span class="text-xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent leading-none">
-                Бизнес Camp
+                Business Qoldau
               </span>
               <span class="text-xs text-gray-500 font-medium">2025</span>
             </div>

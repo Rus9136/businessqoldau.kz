@@ -14,7 +14,7 @@
           <div class="animate-fade-in-up">
             <div class="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
               <span class="w-2 h-2 bg-secondary-500 rounded-full animate-pulse"></span>
-              <span class="text-sm font-semibold">Конкурс 2025</span>
+              <span class="text-sm font-semibold">Конкурс грант 2025</span>
             </div>
 
             <h1 class="mb-6 leading-tight">
@@ -63,22 +63,6 @@
               <NuxtLink to="/how-to-apply" class="btn-outline border-white text-white hover:bg-white hover:text-primary-600">
                 Узнать подробнее
               </NuxtLink>
-            </div>
-
-            <!-- Stats -->
-            <div class="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/20">
-              <div>
-                <div class="text-3xl md:text-4xl font-bold mb-1">10M ₸</div>
-                <div class="text-sm text-white/80">Призовой фонд</div>
-              </div>
-              <div>
-                <div class="text-3xl md:text-4xl font-bold mb-1">3</div>
-                <div class="text-sm text-white/80">Категории</div>
-              </div>
-              <div>
-                <div class="text-3xl md:text-4xl font-bold mb-1">100+</div>
-                <div class="text-sm text-white/80">Участников</div>
-              </div>
             </div>
           </div>
 
@@ -343,14 +327,55 @@
 
 <script setup lang="ts">
 const { settings, periodStatus, loading, getApplicationSettings, formatDate } = useSettings()
+const { getOrganizationSchema, getEventSchema, getWebSiteSchema } = useStructuredData()
+
+// Structured data
+const organizationSchema = getOrganizationSchema()
+const eventSchema = getEventSchema()
+const webSiteSchema = getWebSiteSchema()
 
 // Загрузить настройки периода при монтировании
 onMounted(async () => {
   await getApplicationSettings()
 })
 
+// Enhanced SEO meta
 useSeoMeta({
-  title: 'Бизнес Camp 2025 - Конкурс для предпринимателей',
-  description: 'Конкурс для предпринимателей Казахстана. Призовой фонд до 10 млн тенге.',
+  title: 'Инновационный грант Business Qoldau 2025 - Грант для предпринимателей Казахстана',
+  description: 'Грант для предпринимателей Казахстана с призовым фондом 10 млн тенге. Подайте заявку на участие в Business Qoldau 2025! Получите финансирование, менторство и возможность развить свой бизнес.',
+  keywords: 'бизнес грант, qoldau, business qoldau, предприниматели казахстан, грант, призовой фонд, стартап, бизнес план, конкурс грант 2025, финансирование бизнеса',
+  ogTitle: 'Инновационный грант Business Qoldau 2025 - Грант для предпринимателей Казахстана',
+  ogDescription: 'Грант для предпринимателей Казахстана с призовым фондом 10 млн тенге. Подайте заявку на участие в Business Qoldau 2025!',
+  ogImage: 'https://businessqoldau.kz/og-image.jpg',
+  ogType: 'website',
+  ogUrl: 'https://businessqoldau.kz',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Инновационный грант Business Qoldau 2025 - Грант для предпринимателей Казахстана',
+  twitterDescription: 'Грант для предпринимателей Казахстана с призовым фондом 10 млн тенге. Подайте заявку на участие в Business Qoldau 2025!',
+  twitterImage: 'https://businessqoldau.kz/og-image.jpg'
+})
+
+// Additional head tags
+useHead({
+  link: [
+    { rel: 'canonical', href: 'https://businessqoldau.kz' },
+    { rel: 'alternate', hreflang: 'ru', href: 'https://businessqoldau.kz' },
+    { rel: 'alternate', hreflang: 'kk', href: 'https://businessqoldau.kz' },
+    { rel: 'alternate', hreflang: 'x-default', href: 'https://businessqoldau.kz' }
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify(organizationSchema)
+    },
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify(eventSchema)
+    },
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify(webSiteSchema)
+    }
+  ]
 })
 </script>

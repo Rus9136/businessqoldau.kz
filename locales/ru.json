@@ -11,8 +11,8 @@
     "logout": "Выйти"
   },
   "home": {
-    "title": "Бизнес Camp 2025",
-    "subtitle": "Конкурс для предпринимателей Казахстана",
+    "title": "Инновационный грант Business Qoldau",
+    "subtitle": "Грант для предпринимателей Казахстана",
     "applyButton": "Подать заявку",
     "learnMore": "Подробнее",
     "timer": {
@@ -22,7 +22,7 @@
       "minutes": "минут"
     },
     "stages": {
-      "title": "Этапы конкурса",
+      "title": "Этапы гранта",
       "step1": {
         "title": "Подача заявок",
         "description": "Регистрация и подача заявок с бизнес-планом и видео-презентацией"
@@ -49,16 +49,16 @@
     }
   },
   "footer": {
-    "copyright": "© 2025 Бизнес Camp. Все права защищены."
+    "copyright": "© 2025 Business Qoldau. Все права защищены."
   },
   "terms": {
     "title": "Правила участия",
-    "metaTitle": "Правила участия - Бизнес Camp 2025",
-    "metaDescription": "Правила участия в конкурсе для предпринимателей"
+    "metaTitle": "Правила участия - Business Qoldau 2025",
+    "metaDescription": "Правила участия в гранте для предпринимателей"
   },
   "privacy": {
     "title": "Политика конфиденциальности",
-    "metaTitle": "Политика конфиденциальности - Бизнес Camp 2025",
+    "metaTitle": "Политика конфиденциальности - Business Qoldau 2025",
     "metaDescription": "Политика конфиденциальности и обработки персональных данных"
   },
   "forms": {
@@ -142,11 +142,13 @@
       "enterCity": "Введите ваш город"
     },
     "application": {
+      "statusSubmitted": "Отправлена",
+      "statusDraft": "Черновик",
       "templateName": "Шаблон бизнес-плана",
       "templateDescription": "Используйте этот шаблон для подготовки бизнес-плана",
       "downloadTemplate": "Скачать шаблон",
       "noApplications": "У вас пока нет заявок",
-      "createApplicationPrompt": "Создайте новую заявку на участие в конкурсе",
+      "createApplicationPrompt": "Создайте новую заявку на участие в гранте",
       "createApplication": "Создать заявку",
       "viewApplication": "Посмотреть",
       "createdOn": "Создана",

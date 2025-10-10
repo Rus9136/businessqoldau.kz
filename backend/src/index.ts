@@ -12,6 +12,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+// Trust proxy - required for rate limiting behind Nginx
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(helmet());
 

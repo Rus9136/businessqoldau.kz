@@ -764,7 +764,7 @@ onUnmounted(() => {
 })
 
 useSeoMeta({
-  title: 'Вход - Бизнес Camp 2025',
+  title: 'Вход - Business Qoldau 2025',
   description: 'Войдите в личный кабинет',
 })
 </script>

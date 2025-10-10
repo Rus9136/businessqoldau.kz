@@ -805,7 +805,7 @@ const handleDownloadTemplate = () => {
 }
 
 useSeoMeta({
-  title: 'Личный кабинет - Бизнес Camp 2025',
+  title: 'Личный кабинет - Business Qoldau 2025',
   description: 'Личный кабинет участника',
 })
 </script>

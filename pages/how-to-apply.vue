@@ -98,7 +98,7 @@
 
 <script setup lang="ts">
 useSeoMeta({
-  title: 'Как подать заявку - Бизнес Camp 2025',
-  description: 'Пошаговая инструкция по подаче заявки на участие в конкурсе',
+  title: 'Как подать заявку - Business Qoldau 2025',
+  description: 'Пошаговая инструкция по подаче заявки на участие в гранте',
 })
 </script>

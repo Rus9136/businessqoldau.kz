@@ -8,11 +8,11 @@ const router = Router();
 
 // POST /api/auth/register - Register new user
 // Rate limit: 5 attempts per 15 minutes per IP
-router.post('/register', authLimiter, checkApplicationPeriodForAuth, authController.register);
+router.post('/register', authLimiter, authController.register);
 
 // POST /api/auth/login - Login user
 // Rate limit: 5 attempts per 15 minutes per IP
-router.post('/login', authLimiter, checkApplicationPeriodForAuth, authController.login);
+router.post('/login', authLimiter, authController.login);
 
 // POST /api/auth/refresh - Refresh access token
 router.post('/refresh', authController.refresh);

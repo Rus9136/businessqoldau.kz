@@ -135,7 +135,7 @@ const handleSubmit = async () => {
 }
 
 useSeoMeta({
-  title: 'Контакты - Бизнес Camp 2025',
+  title: 'Контакты - Business Qoldau 2025',
   description: 'Свяжитесь с нами по любым вопросам',
 })
 </script>
