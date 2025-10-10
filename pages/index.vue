@@ -40,7 +40,7 @@
                     </div>
                   </div>
                   <div class="flex-1">
-                    <div class="text-sm font-medium opacity-90 mb-1">Период подачи заявок</div>
+                    <div class="text-sm font-medium opacity-90 mb-1">Период подачи заявок на регистрацию</div>
                     <div class="text-xl md:text-2xl font-bold">
                       {{ formatDate(settings.start_date) }} — {{ formatDate(settings.end_date) }}
                     </div>
