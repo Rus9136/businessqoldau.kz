@@ -61,7 +61,7 @@
                 {{ $t('home.cta.button') }}
               </NuxtLink>
               <NuxtLink to="/how-to-apply" class="btn-outline border-white text-white hover:bg-white hover:text-primary-600">
-                Узнать подробнее
+                {{ $t('home.learnMoreBtn') }}
               </NuxtLink>
             </div>
           </div>
@@ -83,7 +83,7 @@
       <div class="container-custom">
         <div class="text-center max-w-3xl mx-auto mb-16">
           <h2 class="mb-4 bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent">{{ $t('home.stages.title') }}</h2>
-          <p class="text-xl text-gray-600">Простой и прозрачный процесс участия в конкурсе</p>
+          <p class="text-xl text-gray-600">{{ $t('home.simpleProcess') }}</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
@@ -153,99 +153,265 @@
       </div>
     </section>
 
-    <!-- Призовой фонд -->
-    <section class="section-padding bg-white">
+    <!-- FAQ Section -->
+    <section class="section-padding bg-gray-50">
       <div class="container-custom">
         <div class="text-center max-w-3xl mx-auto mb-16">
-          <h2 class="mb-4 text-gray-900">{{ $t('home.prizes.title') }}</h2>
-          <p class="text-xl text-gray-600">Общий призовой фонд составляет 10 миллионов тенге</p>
+          <h2 class="mb-4 text-gray-900">{{ $t('faq.title') }}</h2>
+          <p class="text-xl text-gray-600">{{ $t('faq.subtitle') }}</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          <!-- First Place -->
-          <div class="bg-white border-2 border-yellow-400 rounded-2xl p-8 text-center relative overflow-hidden group hover:shadow-xl transition-all duration-300">
-            <div class="absolute top-0 left-0 right-0 h-1 bg-yellow-400"></div>
-
-            <div class="relative z-10">
-              <div class="w-20 h-20 mx-auto mb-6 bg-yellow-50 border-2 border-yellow-400 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
-                <svg class="w-10 h-10 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              </div>
-              <div class="text-xl font-bold text-gray-900 mb-3">{{ $t('home.prizes.first') }}</div>
-              <div class="text-4xl font-bold text-gray-900 mb-2">5 000 000 ₸</div>
-              <p class="text-gray-500 text-sm">Главный приз конкурса</p>
-            </div>
-          </div>
-
-          <!-- Second Place -->
-          <div class="bg-white border-2 border-gray-300 rounded-2xl p-8 text-center relative overflow-hidden group hover:shadow-xl transition-all duration-300 md:mt-8">
-            <div class="absolute top-0 left-0 right-0 h-1 bg-gray-300"></div>
-
-            <div class="relative z-10">
-              <div class="w-20 h-20 mx-auto mb-6 bg-gray-50 border-2 border-gray-300 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
-                <svg class="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              </div>
-              <div class="text-xl font-bold text-gray-900 mb-3">{{ $t('home.prizes.second') }}</div>
-              <div class="text-4xl font-bold text-gray-900 mb-2">3 000 000 ₸</div>
-              <p class="text-gray-500 text-sm">Второе место</p>
-            </div>
-          </div>
-
-          <!-- Third Place -->
-          <div class="bg-white border-2 border-orange-300 rounded-2xl p-8 text-center relative overflow-hidden group hover:shadow-xl transition-all duration-300">
-            <div class="absolute top-0 left-0 right-0 h-1 bg-orange-300"></div>
-
-            <div class="relative z-10">
-              <div class="w-20 h-20 mx-auto mb-6 bg-orange-50 border-2 border-orange-300 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
-                <svg class="w-10 h-10 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              </div>
-              <div class="text-xl font-bold text-gray-900 mb-3">{{ $t('home.prizes.third') }}</div>
-              <div class="text-4xl font-bold text-gray-900 mb-2">2 000 000 ₸</div>
-              <p class="text-gray-500 text-sm">Третье место</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Additional Benefits -->
-        <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          <div class="flex items-start space-x-3 bg-white/60 backdrop-blur-sm rounded-xl p-4">
-            <div class="flex-shrink-0 w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
-              <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <div class="max-w-4xl mx-auto space-y-4">
+          <!-- FAQ Item 1 -->
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+            <button
+              @click="toggleFaq(1)"
+              class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors duration-200"
+            >
+              <span class="font-semibold text-gray-900 text-lg pr-8">{{ $t('faq.q1.question') }}</span>
+              <svg
+                class="w-6 h-6 text-primary-600 flex-shrink-0 transition-transform duration-300"
+                :class="{ 'rotate-180': openFaq === 1 }"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
-            </div>
-            <div>
-              <div class="font-semibold text-gray-800">Менторство</div>
-              <p class="text-sm text-gray-600">От опытных предпринимателей</p>
-            </div>
-          </div>
-
-          <div class="flex items-start space-x-3 bg-white/60 backdrop-blur-sm rounded-xl p-4">
-            <div class="flex-shrink-0 w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
-              <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-              </svg>
-            </div>
-            <div>
-              <div class="font-semibold text-gray-800">Нетворкинг</div>
-              <p class="text-sm text-gray-600">Связи с инвесторами и партнерами</p>
+            </button>
+            <div
+              v-show="openFaq === 1"
+              class="px-6 pb-5 text-gray-600 leading-relaxed"
+            >
+              {{ $t('faq.q1.answer') }}
             </div>
           </div>
 
-          <div class="flex items-start space-x-3 bg-white/60 backdrop-blur-sm rounded-xl p-4">
-            <div class="flex-shrink-0 w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
-              <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+          <!-- FAQ Item 2 -->
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+            <button
+              @click="toggleFaq(2)"
+              class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors duration-200"
+            >
+              <span class="font-semibold text-gray-900 text-lg pr-8">{{ $t('faq.q2.question') }}</span>
+              <svg
+                class="w-6 h-6 text-primary-600 flex-shrink-0 transition-transform duration-300"
+                :class="{ 'rotate-180': openFaq === 2 }"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
+            </button>
+            <div
+              v-show="openFaq === 2"
+              class="px-6 pb-5 text-gray-600 leading-relaxed"
+            >
+              {{ $t('faq.q2.answer') }}
             </div>
-            <div>
-              <div class="font-semibold text-gray-800">Медиа поддержка</div>
-              <p class="text-sm text-gray-600">Освещение в СМИ и социальных сетях</p>
+          </div>
+
+          <!-- FAQ Item 3 -->
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+            <button
+              @click="toggleFaq(3)"
+              class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors duration-200"
+            >
+              <span class="font-semibold text-gray-900 text-lg pr-8">{{ $t('faq.q3.question') }}</span>
+              <svg
+                class="w-6 h-6 text-primary-600 flex-shrink-0 transition-transform duration-300"
+                :class="{ 'rotate-180': openFaq === 3 }"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              v-show="openFaq === 3"
+              class="px-6 pb-5 text-gray-600 leading-relaxed"
+            >
+              {{ $t('faq.q3.answer') }}
+            </div>
+          </div>
+
+          <!-- FAQ Item 4 -->
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+            <button
+              @click="toggleFaq(4)"
+              class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors duration-200"
+            >
+              <span class="font-semibold text-gray-900 text-lg pr-8">{{ $t('faq.q4.question') }}</span>
+              <svg
+                class="w-6 h-6 text-primary-600 flex-shrink-0 transition-transform duration-300"
+                :class="{ 'rotate-180': openFaq === 4 }"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              v-show="openFaq === 4"
+              class="px-6 pb-5 text-gray-600 leading-relaxed"
+            >
+              {{ $t('faq.q4.answer') }}
+            </div>
+          </div>
+
+          <!-- FAQ Item 5 -->
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+            <button
+              @click="toggleFaq(5)"
+              class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors duration-200"
+            >
+              <span class="font-semibold text-gray-900 text-lg pr-8">{{ $t('faq.q5.question') }}</span>
+              <svg
+                class="w-6 h-6 text-primary-600 flex-shrink-0 transition-transform duration-300"
+                :class="{ 'rotate-180': openFaq === 5 }"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              v-show="openFaq === 5"
+              class="px-6 pb-5 text-gray-600 leading-relaxed space-y-2"
+            >
+              <p>{{ $t('faq.q5.answer') }}</p>
+              <p class="text-sm text-gray-500">{{ $t('faq.q5.note') }}</p>
+            </div>
+          </div>
+
+          <!-- FAQ Item 6 -->
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+            <button
+              @click="toggleFaq(6)"
+              class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors duration-200"
+            >
+              <span class="font-semibold text-gray-900 text-lg pr-8">{{ $t('faq.q6.question') }}</span>
+              <svg
+                class="w-6 h-6 text-primary-600 flex-shrink-0 transition-transform duration-300"
+                :class="{ 'rotate-180': openFaq === 6 }"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              v-show="openFaq === 6"
+              class="px-6 pb-5 text-gray-600"
+            >
+              <ul class="space-y-2 list-disc list-inside">
+                <li v-for="(item, index) in $tm('faq.q6.items')" :key="index">{{ item }}</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- FAQ Item 7 -->
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+            <button
+              @click="toggleFaq(7)"
+              class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors duration-200"
+            >
+              <span class="font-semibold text-gray-900 text-lg pr-8">{{ $t('faq.q7.question') }}</span>
+              <svg
+                class="w-6 h-6 text-primary-600 flex-shrink-0 transition-transform duration-300"
+                :class="{ 'rotate-180': openFaq === 7 }"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              v-show="openFaq === 7"
+              class="px-6 pb-5 text-gray-600 leading-relaxed"
+            >
+              {{ $t('faq.q7.answer') }}
+            </div>
+          </div>
+
+          <!-- FAQ Item 8 -->
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+            <button
+              @click="toggleFaq(8)"
+              class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors duration-200"
+            >
+              <span class="font-semibold text-gray-900 text-lg pr-8">{{ $t('faq.q8.question') }}</span>
+              <svg
+                class="w-6 h-6 text-primary-600 flex-shrink-0 transition-transform duration-300"
+                :class="{ 'rotate-180': openFaq === 8 }"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              v-show="openFaq === 8"
+              class="px-6 pb-5 text-gray-600 leading-relaxed"
+            >
+              {{ $t('faq.q8.answer') }}
+            </div>
+          </div>
+
+          <!-- FAQ Item 9 -->
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+            <button
+              @click="toggleFaq(9)"
+              class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors duration-200"
+            >
+              <span class="font-semibold text-gray-900 text-lg pr-8">{{ $t('faq.q9.question') }}</span>
+              <svg
+                class="w-6 h-6 text-primary-600 flex-shrink-0 transition-transform duration-300"
+                :class="{ 'rotate-180': openFaq === 9 }"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              v-show="openFaq === 9"
+              class="px-6 pb-5 text-gray-600 leading-relaxed"
+            >
+              {{ $t('faq.q9.answer') }}
+            </div>
+          </div>
+
+          <!-- FAQ Item 10 -->
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+            <button
+              @click="toggleFaq(10)"
+              class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors duration-200"
+            >
+              <span class="font-semibold text-gray-900 text-lg pr-8">{{ $t('faq.q10.question') }}</span>
+              <svg
+                class="w-6 h-6 text-primary-600 flex-shrink-0 transition-transform duration-300"
+                :class="{ 'rotate-180': openFaq === 10 }"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              v-show="openFaq === 10"
+              class="px-6 pb-5 text-gray-600 leading-relaxed space-y-2"
+            >
+              <p v-for="(part, index) in $tm('faq.q10.parts')" :key="index">{{ part }}</p>
             </div>
           </div>
         </div>
@@ -286,7 +452,7 @@
                 <span>{{ $t('home.cta.button') }}</span>
               </NuxtLink>
               <NuxtLink to="/contacts" class="btn-outline border-white text-white hover:bg-white hover:text-primary-600">
-                Связаться с нами
+                {{ $t('home.contactUsBtn') }}
               </NuxtLink>
             </div>
 
@@ -300,8 +466,8 @@
                     </svg>
                   </div>
                   <div class="text-left">
-                    <div class="text-sm font-semibold">Безопасность</div>
-                    <div class="text-xs text-white/70">Защита данных</div>
+                    <div class="text-sm font-semibold">{{ $t('home.security') }}</div>
+                    <div class="text-xs text-white/70">{{ $t('home.dataProtection') }}</div>
                   </div>
                 </div>
 
@@ -312,8 +478,8 @@
                     </svg>
                   </div>
                   <div class="text-left">
-                    <div class="text-sm font-semibold">Прозрачность</div>
-                    <div class="text-xs text-white/70">Честная оценка</div>
+                    <div class="text-sm font-semibold">{{ $t('home.transparency') }}</div>
+                    <div class="text-xs text-white/70">{{ $t('home.fairEvaluation') }}</div>
                   </div>
                 </div>
               </div>
@@ -328,6 +494,13 @@
 <script setup lang="ts">
 const { settings, periodStatus, loading, getApplicationSettings, formatDate } = useSettings()
 const { getOrganizationSchema, getEventSchema, getWebSiteSchema } = useStructuredData()
+
+// FAQ accordion state
+const openFaq = ref<number | null>(null)
+
+const toggleFaq = (id: number) => {
+  openFaq.value = openFaq.value === id ? null : id
+}
 
 // Structured data
 const organizationSchema = getOrganizationSchema()
