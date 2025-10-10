@@ -106,16 +106,28 @@ curl http://localhost:3001/api       # API info
 - Public routes: `/`, `/how-to-apply`, `/terms`, `/contacts`, `/privacy`
 - Protected routes: `/app` (application submission form)
 
-### i18n Configuration
-- Configured in `i18n.config.ts` with inline messages
+### i18n Configuration (Internationalization)
+**Translation System:**
+- Translations stored in JSON files:
+  - `locales/ru.json` - Russian translations
+  - `locales/kk.json` - Kazakh translations
+- Loaded via `plugins/i18n.ts` plugin on app initialization
 - Default locale: `ru` (Russian)
 - Available locales: `ru`, `kk` (Kazakh)
-- Access translations via `$t()` in templates or `useI18n()` in script
+
+**Usage:**
+- In templates: `{{ $t('key.path') }}` or `{{ $t('nav.home') }}`
+- In script: `const { t } = useI18n()` then `t('key.path')`
 - Language switcher in `Header.vue` allows runtime locale switching
-- ⚠️ **Current Issue**: Translation keys display as `nav.home` instead of translated text
-  - Messages are defined in `i18n.config.ts` but @nuxtjs/i18n v10 requires additional configuration
-  - Site functionality is NOT affected - this is a display-only issue
-  - See "Known Issues" section for details
+
+**Translation Structure:**
+- Organized by feature: `nav`, `home`, `footer`, `cabinet`, `faq`, etc.
+- Example: `$t('footer.navigation')` → "Навигация" (ru) / "Сайт бөлімдері" (kk)
+
+**Adding New Translations:**
+1. Add key to both `locales/ru.json` and `locales/kk.json`
+2. Use `$t('your.key')` in component templates
+3. Rebuild and restart: `npm run build && pm2 restart businessqoldau-nuxt`
 
 ### Page Structure & Routes
 - `/` - Landing page with hero, countdown timer, competition stages, prize pool
@@ -422,9 +434,9 @@ backend/
 - ✅ File upload with progress tracking for business plans (PDF/DOC/DOCX)
 - ✅ useContact() composable for contact form
 - ✅ pages/contacts.vue integrated with backend API
+- ✅ i18n translations working with JSON files (ru.json, kk.json)
 
 **TODO:**
-- **Fix i18n translations** - configure @nuxtjs/i18n v10 correctly (see Known Issues)
 - Implement countdown timer on landing page
 - Add form validation feedback
 - Handle edge cases and error states
@@ -440,20 +452,6 @@ Landing page (`pages/index.vue`) has static timer placeholder:
 - Edit `content/terms.md` and `content/privacy.md` to update legal text
 
 ## ⚠️ Known Issues
-
-### i18n Translations Not Displaying
-**Status**: Translation keys (e.g., `nav.home`) display instead of translated text
-
-**Details**:
-- All translations are properly defined in `i18n.config.ts` (Russian and Kazakh)
-- @nuxtjs/i18n v10.x requires specific configuration that differs from v8/v9
-- Attempted solutions:
-  - Created JSON files in `locales/` directory (ru.json, kk.json)
-  - Configured `vueI18n: './i18n.config.ts'` in nuxt.config.ts
-  - Tried lazy loading with `langDir` setting
-- **Impact**: Display only - site functionality is NOT affected
-- **Workaround**: Temporarily hardcode text in components instead of using `$t()`
-- **TODO**: Research @nuxtjs/i18n v10 documentation for correct configuration
 
 ### Other Issues
 - @nuxt/content warns about missing content config (optional, using default collection)
