@@ -15,8 +15,8 @@
             </div>
             <div>
               <h3 class="font-semibold mb-2">{{ $t('contactPage.phone') }}</h3>
-              <a href="tel:+77000000000" class="text-blue-600 hover:underline">
-                +7 (700) 000-00-00
+              <a href="tel:+77772600038" class="text-blue-600 hover:underline">
+                +7 (777) 260-00-38
               </a>
             </div>
           </div>
