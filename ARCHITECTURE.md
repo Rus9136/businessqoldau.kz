@@ -16,7 +16,7 @@
 
 Быстро запустить сайт по примеру shesnext.kz: лендинг + странички с правилами, контактами и политикой, плюс один общий кабинет для подачи заявок.
 
-**Бизнес Camp 2025** - A bilingual (Russian/Kazakh) business competition platform for entrepreneurs in Kazakhstan.
+**Инновационный грант Business Qoldau - Грант для предпринимателей Казахстана** - A bilingual (Russian/Kazakh) business competition platform for entrepreneurs in Kazakhstan.
 
 ---
 

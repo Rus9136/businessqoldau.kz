@@ -71,9 +71,9 @@
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/terms" class="text-gray-400 hover:text-white transition-colors flex items-center space-x-2 group">
+              <NuxtLink to="/documents" class="text-gray-400 hover:text-white transition-colors flex items-center space-x-2 group">
                 <span class="w-1.5 h-1.5 bg-primary-500 rounded-full group-hover:scale-150 transition-transform"></span>
-                <span>{{ $t('nav.terms') }}</span>
+                <span>{{ $t('nav.documents') }}</span>
               </NuxtLink>
             </li>
             <li>

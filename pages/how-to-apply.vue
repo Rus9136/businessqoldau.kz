@@ -97,6 +97,14 @@
 </template>
 
 <script setup lang="ts">
+// SEO: canonical and hreflang
+const { setCanonicalAndHreflang } = useSeoHelpers()
+setCanonicalAndHreflang()
+
+// SEO: Breadcrumb Schema
+const { setBreadcrumbSchema } = useBreadcrumb()
+setBreadcrumbSchema()
+
 useSeoMeta({
   title: 'Как подать заявку - Business Qoldau 2025',
   description: 'Пошаговая инструкция по подаче заявки на участие в гранте',

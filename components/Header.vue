@@ -41,6 +41,12 @@
             {{ $t('nav.documents') }}
           </NuxtLink>
           <NuxtLink
+            to="/faq"
+            class="px-4 py-2 rounded-lg font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200"
+          >
+            FAQ
+          </NuxtLink>
+          <NuxtLink
             to="/contacts"
             class="px-4 py-2 rounded-lg font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200"
           >
@@ -145,6 +151,13 @@
             class="block px-4 py-3 rounded-lg font-medium text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors"
           >
             {{ $t('nav.documents') }}
+          </NuxtLink>
+          <NuxtLink
+            to="/faq"
+            @click="mobileMenuOpen = false"
+            class="block px-4 py-3 rounded-lg font-medium text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors"
+          >
+            FAQ
           </NuxtLink>
           <NuxtLink
             to="/contacts"

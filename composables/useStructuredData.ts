@@ -7,11 +7,14 @@ export const useStructuredData = () => {
       "alternateName": "Инновационный грант Business Qoldau",
       "url": "https://businessqoldau.kz",
       "logo": "https://businessqoldau.kz/logo.png",
-      "description": "Грант для предпринимателей Казахстана с призовым фондом 10 млн тенге",
+      "description": "Центр поддержки предпринимателей Казахстана организует конкурс на безвозмездные гранты начинающим и действующим предпринимателям в сумме от 2 до 10 млн тенге на развитие инновационных проектов в приоритетных секторах экономики",
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": "Алматы",
         "addressCountry": "KZ"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Kazakhstan"
       },
       "contactPoint": {
         "@type": "ContactPoint",
@@ -30,7 +33,7 @@ export const useStructuredData = () => {
       "@context": "https://schema.org",
       "@type": "Event",
       "name": "Business Qoldau 2025",
-      "description": "Грант для предпринимателей Казахстана с призовым фондом 10 млн тенге",
+      "description": "Центр поддержки предпринимателей Казахстана организует конкурс на безвозмездные гранты начинающим и действующим предпринимателям в сумме от 2 до 10 млн тенге на развитие инновационных проектов в приоритетных секторах экономики",
       "url": "https://businessqoldau.kz",
       "startDate": "2025-01-01",
       "endDate": "2025-12-31",
@@ -39,6 +42,14 @@ export const useStructuredData = () => {
       "location": {
         "@type": "VirtualLocation",
         "url": "https://businessqoldau.kz"
+      },
+      "audience": {
+        "@type": "Audience",
+        "audienceType": "Предприниматели Казахстана",
+        "geographicArea": {
+          "@type": "Country",
+          "name": "Kazakhstan"
+        }
       },
       "organizer": {
         "@type": "Organization",
@@ -62,7 +73,7 @@ export const useStructuredData = () => {
       "name": "Business Qoldau",
       "alternateName": "Инновационный грант Business Qoldau",
       "url": "https://businessqoldau.kz",
-      "description": "Грант для предпринимателей Казахстана с призовым фондом 10 млн тенге",
+      "description": "Центр поддержки предпринимателей Казахстана организует конкурс на безвозмездные гранты начинающим и действующим предпринимателям в сумме от 2 до 10 млн тенге на развитие инновационных проектов в приоритетных секторах экономики",
       "inLanguage": ["ru", "kk"],
       "potentialAction": {
         "@type": "SearchAction",

@@ -14,9 +14,13 @@ export default defineNuxtConfig({
   // i18n configuration
   i18n: {
     defaultLocale: 'ru',
-    locales: ['ru', 'kk'],
+    locales: [
+      { code: 'ru', name: 'Русский' },
+      { code: 'kk', name: 'Қазақша' }
+    ],
     strategy: 'no_prefix',
-    vueI18n: './i18n.config.ts'
+    vueI18n: './i18n.config.ts',
+    detectBrowserLanguage: false
   },
 
   // Content configuration
@@ -30,7 +34,7 @@ export default defineNuxtConfig({
   site: {
     url: 'https://businessqoldau.kz',
     name: 'Инновационный грант Business Qoldau 2025 - Грант для предпринимателей Казахстана',
-    description: 'Грант для предпринимателей Казахстана с призовым фондом 10 млн тенге. Подайте заявку на участие в Business Qoldau 2025!',
+    description: 'Центр поддержки предпринимателей Казахстана организует конкурс на безвозмездные гранты начинающим и действующим предпринимателям в сумме от 2 до 10 млн тенге на развитие инновационных проектов в приоритетных секторах экономики.',
     defaultLocale: 'ru'
   },
 
@@ -62,26 +66,26 @@ export default defineNuxtConfig({
       },
       title: 'Инновационный грант Business Qoldau 2025 - Грант для предпринимателей Казахстана',
       meta: [
-        { name: 'description', content: 'Грант для предпринимателей Казахстана с призовым фондом 10 млн тенге. Подайте заявку на участие в Business Qoldau 2025!' },
-        { name: 'keywords', content: 'бизнес грант, qoldau, business qoldau, предприниматели казахстан, грант, призовой фонд, стартап, бизнес план, конкурс грант 2025' },
+        { name: 'description', content: 'Центр поддержки предпринимателей Казахстана организует конкурс на безвозмездные гранты начинающим и действующим предпринимателям в сумме от 2 до 10 млн тенге на развитие инновационных проектов в приоритетных секторах экономики.' },
+        { name: 'keywords', content: 'бизнес грант казахстан, qoldau, business qoldau, предприниматели казахстан, грант для бизнеса, стартап казахстан, бизнес план, конкурс грант 2025, грант астана, грант алматы, грант шымкент, грант караганда, грант актобе, грант павлодар, поддержка предпринимателей' },
         { name: 'author', content: 'Business Qoldau 2025' },
         { name: 'robots', content: 'index, follow' },
         { property: 'og:title', content: 'Инновационный грант Business Qoldau 2025 - Грант для предпринимателей Казахстана' },
-        { property: 'og:description', content: 'Грант для предпринимателей Казахстана с призовым фондом 10 млн тенге. Подайте заявку на участие в Business Qoldau 2025!' },
+        { property: 'og:description', content: 'Центр поддержки предпринимателей Казахстана организует конкурс на безвозмездные гранты начинающим и действующим предпринимателям в сумме от 2 до 10 млн тенге на развитие инновационных проектов в приоритетных секторах экономики.' },
         { property: 'og:type', content: 'website' },
         { property: 'og:url', content: 'https://businessqoldau.kz' },
+        { property: 'og:image', content: 'https://businessqoldau.kz/og-image.svg' },
         { property: 'og:site_name', content: 'Business Qoldau 2025' },
         { property: 'og:locale', content: 'ru_RU' },
         { property: 'og:locale:alternate', content: 'kk_KZ' },
         { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:image', content: 'https://businessqoldau.kz/og-image.svg' },
         { name: 'twitter:title', content: 'Инновационный грант Business Qoldau 2025 - Грант для предпринимателей Казахстана' },
-        { name: 'twitter:description', content: 'Грант для предпринимателей Казахстана с призовым фондом 10 млн тенге. Подайте заявку на участие в Business Qoldau 2025!' }
+        { name: 'twitter:description', content: 'Центр поддержки предпринимателей Казахстана организует конкурс на безвозмездные гранты начинающим и действующим предпринимателям в сумме от 2 до 10 млн тенге на развитие инновационных проектов в приоритетных секторах экономики.' }
       ],
       link: [
-        { rel: 'canonical', href: 'https://businessqoldau.kz' },
-        { rel: 'alternate', hreflang: 'ru', href: 'https://businessqoldau.kz' },
-        { rel: 'alternate', hreflang: 'kk', href: 'https://businessqoldau.kz' },
-        { rel: 'alternate', hreflang: 'x-default', href: 'https://businessqoldau.kz' }
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
       ]
     }
   },

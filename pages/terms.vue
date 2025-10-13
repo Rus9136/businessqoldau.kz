@@ -12,6 +12,14 @@
 </template>
 
 <script setup lang="ts">
+// SEO: canonical and hreflang
+const { setCanonicalAndHreflang } = useSeoHelpers()
+setCanonicalAndHreflang()
+
+// SEO: Breadcrumb Schema
+const { setBreadcrumbSchema } = useBreadcrumb()
+setBreadcrumbSchema()
+
 const { t } = useI18n()
 
 useSeoMeta({

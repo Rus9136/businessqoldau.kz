@@ -5,7 +5,7 @@ This file provides comprehensive guidance to Claude Code (claude.ai/code) when w
 
 ## 📋 Project Overview
 
-**Бизнес Camp 2025** - A bilingual (Russian/Kazakh) business competition platform for entrepreneurs in Kazakhstan. Full-stack application with Nuxt 3 frontend and Node.js + Express backend.
+**Инновационный грант Business Qoldau - Грант для предпринимателей Казахстана** - A bilingual (Russian/Kazakh) business competition platform for entrepreneurs in Kazakhstan. Full-stack application with Nuxt 3 frontend and Node.js + Express backend.
 
 ### Tech Stack
 

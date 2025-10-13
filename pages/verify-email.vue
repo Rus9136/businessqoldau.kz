@@ -172,7 +172,7 @@ onUnmounted(() => {
 })
 
 useSeoMeta({
-  title: 'Подтверждение Email - Бизнес Camp 2025',
+  title: 'Подтверждение Email - Инновационный грант Business Qoldau',
   description: 'Подтвердите ваш email адрес',
 })
 </script>
