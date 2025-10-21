@@ -4,18 +4,22 @@ import rateLimit from 'express-rate-limit';
  * Rate limiter для auth endpoints (register/login)
  * Защита от brute-force атак
  *
- * Лимит: 5 попыток за 15 минут с одного IP
+ * Лимит: 10 попыток за 15 минут с одного IP
  */
 export const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 минут
-  max: 5, // максимум 5 запросов
+  max: 10, // максимум 10 запросов (увеличено для разработки)
   message: {
     status: 'error',
     message: 'Слишком много попыток входа. Попробуйте через 15 минут.'
   },
-  standardHeaders: true, // Return rate limit info in `RateLimit-*` headers
+  standardHeaders: 'draft-7', // Use draft-7 headers
   legacyHeaders: false, // Disable `X-RateLimit-*` headers
   skipSuccessfulRequests: false, // Считаем все запросы (включая успешные)
+  // Правильная обработка IP за Nginx proxy
+  validate: {
+    xForwardedForHeader: false, // Отключаем валидацию X-Forwarded-For
+  },
 });
 
 /**
@@ -31,8 +35,11 @@ export const passwordResetLimiter = rateLimit({
     status: 'error',
     message: 'Слишком много запросов на восстановление пароля. Попробуйте через 15 минут.'
   },
-  standardHeaders: true,
+  standardHeaders: 'draft-7',
   legacyHeaders: false,
+  validate: {
+    xForwardedForHeader: false,
+  },
 });
 
 /**
@@ -48,8 +55,11 @@ export const generalLimiter = rateLimit({
     status: 'error',
     message: 'Слишком много запросов. Попробуйте позже.'
   },
-  standardHeaders: true,
+  standardHeaders: 'draft-7',
   legacyHeaders: false,
   // Не применяем к health check
   skip: (req) => req.path === '/health',
+  validate: {
+    xForwardedForHeader: false,
+  },
 });
