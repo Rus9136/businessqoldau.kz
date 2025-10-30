@@ -43,6 +43,7 @@ interface Contact {
 
 interface ApplicationStats {
   total: number
+  totalUsers: number
   byStatus: {
     draft?: number
     submitted?: number
@@ -52,6 +53,10 @@ interface ApplicationStats {
     active?: number
     it?: number
   }
+  registrationsByDay: {
+    date: string
+    count: number
+  }[]
 }
 
 interface GetApplicationsParams {
@@ -74,6 +79,14 @@ interface GetApplicationsResponse {
 interface GetContactsParams {
   page?: number
   limit?: number
+}
+
+interface GetUsersParams {
+  page?: number
+  limit?: number
+  role?: 'user' | 'admin'
+  search?: string
+  emailVerified?: boolean
 }
 
 interface GetContactsResponse {
@@ -160,16 +173,35 @@ export const useAdmin = () => {
   }
 
   /**
-   * Get all users
+   * Get all users with optional filters
    */
-  const getAllUsers = async () => {
+  const getAllUsers = async (params?: GetUsersParams) => {
     loading.value = true
     error.value = null
 
     try {
-      const response = await fetchWithAuth<{ success: boolean; data: { users: User[] } }>(
-        `${config.public.apiUrl}/admin/users`
-      )
+      const queryParams = new URLSearchParams()
+      if (params?.page) queryParams.append('page', params.page.toString())
+      if (params?.limit) queryParams.append('limit', params.limit.toString())
+      if (params?.role) queryParams.append('role', params.role)
+      if (params?.search) queryParams.append('search', params.search)
+      if (params?.emailVerified !== undefined) queryParams.append('emailVerified', params.emailVerified.toString())
+
+      const queryString = queryParams.toString()
+      const url = `${config.public.apiUrl}/admin/users${queryString ? `?${queryString}` : ''}`
+
+      const response = await fetchWithAuth<{
+        success: boolean;
+        data: {
+          users: User[];
+          pagination: {
+            total: number;
+            page: number;
+            limit: number;
+            totalPages: number;
+          }
+        }
+      }>(url)
       users.value = response.data.users
       return response.data
     } catch (err: any) {
@@ -247,6 +279,110 @@ export const useAdmin = () => {
     }
   }
 
+  /**
+   * Export all applications to Excel
+   */
+  const exportApplications = async () => {
+    loading.value = true
+    error.value = null
+
+    try {
+      const { accessToken } = useAuth()
+      const response = await fetch(`${config.public.apiUrl}/admin/applications/export`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken.value}`,
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to export applications')
+      }
+
+      // Get filename from Content-Disposition header
+      const contentDisposition = response.headers.get('Content-Disposition')
+      let filename = 'applications.xlsx'
+      if (contentDisposition) {
+        const filenameMatch = contentDisposition.match(/filename="(.+)"/)
+        if (filenameMatch) {
+          filename = filenameMatch[1]
+        }
+      }
+
+      // Convert response to blob
+      const blob = await response.blob()
+
+      // Create download link
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = filename
+      document.body.appendChild(a)
+      a.click()
+
+      // Cleanup
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+    } catch (err: any) {
+      error.value = err.message || 'Failed to export applications'
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  /**
+   * Export all users to Excel
+   */
+  const exportUsers = async () => {
+    loading.value = true
+    error.value = null
+
+    try {
+      const { accessToken } = useAuth()
+      const response = await fetch(`${config.public.apiUrl}/admin/users/export`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken.value}`,
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to export users')
+      }
+
+      // Get filename from Content-Disposition header
+      const contentDisposition = response.headers.get('Content-Disposition')
+      let filename = 'users.xlsx'
+      if (contentDisposition) {
+        const filenameMatch = contentDisposition.match(/filename="(.+)"/)
+        if (filenameMatch) {
+          filename = filenameMatch[1]
+        }
+      }
+
+      // Convert response to blob
+      const blob = await response.blob()
+
+      // Create download link
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = filename
+      document.body.appendChild(a)
+      a.click()
+
+      // Cleanup
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+    } catch (err: any) {
+      error.value = err.message || 'Failed to export users'
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     applications,
     users,
@@ -260,5 +396,7 @@ export const useAdmin = () => {
     getStats,
     getAllContacts,
     getContactById,
+    exportApplications,
+    exportUsers,
   }
 }

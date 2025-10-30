@@ -149,9 +149,19 @@
                 <option value="it">IT проекты</option>
               </select>
             </div>
-            <div class="flex items-end">
+            <div class="flex items-end gap-2">
               <button @click="resetFilters" class="btn-secondary">
                 Сбросить фильтры
+              </button>
+              <button
+                @click="handleExportApplications"
+                :disabled="exportLoading"
+                class="px-8 py-4 bg-green-600 text-white rounded-xl font-semibold shadow-md hover:shadow-lg hover:bg-green-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                {{ exportLoading ? 'Экспорт...' : 'Экспорт в Excel' }}
               </button>
             </div>
           </div>
@@ -251,6 +261,60 @@
 
       <!-- Users Tab -->
       <div v-else-if="activeTab === 'users'" class="space-y-6">
+        <!-- Filters -->
+        <div class="bg-white rounded-lg shadow-sm border p-4">
+          <div class="flex flex-wrap gap-4">
+            <div class="flex-1 min-w-[200px]">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Поиск</label>
+              <input
+                v-model="userFilters.search"
+                type="text"
+                placeholder="Email или имя..."
+                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Роль</label>
+              <select
+                v-model="userFilters.role"
+                @change="loadUsers"
+                class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Все</option>
+                <option value="user">Пользователь</option>
+                <option value="admin">Администратор</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Email статус</label>
+              <select
+                v-model="userFilters.emailVerified"
+                @change="loadUsers"
+                class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Все</option>
+                <option value="true">Подтвержден</option>
+                <option value="false">Не подтвержден</option>
+              </select>
+            </div>
+            <div class="flex items-end gap-2">
+              <button @click="resetUserFilters" class="btn-secondary">
+                Сбросить фильтры
+              </button>
+              <button
+                @click="handleExportUsers"
+                :disabled="exportLoading"
+                class="px-8 py-4 bg-green-600 text-white rounded-xl font-semibold shadow-md hover:shadow-lg hover:bg-green-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                {{ exportLoading ? 'Экспорт...' : 'Экспорт в Excel' }}
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
           <div class="overflow-x-auto">
             <table class="w-full">
@@ -302,6 +366,30 @@
                 </tr>
               </tbody>
             </table>
+          </div>
+
+          <!-- Pagination -->
+          <div v-if="userPagination" class="px-6 py-4 border-t bg-gray-50 flex items-center justify-between">
+            <div class="text-sm text-gray-700">
+              Показано {{ users.length }} из {{ userPagination.total }}
+            </div>
+            <div class="flex gap-2">
+              <button
+                @click="changeUserPage(userPagination.page - 1)"
+                :disabled="userPagination.page <= 1"
+                class="px-3 py-1 border rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
+              >
+                Назад
+              </button>
+              <span class="px-3 py-1">Страница {{ userPagination.page }} из {{ userPagination.totalPages }}</span>
+              <button
+                @click="changeUserPage(userPagination.page + 1)"
+                :disabled="userPagination.page >= userPagination.totalPages"
+                class="px-3 py-1 border rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
+              >
+                Вперед
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -399,9 +487,105 @@
 
       <!-- Stats Tab -->
       <div v-else-if="activeTab === 'stats'" class="space-y-6">
+        <!-- Key Metrics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Total Users Card -->
+          <div class="bg-white rounded-lg shadow-sm border p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-gray-600">Всего пользователей</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">{{ stats?.totalUsers || 0 }}</p>
+              </div>
+              <div class="bg-blue-100 rounded-full p-3">
+                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Applications Card -->
+          <div class="bg-white rounded-lg shadow-sm border p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-gray-600">Всего заявок</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">{{ stats?.total || 0 }}</p>
+              </div>
+              <div class="bg-green-100 rounded-full p-3">
+                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submitted Applications Card -->
+          <div class="bg-white rounded-lg shadow-sm border p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-gray-600">Отправленные заявки</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">{{ stats?.byStatus?.submitted || 0 }}</p>
+              </div>
+              <div class="bg-purple-100 rounded-full p-3">
+                <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Draft Applications Card -->
+          <div class="bg-white rounded-lg shadow-sm border p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-gray-600">Черновики</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">{{ stats?.byStatus?.draft || 0 }}</p>
+              </div>
+              <div class="bg-yellow-100 rounded-full p-3">
+                <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Registration Dynamics Chart -->
         <div class="bg-white rounded-lg shadow-sm border p-6">
-          <h3 class="text-lg font-semibold text-gray-900 mb-4">Статистика платформы</h3>
-          <p class="text-gray-600">Раздел в разработке...</p>
+          <h3 class="text-lg font-semibold text-gray-900 mb-6">Динамика регистраций (последние 30 дней)</h3>
+          <div v-if="chartData && chartOptions" class="h-80">
+            <Line :data="chartData" :options="chartOptions" />
+          </div>
+          <div v-else class="h-80 flex items-center justify-center text-gray-500">
+            <p>Нет данных для отображения</p>
+          </div>
+        </div>
+
+        <!-- Applications by Category -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-white rounded-lg shadow-sm border p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h4 class="text-sm font-medium text-gray-600">Стартапы</h4>
+              <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Starter</span>
+            </div>
+            <p class="text-2xl font-bold text-gray-900">{{ stats?.byCategory?.starter || 0 }}</p>
+          </div>
+
+          <div class="bg-white rounded-lg shadow-sm border p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h4 class="text-sm font-medium text-gray-600">Активный бизнес</h4>
+              <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Active</span>
+            </div>
+            <p class="text-2xl font-bold text-gray-900">{{ stats?.byCategory?.active || 0 }}</p>
+          </div>
+
+          <div class="bg-white rounded-lg shadow-sm border p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h4 class="text-sm font-medium text-gray-600">IT проекты</h4>
+              <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded">IT</span>
+            </div>
+            <p class="text-2xl font-bold text-gray-900">{{ stats?.byCategory?.it || 0 }}</p>
+          </div>
         </div>
       </div>
 
@@ -758,13 +942,38 @@
 </template>
 
 <script setup lang="ts">
+import { Line } from 'vue-chartjs'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+} from 'chart.js'
+
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+)
+
 definePageMeta({
   middleware: 'admin',
   layout: false
 })
 
 const { user, logout } = useAuth()
-const { applications, users, contacts, stats, loading, error, getAllApplications, updateApplicationStatus, getAllUsers, getStats, getAllContacts, getContactById } = useAdmin()
+const { applications, users, contacts, stats, loading, error, getAllApplications, updateApplicationStatus, getAllUsers, getStats, getAllContacts, getContactById, exportApplications, exportUsers } = useAdmin()
 const { activeTemplate, uploadTemplate, getActiveTemplate, downloadTemplate, deleteTemplate } = useTemplate()
 const { settings: periodSettings, periodStatus, loading: settingsLoading, error: settingsError, getApplicationSettings, updateApplicationSettings, formatDateForInput, formatDate: formatSettingsDate } = useSettings()
 
@@ -780,8 +989,18 @@ const filters = ref({
 })
 const pagination = ref<{ page: number; limit: number; total: number; pages: number } | null>(null)
 const contactPagination = ref<{ page: number; limit: number; total: number; totalPages: number } | null>(null)
+const userPagination = ref<{ page: number; limit: number; total: number; totalPages: number } | null>(null)
 const selectedApplication = ref<any>(null)
 const selectedContact = ref<any>(null)
+
+// User filters state
+const userFilters = ref({
+  search: '',
+  role: '' as '' | 'user' | 'admin',
+  emailVerified: '' as '' | 'true' | 'false',
+  page: 1,
+  limit: 20
+})
 
 // Template state
 const currentTemplate = ref<any>(null)
@@ -800,6 +1019,99 @@ const periodForm = ref({
 })
 const settingsSuccess = ref(false)
 
+// Export state
+const exportLoading = ref(false)
+const exportSuccess = ref(false)
+const exportError = ref<string | null>(null)
+
+// Chart data and options
+const chartData = computed(() => {
+  if (!stats.value?.registrationsByDay || stats.value.registrationsByDay.length === 0) {
+    return null
+  }
+
+  const labels = stats.value.registrationsByDay.map(item => {
+    const date = new Date(item.date)
+    return date.toLocaleDateString('ru-RU', { month: 'short', day: 'numeric' })
+  })
+
+  const data = stats.value.registrationsByDay.map(item => item.count)
+
+  return {
+    labels,
+    datasets: [
+      {
+        label: 'Регистрации',
+        data,
+        borderColor: 'rgb(59, 130, 246)',
+        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        tension: 0.4,
+        fill: true,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        pointBackgroundColor: 'rgb(59, 130, 246)',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+      }
+    ]
+  }
+})
+
+const chartOptions = computed(() => ({
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: true,
+      position: 'top' as const,
+    },
+    tooltip: {
+      mode: 'index' as const,
+      intersect: false,
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      padding: 12,
+      titleFont: {
+        size: 14,
+        weight: 'bold'
+      },
+      bodyFont: {
+        size: 13
+      },
+      callbacks: {
+        label: function(context: any) {
+          return `Регистраций: ${context.parsed.y}`
+        }
+      }
+    },
+  },
+  scales: {
+    x: {
+      grid: {
+        display: false,
+      },
+      ticks: {
+        maxRotation: 45,
+        minRotation: 0,
+      }
+    },
+    y: {
+      beginAtZero: true,
+      ticks: {
+        stepSize: 1,
+        precision: 0,
+      },
+      grid: {
+        color: 'rgba(0, 0, 0, 0.05)',
+      }
+    }
+  },
+  interaction: {
+    mode: 'nearest' as const,
+    axis: 'x' as const,
+    intersect: false
+  }
+}))
+
 // Load data on mount
 onMounted(async () => {
   await loadData()
@@ -815,6 +1127,8 @@ watch(activeTab, async (newTab) => {
     await loadTemplate()
   } else if (newTab === 'settings' && !periodSettings.value) {
     await loadSettings()
+  } else if (newTab === 'stats' && !stats.value) {
+    await getStats()
   }
 })
 
@@ -851,10 +1165,35 @@ const loadApplications = async () => {
 
 const loadUsers = async () => {
   try {
-    await getAllUsers()
+    const params: any = {
+      page: userFilters.value.page,
+      limit: userFilters.value.limit
+    }
+    if (userFilters.value.search) params.search = userFilters.value.search
+    if (userFilters.value.role) params.role = userFilters.value.role
+    if (userFilters.value.emailVerified) params.emailVerified = userFilters.value.emailVerified === 'true'
+
+    const response = await getAllUsers(params)
+    userPagination.value = response.pagination
   } catch (err) {
     console.error('Failed to load users:', err)
   }
+}
+
+const resetUserFilters = () => {
+  userFilters.value = {
+    search: '',
+    role: '',
+    emailVerified: '',
+    page: 1,
+    limit: 20
+  }
+  loadUsers()
+}
+
+const changeUserPage = (page: number) => {
+  userFilters.value.page = page
+  loadUsers()
 }
 
 const resetFilters = () => {
@@ -1004,11 +1343,66 @@ const resetPeriodForm = () => {
   settingsSuccess.value = false
 }
 
+// Export handlers
+const handleExportApplications = async () => {
+  exportLoading.value = true
+  exportError.value = null
+  exportSuccess.value = false
+
+  try {
+    await exportApplications()
+    exportSuccess.value = true
+
+    // Hide success message after 3 seconds
+    setTimeout(() => {
+      exportSuccess.value = false
+    }, 3000)
+  } catch (err: any) {
+    exportError.value = err.message || 'Не удалось экспортировать заявки'
+    alert('Ошибка экспорта: ' + exportError.value)
+  } finally {
+    exportLoading.value = false
+  }
+}
+
+const handleExportUsers = async () => {
+  exportLoading.value = true
+  exportError.value = null
+  exportSuccess.value = false
+
+  try {
+    await exportUsers()
+    exportSuccess.value = true
+
+    // Hide success message after 3 seconds
+    setTimeout(() => {
+      exportSuccess.value = false
+    }, 3000)
+  } catch (err: any) {
+    exportError.value = err.message || 'Не удалось экспортировать пользователей'
+    alert('Ошибка экспорта: ' + exportError.value)
+  } finally {
+    exportLoading.value = false
+  }
+}
+
 // Watch for tab changes to load data
 watch(activeTab, (newTab) => {
   if (newTab === 'contacts' && contacts.value.length === 0) {
     loadContacts()
   }
+})
+
+// Debounce for user search filter
+let searchDebounceTimer: ReturnType<typeof setTimeout> | null = null
+watch(() => userFilters.value.search, () => {
+  if (searchDebounceTimer) {
+    clearTimeout(searchDebounceTimer)
+  }
+  searchDebounceTimer = setTimeout(() => {
+    userFilters.value.page = 1 // Reset to first page on new search
+    loadUsers()
+  }, 500) // 500ms delay
 })
 
 useSeoMeta({

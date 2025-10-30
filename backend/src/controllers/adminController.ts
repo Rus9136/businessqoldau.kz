@@ -8,6 +8,10 @@ import {
   getAllContacts,
   getContactById,
 } from '../services/adminService';
+import {
+  exportApplicationsToExcel,
+  exportUsersToExcel,
+} from '../services/excelExportService';
 
 // Validation schemas
 const getApplicationsSchema = z.object({
@@ -25,6 +29,8 @@ const getUsersSchema = z.object({
   page: z.string().regex(/^\d+$/).transform(Number).optional(),
   limit: z.string().regex(/^\d+$/).transform(Number).optional(),
   role: z.enum(['user', 'admin']).optional(),
+  search: z.string().optional(),
+  emailVerified: z.enum(['true', 'false']).transform(val => val === 'true').optional(),
 });
 
 const getContactsSchema = z.object({
@@ -230,6 +236,70 @@ export const getContactHandler = async (req: Request, res: Response) => {
     return res.status(500).json({
       success: false,
       error: 'Failed to fetch contact',
+    });
+  }
+};
+
+/**
+ * GET /api/admin/applications/export
+ * Export all applications to Excel file
+ */
+export const exportApplicationsHandler = async (req: Request, res: Response) => {
+  try {
+    // Generate Excel file buffer
+    const buffer = await exportApplicationsToExcel();
+
+    // Generate filename with current date
+    const date = new Date().toISOString().split('T')[0];
+    const filename = `applications_${date}.xlsx`;
+
+    // Set headers for file download
+    res.setHeader(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    );
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-Length', buffer.byteLength.toString());
+
+    // Send buffer
+    return res.send(buffer);
+  } catch (error) {
+    console.error('Export applications error:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to export applications',
+    });
+  }
+};
+
+/**
+ * GET /api/admin/users/export
+ * Export all users to Excel file
+ */
+export const exportUsersHandler = async (req: Request, res: Response) => {
+  try {
+    // Generate Excel file buffer
+    const buffer = await exportUsersToExcel();
+
+    // Generate filename with current date
+    const date = new Date().toISOString().split('T')[0];
+    const filename = `users_${date}.xlsx`;
+
+    // Set headers for file download
+    res.setHeader(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    );
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-Length', buffer.byteLength.toString());
+
+    // Send buffer
+    return res.send(buffer);
+  } catch (error) {
+    console.error('Export users error:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to export users',
     });
   }
 };

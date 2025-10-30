@@ -9,6 +9,12 @@ const router = Router();
 // Apply auth middleware first, then adminAuth middleware
 
 /**
+ * GET /api/admin/applications/export
+ * Export all applications to Excel
+ */
+router.get('/applications/export', authenticate, adminAuth, adminController.exportApplicationsHandler);
+
+/**
  * GET /api/admin/applications
  * Get all applications with filters and pagination
  * Query params: status, category, page, limit
@@ -21,6 +27,12 @@ router.get('/applications', authenticate, adminAuth, adminController.getApplicat
  * Body: { status: 'draft' | 'submitted' }
  */
 router.put('/applications/:id/status', authenticate, adminAuth, adminController.updateApplicationStatusHandler);
+
+/**
+ * GET /api/admin/users/export
+ * Export all users to Excel
+ */
+router.get('/users/export', authenticate, adminAuth, adminController.exportUsersHandler);
 
 /**
  * GET /api/admin/users

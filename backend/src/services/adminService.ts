@@ -109,14 +109,43 @@ export const getAllUsers = async (params: {
   page?: number;
   limit?: number;
   role?: string;
+  search?: string;
+  emailVerified?: boolean;
 }) => {
-  const { page = 1, limit = 50, role } = params;
+  const { page = 1, limit = 50, role, search, emailVerified } = params;
   const skip = (page - 1) * limit;
 
   // Build filter
   const where: any = {};
+
+  // Role filter
   if (role) {
     where.role = role;
+  }
+
+  // Email verified filter
+  if (emailVerified !== undefined) {
+    where.emailVerified = emailVerified;
+  }
+
+  // Search filter (search in email and profile fullName)
+  if (search && search.trim()) {
+    where.OR = [
+      {
+        email: {
+          contains: search.trim(),
+          mode: 'insensitive',
+        },
+      },
+      {
+        profile: {
+          fullName: {
+            contains: search.trim(),
+            mode: 'insensitive',
+          },
+        },
+      },
+    ];
   }
 
   const [users, total] = await Promise.all([
@@ -213,7 +242,11 @@ export const getContactById = async (contactId: string) => {
  * Get application statistics
  */
 export const getApplicationStats = async () => {
-  const [total, byStatus, byCategory] = await Promise.all([
+  // Calculate date 30 days ago for registration dynamics
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+  const [total, byStatus, byCategory, totalUsers, recentUsers] = await Promise.all([
     prisma.application.count(),
     prisma.application.groupBy({
       by: ['status'],
@@ -223,10 +256,30 @@ export const getApplicationStats = async () => {
       by: ['category'],
       _count: true,
     }),
+    // Total users count
+    prisma.user.count(),
+    // Users registered in last 30 days
+    prisma.user.findMany({
+      where: {
+        createdAt: {
+          gte: thirtyDaysAgo,
+        },
+      },
+      select: {
+        createdAt: true,
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+    }),
   ]);
+
+  // Group registrations by day
+  const registrationsByDay = groupUsersByDay(recentUsers, thirtyDaysAgo);
 
   return {
     total,
+    totalUsers,
     byStatus: byStatus.reduce((acc, item) => {
       acc[item.status] = item._count;
       return acc;
@@ -235,5 +288,40 @@ export const getApplicationStats = async () => {
       acc[item.category] = item._count;
       return acc;
     }, {} as Record<string, number>),
+    registrationsByDay,
   };
 };
+
+/**
+ * Helper function to group users by day
+ */
+function groupUsersByDay(
+  users: { createdAt: Date }[],
+  startDate: Date
+): { date: string; count: number }[] {
+  // Create a map for all dates in the range
+  const dateMap = new Map<string, number>();
+
+  // Initialize all days with 0
+  const currentDate = new Date(startDate);
+  const today = new Date();
+  today.setHours(23, 59, 59, 999); // End of today
+
+  while (currentDate <= today) {
+    const dateKey = currentDate.toISOString().split('T')[0];
+    dateMap.set(dateKey, 0);
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  // Count users for each day
+  users.forEach(user => {
+    const dateKey = user.createdAt.toISOString().split('T')[0];
+    const currentCount = dateMap.get(dateKey) || 0;
+    dateMap.set(dateKey, currentCount + 1);
+  });
+
+  // Convert map to array and sort by date
+  return Array.from(dateMap.entries())
+    .map(([date, count]) => ({ date, count }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
