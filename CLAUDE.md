@@ -39,6 +39,9 @@ npm run dev  # http://localhost:3001
 
 **Database:** PostgreSQL `businesscamp` is already configured and running
 
+Email : admin@businessqoldau.kz
+Пароль: AdminSecure2025
+
 ### Frontend
 ```bash
 npm install
@@ -540,6 +543,18 @@ pm2 list
 
 ## 📝 Recent Updates
 
+### 2025-10-30: Privacy Page Temporarily Disabled 🚫
+- **Action**: Temporarily disabled access to `/privacy` page
+- **Implementation**: Created middleware `block-privacy.ts` that redirects all visitors to home page
+- **How it works**:
+  - Middleware applied to `pages/privacy.vue` via `definePageMeta({ middleware: 'block-privacy' })`
+  - Returns HTTP 302 redirect to `/` for any attempts to access `/privacy`
+  - Page file remains in the project and is not deleted
+- **To re-enable**: Remove or comment out the middleware in `pages/privacy.vue` and rebuild
+- **Files modified**:
+  - Created: `middleware/block-privacy.ts`
+  - Modified: `pages/privacy.vue` (added definePageMeta)
+
 ### 2025-10-02: Production Deployment Complete ✅
 - Successfully deployed to https://businessqoldau.kz
 - PostgreSQL database migrated to production (port 5436)
@@ -556,7 +571,7 @@ pm2 list
 
 ---
 
-**📅 Updated**: 2025-10-02
+**📅 Updated**: 2025-10-30
 **👤 Project**: Business Qoldau 2025
 **🌐 Domain**: businessqoldau.kz
 **🔗 Production**: https://businessqoldau.kz
