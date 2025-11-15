@@ -246,7 +246,7 @@ export const getApplicationStats = async () => {
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-  const [total, byStatus, byCategory, totalUsers, recentUsers] = await Promise.all([
+  const [total, byStatus, byCategory, totalUsers, recentUsers, totalContacts, recentContacts] = await Promise.all([
     prisma.application.count(),
     prisma.application.groupBy({
       by: ['status'],
@@ -272,14 +272,34 @@ export const getApplicationStats = async () => {
         createdAt: 'asc',
       },
     }),
+    // Total contacts count
+    prisma.contact.count(),
+    // Contacts from last 30 days
+    prisma.contact.findMany({
+      where: {
+        createdAt: {
+          gte: thirtyDaysAgo,
+        },
+      },
+      select: {
+        createdAt: true,
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+    }),
   ]);
 
   // Group registrations by day
   const registrationsByDay = groupUsersByDay(recentUsers, thirtyDaysAgo);
 
+  // Group contacts by day
+  const contactsByDay = groupUsersByDay(recentContacts, thirtyDaysAgo);
+
   return {
     total,
     totalUsers,
+    totalContacts,
     byStatus: byStatus.reduce((acc, item) => {
       acc[item.status] = item._count;
       return acc;
@@ -289,6 +309,7 @@ export const getApplicationStats = async () => {
       return acc;
     }, {} as Record<string, number>),
     registrationsByDay,
+    contactsByDay,
   };
 };
 

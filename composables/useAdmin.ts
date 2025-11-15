@@ -44,6 +44,7 @@ interface Contact {
 interface ApplicationStats {
   total: number
   totalUsers: number
+  totalContacts: number
   byStatus: {
     draft?: number
     submitted?: number
@@ -54,6 +55,10 @@ interface ApplicationStats {
     it?: number
   }
   registrationsByDay: {
+    date: string
+    count: number
+  }[]
+  contactsByDay: {
     date: string
     count: number
   }[]

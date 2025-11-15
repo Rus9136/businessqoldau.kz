@@ -6,7 +6,7 @@
         <div class="flex items-center justify-between py-4">
           <div>
             <h1 class="text-2xl font-bold text-gray-900">Админ-панель</h1>
-            <p class="text-sm text-gray-600">Business Camp 2025</p>
+            <p class="text-sm text-gray-600">Business Qoldau 2025</p>
           </div>
           <div class="flex items-center gap-4">
             <span class="text-sm text-gray-600">{{ user?.email }}</span>
@@ -79,7 +79,7 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
             </svg>
-            <span>Сообщения</span>
+            <span>Обращения</span>
           </button>
 
           <button
@@ -398,7 +398,7 @@
       <div v-else-if="activeTab === 'contacts'" class="space-y-6">
         <div class="bg-white rounded-lg shadow-sm border p-6">
           <div class="flex justify-between items-center mb-6">
-            <h3 class="text-lg font-semibold text-gray-900">Сообщения от пользователей</h3>
+            <h3 class="text-lg font-semibold text-gray-900">Обращения от пользователей</h3>
             <div class="text-sm text-gray-500">
               Всего: {{ contacts.length }}
             </div>
@@ -407,7 +407,7 @@
           <!-- Loading State -->
           <div v-if="loading" class="text-center py-8">
             <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <p class="mt-2 text-gray-600">Загрузка сообщений...</p>
+            <p class="mt-2 text-gray-600">Загрузка обращений...</p>
           </div>
 
           <!-- Error State -->
@@ -427,8 +427,8 @@
             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
             </svg>
-            <h3 class="mt-2 text-sm font-medium text-gray-900">Нет сообщений</h3>
-            <p class="mt-1 text-sm text-gray-500">Пока нет сообщений от пользователей</p>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">Нет обращений</h3>
+            <p class="mt-1 text-sm text-gray-500">Пока нет обращений от пользователей</p>
           </div>
 
           <!-- Contacts List -->
@@ -534,16 +534,16 @@
             </div>
           </div>
 
-          <!-- Draft Applications Card -->
+          <!-- Total Contacts Card -->
           <div class="bg-white rounded-lg shadow-sm border p-6">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-sm font-medium text-gray-600">Черновики</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">{{ stats?.byStatus?.draft || 0 }}</p>
+                <p class="text-sm font-medium text-gray-600">Всего обращений</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">{{ stats?.totalContacts || 0 }}</p>
               </div>
-              <div class="bg-yellow-100 rounded-full p-3">
-                <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+              <div class="bg-orange-100 rounded-full p-3">
+                <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                 </svg>
               </div>
             </div>
@@ -555,6 +555,17 @@
           <h3 class="text-lg font-semibold text-gray-900 mb-6">Динамика регистраций (последние 30 дней)</h3>
           <div v-if="chartData && chartOptions" class="h-80">
             <Line :data="chartData" :options="chartOptions" />
+          </div>
+          <div v-else class="h-80 flex items-center justify-center text-gray-500">
+            <p>Нет данных для отображения</p>
+          </div>
+        </div>
+
+        <!-- Contacts Dynamics Chart -->
+        <div class="bg-white rounded-lg shadow-sm border p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-6">Динамика обращений (последние 30 дней)</h3>
+          <div v-if="contactsChartData && contactsChartOptions" class="h-80">
+            <Line :data="contactsChartData" :options="contactsChartOptions" />
           </div>
           <div v-else class="h-80 flex items-center justify-center text-gray-500">
             <p>Нет данных для отображения</p>
@@ -879,7 +890,7 @@
     <div v-if="selectedContact" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" @click.self="selectedContact = null">
       <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
-          <h2 class="text-2xl font-semibold text-gray-900">Сообщение от пользователя</h2>
+          <h2 class="text-2xl font-semibold text-gray-900">Обращение от пользователя</h2>
           <button @click="selectedContact = null" class="text-gray-400 hover:text-gray-600">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -911,7 +922,7 @@
 
           <!-- Message Content -->
           <div>
-            <label class="block text-sm font-medium text-gray-500 mb-2">Сообщение</label>
+            <label class="block text-sm font-medium text-gray-500 mb-2">Обращение</label>
             <div class="bg-gray-50 rounded-lg p-4">
               <p class="text-gray-900 whitespace-pre-wrap">{{ selectedContact.message }}</p>
             </div>
@@ -919,8 +930,8 @@
 
           <!-- Actions -->
           <div class="flex justify-end gap-3">
-            <a 
-              :href="`mailto:${selectedContact.email}?subject=Ответ на ваше сообщение&body=Здравствуйте, ${selectedContact.name}!%0A%0AСпасибо за ваше сообщение:%0A%0A${selectedContact.message}%0A%0A---%0AОтвет:%0A`"
+            <a
+              :href="`mailto:${selectedContact.email}?subject=Ответ на ваше обращение&body=Здравствуйте, ${selectedContact.name}!%0A%0AСпасибо за ваше обращение:%0A%0A${selectedContact.message}%0A%0A---%0AОтвет:%0A`"
               class="btn-primary text-sm inline-flex items-center gap-2"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -928,8 +939,8 @@
               </svg>
               Ответить
             </a>
-            <button 
-              @click="selectedContact = null" 
+            <button
+              @click="selectedContact = null"
               class="btn-secondary text-sm"
             >
               Закрыть
@@ -1057,6 +1068,39 @@ const chartData = computed(() => {
   }
 })
 
+// Contacts chart data
+const contactsChartData = computed(() => {
+  if (!stats.value?.contactsByDay || stats.value.contactsByDay.length === 0) {
+    return null
+  }
+
+  const labels = stats.value.contactsByDay.map(item => {
+    const date = new Date(item.date)
+    return date.toLocaleDateString('ru-RU', { month: 'short', day: 'numeric' })
+  })
+
+  const data = stats.value.contactsByDay.map(item => item.count)
+
+  return {
+    labels,
+    datasets: [
+      {
+        label: 'Обращения',
+        data,
+        borderColor: 'rgb(249, 115, 22)',
+        backgroundColor: 'rgba(249, 115, 22, 0.1)',
+        tension: 0.4,
+        fill: true,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        pointBackgroundColor: 'rgb(249, 115, 22)',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+      }
+    ]
+  }
+})
+
 const chartOptions = computed(() => ({
   responsive: true,
   maintainAspectRatio: false,
@@ -1080,6 +1124,62 @@ const chartOptions = computed(() => ({
       callbacks: {
         label: function(context: any) {
           return `Регистраций: ${context.parsed.y}`
+        }
+      }
+    },
+  },
+  scales: {
+    x: {
+      grid: {
+        display: false,
+      },
+      ticks: {
+        maxRotation: 45,
+        minRotation: 0,
+      }
+    },
+    y: {
+      beginAtZero: true,
+      ticks: {
+        stepSize: 1,
+        precision: 0,
+      },
+      grid: {
+        color: 'rgba(0, 0, 0, 0.05)',
+      }
+    }
+  },
+  interaction: {
+    mode: 'nearest' as const,
+    axis: 'x' as const,
+    intersect: false
+  }
+}))
+
+// Contacts chart options (separate for different tooltip text)
+const contactsChartOptions = computed(() => ({
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: true,
+      position: 'top' as const,
+    },
+    tooltip: {
+      mode: 'index' as const,
+      intersect: false,
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      padding: 12,
+      titleFont: {
+        size: 14,
+        weight: 'bold'
+      },
+      bodyFont: {
+        size: 13
+      },
+      callbacks: {
+        label: function(context: any) {
+          return `Обращений: ${context.parsed.y}`
         }
       }
     },
@@ -1406,7 +1506,7 @@ watch(() => userFilters.value.search, () => {
 })
 
 useSeoMeta({
-  title: 'Админ-панель - Business Camp 2025',
+  title: 'Админ-панель - Business Qoldau 2025',
   description: 'Панель администратора',
   robots: 'noindex, nofollow'
 })
